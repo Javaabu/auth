@@ -1,12 +1,12 @@
 {
-    "name": "javaabu/{your-package}",
-    "description": "{package description}",
-    "homepage": "https://github.com/Javaabu/{your-package}",
+    "name": "javaabu/auth",
+    "description": "Laravel Authentication Helpers",
+    "homepage": "https://github.com/Javaabu/auth",
     "license": "MIT",
     "authors": [
         {
-            "name": "Arushad Ahmed",
-            "email": "arushad@javaabu.com"
+            "name": "Athfan Khaleel",
+            "email": "athfan@javaabu.com"
         }
     ],
     "require": {
@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Javaabu\\{YourPackage}\\": "src/"
+            "Javaabu\\Auth\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Javaabu\\{YourPackage}\\Tests\\": "tests/"
+            "Javaabu\\Auth\\Tests\\": "tests/"
         }
     },
     "extra": {
@@ -33,7 +33,7 @@
         },
         "laravel": {
             "providers": [
-                "Javaabu\\{YourPackage}\\{YourPackage}ServiceProvider"
+                "Javaabu\\Auth\\AuthServiceProvider"
             ]
         }
     },

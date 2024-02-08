@@ -1,10 +1,10 @@
 <?php
 
-namespace Javaabu\{YourPackage};
+namespace Javaabu\Auth;
 
 use Illuminate\Support\ServiceProvider;
 
-class {YourPackage}ServiceProvider extends ServiceProvider
+class AuthServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -14,8 +14,8 @@ class {YourPackage}ServiceProvider extends ServiceProvider
         // declare publishes
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/config.php' => config_path('{your-package}.php'),
-            ], '{your-package}-config');
+                __DIR__ . '/../config/config.php' => config_path('auth.php'),
+            ], 'auth-config');
         }
     }
 
@@ -25,6 +25,6 @@ class {YourPackage}ServiceProvider extends ServiceProvider
     public function register()
     {
         // merge package config with user defined config
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', '{your-package}');
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'auth');
     }
 }
