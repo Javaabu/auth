@@ -2,6 +2,7 @@
 
 namespace Javaabu\Auth\Tests\Feature;
 
+use Javaabu\Auth\Tests\Feature\Http\Controllers\HomeController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\LoginController;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
@@ -22,10 +23,12 @@ class LoginControllerTest extends TestCase
     public function it_can_show_the_login_form_page(): void
     {
         $this->withoutExceptionHandling();
+
         $this->registerTestRoute(
             '/login',
             LoginController::class,
-            'getLoginForm'
+            'getLoginForm',
+            name: 'login'
         );
 
         $this->get('/login')
@@ -36,7 +39,7 @@ class LoginControllerTest extends TestCase
     /** @test */
     public function it_can_login_a_user(): void
     {
-        $this->withoutExceptionHandling();
+        $user = $this->getUser('user@example.com');
 
         $this->registerTestRoute(
             '/login',
@@ -44,8 +47,10 @@ class LoginControllerTest extends TestCase
             'login',
             method: 'post');
 
+        $this->registerTestRoute('/', HomeController::class, 'index', name: 'home');
+
         $this->post('/login', [
-            'email'    => 'admin@example.com',
+            'email'    => $user->email,
             'password' => 'password',
         ])
             ->assertSessionDoesntHaveErrors()

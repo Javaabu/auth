@@ -2,10 +2,13 @@
 
 namespace Javaabu\Auth\Tests;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
+use Javaabu\Activitylog\ActivitylogServiceProvider;
 use Javaabu\Auth\AuthServiceProvider;
 use Javaabu\Auth\Enums\UserStatuses;
 use Javaabu\Auth\Models\User;
+use Javaabu\Helpers\HelpersServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -22,6 +25,8 @@ abstract class TestCase extends BaseTestCase
         // Set the view path to include your package's views directory
         $this->app['config']->set('view.paths', [__DIR__ . '/Feature/views']);
 
+        $this->app['config']->set('database.default', 'mysql');
+
         $this->app['config']->set('database.connections.mysql', [
             'driver'   => 'mysql',
             'database' => env('DB_DATABASE'),
@@ -35,14 +40,22 @@ abstract class TestCase extends BaseTestCase
 
     protected function getPackageProviders($app)
     {
-        return [AuthServiceProvider::class];
+        return [
+            HelpersServiceProvider::class,
+            AuthServiceProvider::class,
+            ActivitylogServiceProvider::class
+        ];
     }
 
-    protected function registerTestRoute(string $uri, string $controller, $function, string $method = 'get'): void
+    protected function registerTestRoute(string $uri, string $controller, $function, string $method = 'get', string $name = null): void
     {
         Route::middleware('web')
-            ->group(function () use ($uri, $controller, $function, $method) {
-                Route::$method($uri, [$controller, $function]);
+            ->group(function () use ($uri, $controller, $function, $method, $name) {
+                $route = Route::$method($uri, [$controller, $function]);
+
+                if ($name) {
+                    $route->name($name);
+                }
             });
     }
 
@@ -57,16 +70,22 @@ abstract class TestCase extends BaseTestCase
 
     protected function seedDefaultUsers(): void
     {
-        $user = User::where('email', 'admin@example.com')->first();
+        Model::unguard();
 
-        if (! $user) {
-            $user = new User();
-            $user->name = 'John Doe';
-            $user->email = 'admin@example.com';
-            $user->email_verified_at = now();
-            $user->password = bcrypt('password');
-            $user->status = UserStatuses::APPROVED;
-            $user->save();
-        }
+        User::firstOrCreate([
+            'name' => 'John Doe',
+            'email' => 'user@example.com',
+        ], [
+            'password' => 'password',
+            'status' => UserStatuses::APPROVED,
+            'email_verified_at' => now(),
+        ]);
+
+        Model::reguard();
+    }
+
+    protected function getUser(string $email): ?User
+    {
+        return User::where('email', $email)->first();
     }
 }

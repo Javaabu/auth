@@ -9,7 +9,7 @@ class User extends \Javaabu\Auth\User
      */
     public function getAdminUrlAttribute(): string
     {
-        return route('admin.users.show', $this);
+        return route('users.show', $this);
     }
 
     /**
@@ -17,7 +17,7 @@ class User extends \Javaabu\Auth\User
      */
     public function passwordUpdateUrl(): string
     {
-        return route('admin.password.new-password');
+        return route('password.new-password');
     }
 
     /**
@@ -25,7 +25,7 @@ class User extends \Javaabu\Auth\User
      */
     public function homeUrl(): string
     {
-        return route('admin.home');
+        return route('home');
     }
 
     /**
@@ -33,7 +33,7 @@ class User extends \Javaabu\Auth\User
      */
     public function loginUrl(): string
     {
-        return route('admin.login');
+        return route('login');
     }
 
     /**
@@ -41,7 +41,7 @@ class User extends \Javaabu\Auth\User
      */
     public function getRouteForPasswordReset(): string
     {
-        return 'admin.password.reset';
+        return 'password.reset';
     }
 
     /**
@@ -49,7 +49,7 @@ class User extends \Javaabu\Auth\User
      */
     public function getRouteForEmailVerification(): string
     {
-        return 'admin.verification.verify';
+        return 'verification.verify';
     }
 
     /**
@@ -57,6 +57,6 @@ class User extends \Javaabu\Auth\User
      */
     public function inactiveNoticeUrl(): string
     {
-        return route('admin.verification.notice');
+        return route('verification.notice');
     }
 }

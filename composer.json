@@ -12,7 +12,7 @@
     "require": {
         "php": "^8.1",
         "illuminate/support": "^9.0 || ^10.0 || ^11.0",
-        "javaabu/helpers": "^1.7",
+        "javaabu/helpers": "^1.9",
         "javaabu/activitylog": "^1.1",
         "laravel/ui": "^4.4",
         "javaabu/passport": "^1.0",
