@@ -11,8 +11,6 @@ class RecordFailedLogin
     {
         $user = $event->user;
 
-        $user = User::find($user->id);
-
         if ($user) {
             // increment the attempts
             $user->incrementLoginAttempts();

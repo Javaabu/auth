@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers\User;
+namespace Javaabu\Auth;
 
 use Illuminate\View\View;
 use App\Events\EmailUpdated;

@@ -2,13 +2,14 @@
 
 return [
     /*
-    |--------------------------------------------------------------------------
-    | Some config option
-    |--------------------------------------------------------------------------
-    |
-    | Give a description of what each config option is like this
-    |
-    */
+     |--------------------------------------------------------------------------
+     | Max login attempts
+     |--------------------------------------------------------------------------
+     |
+     | The maximum login attempts allowed before a user gets locked out.
+     | This is a custom configuration.
+     |
+     */
 
-    // TODO
+    'max_login_attempts' => env('MAX_LOGIN_ATTEMPTS', 5),
 ];

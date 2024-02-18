@@ -10,6 +10,7 @@ use Javaabu\Auth\Enums\UserStatuses;
 use Javaabu\Auth\Models\User;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\HomeController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\LoginController;
+use Javaabu\Auth\Tests\Feature\Http\Controllers\VerificationController;
 use Javaabu\Helpers\HelpersServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
@@ -28,6 +29,9 @@ abstract class TestCase extends BaseTestCase
         $this->app['config']->set('view.paths', [__DIR__ . '/Feature/views']);
 
         $this->app['config']->set('database.default', 'mysql');
+        $this->app['config']->set('app.api_prefix', 'api/v1');
+
+        $this->app['config']->set('auth.providers.users.model', User::class);
 
         $this->app['config']->set('database.connections.mysql', [
             'driver'   => 'mysql',
@@ -51,9 +55,16 @@ abstract class TestCase extends BaseTestCase
         ];
     }
 
-    protected function registerTestRoute(string $uri, string $controller, $function, string $method = 'get', string $name = null): void
+    protected function registerTestRoute(
+        string $uri,
+        string $controller,
+        $function,
+        string $method = 'get',
+        string $name = null,
+        array $middlewares = ['web']
+    ): void
     {
-        Route::middleware('web')
+        Route::middleware(array_merge(['web'], $middlewares ?? []))
             ->group(function () use ($uri, $controller, $function, $method, $name) {
                 $route = Route::$method($uri, [$controller, $function]);
 
@@ -112,7 +123,19 @@ abstract class TestCase extends BaseTestCase
             '/',
             HomeController::class,
             'index',
-            name: 'home'
+            name: 'home',
+            middlewares: ['active:web']
         );
+
+        // Email Verification
+        Route::group([
+            'namespace' => 'Auth',
+            'prefix' => 'verify',
+            'as' => 'verification.'
+        ], function () {
+            Route::get('/', [VerificationController::class, 'show'])->name('notice');
+            Route::post('email/resend', [VerificationController::class, 'resend'])->name('resend');
+            Route::get('email/{id}/{hash}', [VerificationController::class, 'verify'])->name('verify');
+        });
     }
 }

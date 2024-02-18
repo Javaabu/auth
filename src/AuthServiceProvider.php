@@ -3,6 +3,8 @@
 namespace Javaabu\Auth;
 
 use Illuminate\Support\ServiceProvider;
+use Javaabu\Auth\Http\Middlewares\RedirectIfActivated;
+use Javaabu\Auth\Http\Middlewares\RedirectIfNotActivated;
 use Javaabu\Auth\Providers\EventServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -29,5 +31,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'auth');
 
         $this->app->register(EventServiceProvider::class);
+
+        app('router')->aliasMiddleware('active', RedirectIfNotActivated::class);
+        app('router')->aliasMiddleware('inactive', RedirectIfActivated::class);
     }
 }

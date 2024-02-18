@@ -19,6 +19,7 @@ use Javaabu\Auth\PasswordUpdate\PasswordUpdatable;
 use Javaabu\Auth\PasswordUpdate\PasswordUpdatableContract;
 use Javaabu\Helpers\AdminModel\AdminModel;
 use Javaabu\Helpers\AdminModel\IsAdminModel;
+use Javaabu\Helpers\Media\AllowedMimeTypes;
 use Javaabu\Helpers\Media\UpdateMedia;
 use Javaabu\Helpers\Traits\HasStatus;
 use Javaabu\Passport\Traits\HasUserIdentifier;
@@ -611,7 +612,7 @@ abstract class User extends Authenticatable implements
      *
      * @return void
      */
-    public function resetLoginAttempts()
+    public function resetLoginAttempts(): void
     {
         $this->login_attempts = null;
     }

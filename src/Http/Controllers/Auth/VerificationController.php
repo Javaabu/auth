@@ -2,13 +2,13 @@
 
 namespace Javaabu\Auth\Http\Controllers\Auth;
 
-use App\Helpers\User\VerifiesEmails;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Javaabu\Auth\Http\Controllers\AuthBaseController;
 use Javaabu\Auth\Models\User;
 use Javaabu\Auth\Traits\DeterminesRedirectPaths;
+use Javaabu\Auth\VerifiesEmails;
 
 abstract class VerificationController extends AuthBaseController
 {
@@ -67,8 +67,8 @@ abstract class VerificationController extends AuthBaseController
 
     public function applyMiddlewares(): void
     {
-        $this->middleware('auth:web_admin');
-        $this->middleware('inactive:web_admin')->except('verify');
+        $this->middleware('auth:web');
+        $this->middleware('inactive:web')->except('verify');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
         $this->middleware('needs-verification')->except('show');
