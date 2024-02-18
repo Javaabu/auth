@@ -8,6 +8,8 @@ use Javaabu\Activitylog\ActivitylogServiceProvider;
 use Javaabu\Auth\AuthServiceProvider;
 use Javaabu\Auth\Enums\UserStatuses;
 use Javaabu\Auth\Models\User;
+use Javaabu\Auth\Tests\Feature\Http\Controllers\HomeController;
+use Javaabu\Auth\Tests\Feature\Http\Controllers\LoginController;
 use Javaabu\Helpers\HelpersServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
@@ -36,6 +38,8 @@ abstract class TestCase extends BaseTestCase
             'password' => env('DB_PASSWORD', ''),
             'prefix'   => '',
         ]);
+
+        $this->registerRoutes();
     }
 
     protected function getPackageProviders($app)
@@ -87,5 +91,28 @@ abstract class TestCase extends BaseTestCase
     protected function getUser(string $email): ?User
     {
         return User::where('email', $email)->first();
+    }
+
+    protected function registerRoutes(): void
+    {
+        $this->registerTestRoute(
+            '/login',
+            LoginController::class,
+            'getLoginForm',
+            name: 'login'
+        );
+
+        $this->registerTestRoute(
+            '/login',
+            LoginController::class,
+            'login',
+            method: 'post');
+
+        $this->registerTestRoute(
+            '/',
+            HomeController::class,
+            'index',
+            name: 'home'
+        );
     }
 }

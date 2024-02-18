@@ -3,6 +3,7 @@
 namespace Javaabu\Auth;
 
 use Illuminate\Support\ServiceProvider;
+use Javaabu\Auth\Providers\EventServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -26,5 +27,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         // merge package config with user defined config
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'auth');
+
+        $this->app->register(EventServiceProvider::class);
     }
 }

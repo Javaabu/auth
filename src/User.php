@@ -601,7 +601,7 @@ abstract class User extends Authenticatable implements
      *
      * @return void
      */
-    public function incrementLoginAttempts()
+    public function incrementLoginAttempts(): void
     {
         $this->login_attempts = ($this->login_attempts ?: 0) + 1;
     }

@@ -2,14 +2,15 @@
 
 namespace Javaabu\Auth\Tests\Feature;
 
-use Javaabu\Auth\Tests\Feature\Http\Controllers\HomeController;
-use Javaabu\Auth\Tests\Feature\Http\Controllers\LoginController;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
 
 class LoginControllerTest extends TestCase
 {
     use InteractsWithDatabase;
+    use RefreshDatabase;
 
     public function setUp(): void
     {
@@ -22,15 +23,6 @@ class LoginControllerTest extends TestCase
     /** @test */
     public function it_can_show_the_login_form_page(): void
     {
-        $this->withoutExceptionHandling();
-
-        $this->registerTestRoute(
-            '/login',
-            LoginController::class,
-            'getLoginForm',
-            name: 'login'
-        );
-
         $this->get('/login')
             ->assertStatus(200)
             ->assertViewIs('login');
@@ -41,19 +33,57 @@ class LoginControllerTest extends TestCase
     {
         $user = $this->getUser('user@example.com');
 
-        $this->registerTestRoute(
-            '/login',
-            LoginController::class,
-            'login',
-            method: 'post');
-
-        $this->registerTestRoute('/', HomeController::class, 'index', name: 'home');
-
         $this->post('/login', [
             'email'    => $user->email,
             'password' => 'password',
         ])
             ->assertSessionDoesntHaveErrors()
             ->assertRedirect('/');
+    }
+
+    /** @test */
+    public function it_can_validate_the_login_inputs()
+    {
+        $this->post('/login', [
+            'email'    => '',
+            'password' => '',
+        ])
+            ->assertSessionHasErrors('password', 'email');
+    }
+
+    /** @test */
+    public function it_does_not_allow_a_user_to_be_logged_in_using_an_invalid_password()
+    {
+        $this->post('/login', [
+            'email'    => 'user@example.com',
+            'password' => '9876544',
+        ])
+            ->assertSessionHasErrors('email');
+
+        $this->assertNull(Auth::guard('web')->id(), 'Invalid logged in user id');
+    }
+
+    /** @test */
+    public function it_increments_the_users_login_attempts_if_an_invalid_password_is_entered()
+    {
+        $user = $this->getUser('user@example.com');
+
+        $this->assertDatabaseHas('users', [
+            'id'             => $user->id,
+            'login_attempts' => null,
+        ]);
+
+        $this->post('/login', [
+            'email'    => $user->email,
+            'password' => 'not-the-password',
+        ])
+            ->assertSessionHasErrors('email');
+
+        $this->assertNull(Auth::guard('web')->id(), 'Invalid logged in user id');
+
+        $this->assertDatabaseHas('users', [
+            'id'             => $user->id,
+            'login_attempts' => 1,
+        ]);
     }
 }
