@@ -2,11 +2,6 @@
 
 namespace Javaabu\Auth;
 
-use App\Mail\EmailUpdated;
-use App\Mail\NewEmailVerification;
-use App\Notifications\EmailUpdateRequest;
-use App\Notifications\ResetPassword;
-use App\Notifications\VerifyEmail;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,6 +10,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Javaabu\Auth\Enums\UserStatuses;
+use Javaabu\Auth\Notifications\EmailUpdateRequest;
+use Javaabu\Auth\Notifications\ResetPassword;
+use Javaabu\Auth\Notifications\VerifyEmail;
 use Javaabu\Auth\PasswordUpdate\PasswordUpdatable;
 use Javaabu\Auth\PasswordUpdate\PasswordUpdatableContract;
 use Javaabu\Helpers\AdminModel\AdminModel;
@@ -51,21 +49,21 @@ abstract class User extends Authenticatable implements
     use SoftDeletes;
     use UpdateMedia;
 
-    protected static $status_class = UserStatuses::class;
+    protected static string $status_class = UserStatuses::class;
 
     /**
      * The attributes that would be logged
      *
      * @var array
      */
-    protected static $logAttributes = ['*'];
+    protected static array $logAttributes = ['*'];
 
     /**
      * Log only changed attributes
      *
      * @var boolean
      */
-    protected static $logOnlyDirty = true;
+    protected static bool $logOnlyDirty = true;
 
     /**
      * The attributes that should be hidden for arrays.
@@ -76,20 +74,15 @@ abstract class User extends Authenticatable implements
         'password', 'remember_token', 'email'
     ];
 
-    /**
-     * The attributes that are dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'last_login_at',
-        'email_verified_at'
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'last_login_at'     => 'datetime',
     ];
 
     /**
      * Get the user identifier
      */
-    public function getPassportCookieIdentifier()
+    public function getPassportCookieIdentifier(): string
     {
         return $this->makeUserIdentifier($this->getKey(), $this->getMorphClass());
     }
@@ -99,7 +92,7 @@ abstract class User extends Authenticatable implements
      *
      * @param $date
      */
-    public function setLastLoginAtAttribute($date)
+    public function setLastLoginAtAttribute($date): void
     {
         $this->attributes['last_login_at'] = $date ? Carbon::parse($date) : null;
     }
@@ -109,7 +102,7 @@ abstract class User extends Authenticatable implements
      *
      * @param $value
      */
-    public function setPasswordAttribute($value)
+    public function setPasswordAttribute($value): void
     {
         $this->attributes['password'] = Hash::make($value);
     }
@@ -120,7 +113,7 @@ abstract class User extends Authenticatable implements
      * @param  string  $token
      * @return void
      */
-    public function sendPasswordResetNotification($token)
+    public function sendPasswordResetNotification($token): void
     {
         $this->notify(new ResetPassword($token));
     }
@@ -130,7 +123,7 @@ abstract class User extends Authenticatable implements
      *
      * @return void
      */
-    public function sendEmailVerificationNotification()
+    public function sendEmailVerificationNotification(): void
     {
         $this->notify(new VerifyEmail());
     }
@@ -139,7 +132,7 @@ abstract class User extends Authenticatable implements
      * Send email verification link to
      * new email address
      */
-    public function sendNewEmailVerification()
+    public function sendNewEmailVerification(): void
     {
         Mail::to($this->new_email)
             ->send(new NewEmailVerification($this));
@@ -152,7 +145,7 @@ abstract class User extends Authenticatable implements
      *
      * @param $new_email
      */
-    public function sendEmailUpdateRequestNotification($new_email)
+    public function sendEmailUpdateRequestNotification($new_email): void
     {
         $this->notify(new EmailUpdateRequest($new_email));
     }
@@ -164,7 +157,7 @@ abstract class User extends Authenticatable implements
      * @param $old_email
      * @param $new_email
      */
-    public function sendEmailUpdatedNotification($old_email, $new_email)
+    public function sendEmailUpdatedNotification($old_email, $new_email): void
     {
         Mail::to($old_email)
             ->send(new EmailUpdated($this, $new_email));
@@ -202,7 +195,7 @@ abstract class User extends Authenticatable implements
      * @param $new_email
      * @return bool
      */
-    public function requestEmailUpdate($new_email)
+    public function requestEmailUpdate($new_email): bool
     {
         //check if new email is different
         if ($new_email && $this->email != $new_email) {
@@ -225,7 +218,7 @@ abstract class User extends Authenticatable implements
      *
      * @param  bool  $save
      */
-    public function approve($save = false)
+    public function approve($save = false): void
     {
         $this->updateStatus(UserStatuses::APPROVED, $save);
     }
@@ -235,7 +228,7 @@ abstract class User extends Authenticatable implements
      *
      * @param  bool  $save
      */
-    public function markAsPending($save = false)
+    public function markAsPending($save = false): void
     {
         $this->updateStatus(UserStatuses::PENDING, $save);
     }
@@ -245,7 +238,7 @@ abstract class User extends Authenticatable implements
      *
      * @param  bool  $save
      */
-    public function ban($save = false)
+    public function ban($save = false): void
     {
         $this->updateStatus(UserStatuses::BANNED, $save);
     }
@@ -256,7 +249,7 @@ abstract class User extends Authenticatable implements
      * @param $username
      * @return mixed
      */
-    public function findForPassport($username)
+    public function findForPassport($username): mixed
     {
         return $this->where('email', $username)
             ->active()
@@ -268,7 +261,7 @@ abstract class User extends Authenticatable implements
      *
      * @return int
      */
-    public function getPendingKey()
+    public function getPendingKey(): int
     {
         return UserStatuses::PENDING;
     }
@@ -289,7 +282,7 @@ abstract class User extends Authenticatable implements
      *
      * @return boolean
      */
-    public function isNewEmailAvailable()
+    public function isNewEmailAvailable(): bool
     {
         return !static::where('email', $this->new_email)
             ->withTrashed()
@@ -301,7 +294,7 @@ abstract class User extends Authenticatable implements
      *
      * @return bool
      */
-    public function shouldVerifyEmail()
+    public function shouldVerifyEmail(): bool
     {
         return $this->status != UserStatuses::BANNED;
     }
@@ -311,7 +304,7 @@ abstract class User extends Authenticatable implements
      *
      * @return boolean
      */
-    public function wantsNewEmail()
+    public function wantsNewEmail(): bool
     {
         return $this->hasVerifiedEmail() && $this->new_email;
     }
@@ -324,7 +317,7 @@ abstract class User extends Authenticatable implements
      *
      * @return boolean
      */
-    public function needsEmailVerification()
+    public function needsEmailVerification(): bool
     {
         return $this->shouldVerifyEmail() &&
             (!$this->hasVerifiedEmail() || $this->wantsNewEmail());
@@ -335,7 +328,7 @@ abstract class User extends Authenticatable implements
      *
      * @return string
      */
-    public function getEmailForVerification()
+    public function getEmailForVerification(): string
     {
         return $this->wantsNewEmail() ? $this->new_email : $this->email;
     }
@@ -346,7 +339,7 @@ abstract class User extends Authenticatable implements
      * @param $query
      * @return mixed
      */
-    public function scopeEmailUnverified($query)
+    public function scopeEmailUnverified($query): mixed
     {
         return $query->whereNull($this->getTable() . '.email_verified_at');
     }
@@ -367,7 +360,7 @@ abstract class User extends Authenticatable implements
      *
      * @return string
      */
-    public function getStatusMessageAttribute()
+    public function getStatusMessageAttribute(): string
     {
         if ($this->is_locked_out) {
             return __('Your account has been locked due to too many login attempts. ' .
@@ -387,7 +380,7 @@ abstract class User extends Authenticatable implements
      * @param  bool  $verified
      * @return void
      */
-    public function setEmailVerificationStatus($verified)
+    public function setEmailVerificationStatus($verified): void
     {
         if ($verified) {
             if (!$this->hasVerifiedEmail()) {
@@ -438,7 +431,7 @@ abstract class User extends Authenticatable implements
      *
      * @return bool
      */
-    public function getIsActiveAttribute()
+    public function getIsActiveAttribute(): bool
     {
         return $this->hasVerifiedEmail() &&
             $this->status == UserStatuses::APPROVED &&
@@ -450,7 +443,7 @@ abstract class User extends Authenticatable implements
      *
      * @return int
      */
-    public function maxLoginAttempts()
+    public function maxLoginAttempts(): int
     {
         return config('auth.max_login_attempts');
     }
@@ -460,7 +453,7 @@ abstract class User extends Authenticatable implements
      *
      * @return boolean
      */
-    public function getIsLockedOutAttribute()
+    public function getIsLockedOutAttribute(): bool
     {
         return $this->login_attempts >= $this->maxLoginAttempts();
     }
@@ -493,7 +486,7 @@ abstract class User extends Authenticatable implements
      *
      * @return bool
      */
-    public function getIsApprovedAttribute()
+    public function getIsApprovedAttribute(): bool
     {
         return $this->status == UserStatuses::APPROVED;
     }
@@ -503,7 +496,7 @@ abstract class User extends Authenticatable implements
      *
      * @return bool
      */
-    public function getIsBannedAttribute()
+    public function getIsBannedAttribute(): bool
     {
         return $this->status == UserStatuses::BANNED;
     }
@@ -513,7 +506,7 @@ abstract class User extends Authenticatable implements
      *
      * @return bool
      */
-    public function getIsPendingAttribute()
+    public function getIsPendingAttribute(): bool
     {
         return $this->status == UserStatuses::PENDING;
     }
@@ -524,7 +517,7 @@ abstract class User extends Authenticatable implements
      * @param  array|string  $permissions
      * @return bool
      */
-    public function anyPermission($permissions)
+    public function anyPermission($permissions): bool
     {
         if (!is_array($permissions)) {
             $permissions = [$permissions];
@@ -545,7 +538,7 @@ abstract class User extends Authenticatable implements
      * @param $query
      * @return mixed
      */
-    public function scopeUserVisible($query)
+    public function scopeUserVisible($query): mixed
     {
         $user = auth()->user();
 
@@ -565,7 +558,7 @@ abstract class User extends Authenticatable implements
      *
      * @return bool
      */
-    public function getIsPublishedAttribute()
+    public function getIsPublishedAttribute(): bool
     {
         return $this->is_approved;
     }
@@ -575,7 +568,7 @@ abstract class User extends Authenticatable implements
      *
      * @return string
      */
-    public function emailVerificationRedirectUrl()
+    public function emailVerificationRedirectUrl(): string
     {
         return $this->homeUrl();
     }
@@ -585,7 +578,7 @@ abstract class User extends Authenticatable implements
      *
      * @return string
      */
-    public function getInitialsAttribute()
+    public function getInitialsAttribute(): string
     {
         $names = explode(' ', preg_replace('/\s+/', ' ', $this->name));
         $initials = substr($names[0] ?? '', 0, 1);
@@ -654,7 +647,7 @@ abstract class User extends Authenticatable implements
      *
      * @return string
      */
-    public function getAvatarAttribute()
+    public function getAvatarAttribute(): string
     {
         $avatar = $this->getFirstMediaUrl('avatar', 'avatar');
         return $avatar ?: asset(get_setting('default_avatar'));
@@ -665,7 +658,7 @@ abstract class User extends Authenticatable implements
      *
      * @return string
      */
-    public function getProvider()
+    public function getProvider(): string
     {
         return $this->getTable();
     }

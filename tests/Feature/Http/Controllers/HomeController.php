@@ -10,7 +10,5 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-
-        echo $user->name;
     }
 }

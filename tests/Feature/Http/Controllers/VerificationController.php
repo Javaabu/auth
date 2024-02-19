@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Javaabu\Auth\Models\User;
 use Javaabu\Auth\VerifiesEmails;
+use function Laravel\Prompts\error;
 
 class VerificationController extends \Javaabu\Auth\Http\Controllers\Auth\VerificationController
 {
@@ -36,7 +37,7 @@ class VerificationController extends \Javaabu\Auth\Http\Controllers\Auth\Verific
      */
     public function showVerificationResult(Request $request, $data = null, $errors = null)
     {
-        return view('auth.verification.result')
+        return view('verification.result')
             ->with($data)
             ->withErrors($errors);
     }

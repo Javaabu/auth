@@ -2,12 +2,16 @@
 
 namespace Javaabu\Auth\Notifications;
 
+use Closure;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\UrlGenerator;
+
 class ResetPassword extends \Illuminate\Auth\Notifications\ResetPassword
 {
     /**
      * The callback that should be used to create the reset password URL.
      *
-     * @var \Closure|null
+     * @var Closure|null
      */
     public static $createUrlCallback = [self::class, 'createPasswordResetUrl'];
 
@@ -15,9 +19,9 @@ class ResetPassword extends \Illuminate\Auth\Notifications\ResetPassword
      *
      * @param $notifiable
      * @param $token
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\UrlGenerator|string
+     * @return Application|UrlGenerator|string
      */
-    public static function createPasswordResetUrl($notifiable, $token)
+    public static function createPasswordResetUrl($notifiable, $token): string|UrlGenerator|Application
     {
         return url(route($notifiable->getRouteForPasswordReset(), [
             'token' => $token,

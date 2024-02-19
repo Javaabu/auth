@@ -13,6 +13,7 @@ trait InteractsWithDatabase
             $this->dropAllTables();
 
             include_once __DIR__ . '/database/create_users_table.php';
+            include_once __DIR__ . '/database/create_password_resets_table.php';
 
             include_once __DIR__ . '/../vendor/javaabu/activitylog/database/migrations/2024_02_05_223412_create_activity_log_table.php';
             include_once __DIR__ . '/../vendor/javaabu/activitylog/database/migrations/2024_02_05_223413_add_event_column_to_activity_log_table.php';
@@ -23,6 +24,7 @@ trait InteractsWithDatabase
             (new \AddBatchUuidColumnToActivityLogTable)->up();
 
             (new \CreateUsersTable())->up();
+            (new \CreatePasswordResetsTable())->up();
 
             RefreshDatabaseState::$migrated = true;
         }

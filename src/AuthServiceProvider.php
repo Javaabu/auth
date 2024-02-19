@@ -4,7 +4,10 @@ namespace Javaabu\Auth;
 
 use Illuminate\Support\ServiceProvider;
 use Javaabu\Auth\Http\Middlewares\RedirectIfActivated;
+use Javaabu\Auth\Http\Middlewares\RedirectIfEmailVerificationNotNeeded;
 use Javaabu\Auth\Http\Middlewares\RedirectIfNotActivated;
+use Javaabu\Auth\PasswordUpdate\Middleware\RedirectIfPasswordUpdateNotRequired;
+use Javaabu\Auth\PasswordUpdate\Middleware\RedirectIfPasswordUpdateRequired;
 use Javaabu\Auth\Providers\EventServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -34,5 +37,8 @@ class AuthServiceProvider extends ServiceProvider
 
         app('router')->aliasMiddleware('active', RedirectIfNotActivated::class);
         app('router')->aliasMiddleware('inactive', RedirectIfActivated::class);
+        app('router')->aliasMiddleware('password-update-not-required', RedirectIfPasswordUpdateRequired::class);
+        app('router')->aliasMiddleware('password-update-required', RedirectIfPasswordUpdateNotRequired::class);
+        app('router')->aliasMiddleware('needs-verification', RedirectIfEmailVerificationNotNeeded::class);
     }
 }

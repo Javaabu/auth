@@ -36,14 +36,5 @@ abstract class ForgotPasswordController extends AuthBaseController
      */
     abstract public function showLinkRequestForm(): View;
 
-    /**
-     * Apply middlewares for the controller. Used in the constructor.
-     * Helps with applying/changing applied middlewares for the controller.
-     *
-     * @return void
-     */
-    public function applyMiddlewares(): void
-    {
-        $this->middleware('guest:web_admin');
-    }
+
 }

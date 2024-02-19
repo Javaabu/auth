@@ -52,7 +52,7 @@ trait VerifiesEmails
      */
     public function showVerificationResult(Request $request, $data = null, $errors = null)
     {
-        return view('admin.auth.verification.result')
+        return view('verification.result')
             ->with($data)
             ->withErrors($errors);
     }

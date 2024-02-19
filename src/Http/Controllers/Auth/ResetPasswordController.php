@@ -56,6 +56,13 @@ abstract class ResetPasswordController extends AuthBaseController
     }
 
     /**
+     * Get the view name for the showResetForm method
+     *
+     * @return string
+     */
+    abstract public function getResetFormViewName(): string;
+
+    /**
      * Display the password reset view for the given token.
      *
      * If no token is present, display the link request form.
@@ -66,7 +73,7 @@ abstract class ResetPasswordController extends AuthBaseController
      */
     public function showResetForm(Request $request, $token = null)
     {
-        return view('admin.auth.passwords.reset')->with(
+        return view($this->getResetFormViewName())->with(
             ['token' => $token, 'email' => $request->email]
         );
     }

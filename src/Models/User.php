@@ -2,8 +2,17 @@
 
 namespace Javaabu\Auth\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class User extends \Javaabu\Auth\User
 {
+    use HasFactory;
+
+    protected static function newFactory(): \Javaabu\Auth\Factories\UserFactory
+    {
+        return \Javaabu\Auth\Factories\UserFactory::new();
+    }
+
     /**
      * @inheritDoc
      */

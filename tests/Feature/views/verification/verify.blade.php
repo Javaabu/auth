@@ -1,2 +1,4 @@
+Resend Verification
+
 {{ $message }}
 

@@ -3,13 +3,19 @@
 namespace Javaabu\Auth\Tests;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 use Javaabu\Activitylog\ActivitylogServiceProvider;
 use Javaabu\Auth\AuthServiceProvider;
 use Javaabu\Auth\Enums\UserStatuses;
 use Javaabu\Auth\Models\User;
+use Javaabu\Auth\Tests\Feature\Http\Controllers\ConfirmPasswordController;
+use Javaabu\Auth\Tests\Feature\Http\Controllers\ForgotPasswordController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\HomeController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\LoginController;
+use Javaabu\Auth\Tests\Feature\Http\Controllers\ResetPasswordController;
+use Javaabu\Auth\Tests\Feature\Http\Controllers\UpdatePasswordController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\VerificationController;
 use Javaabu\Helpers\HelpersServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
@@ -33,6 +39,14 @@ abstract class TestCase extends BaseTestCase
 
         $this->app['config']->set('auth.providers.users.model', User::class);
 
+        // set password reset
+        $this->app['config']->set('auth.passwords.users', [
+            'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ]);
+
+
         $this->app['config']->set('database.connections.mysql', [
             'driver'   => 'mysql',
             'database' => env('DB_DATABASE'),
@@ -44,6 +58,9 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         $this->registerRoutes();
+
+        Mail::fake();
+        Notification::fake();
     }
 
     protected function getPackageProviders($app)
@@ -106,6 +123,14 @@ abstract class TestCase extends BaseTestCase
 
     protected function registerRoutes(): void
     {
+        Route::group([
+            'middleware' => ['auth:web', 'active:web', 'password-update-not-required:web']
+        ], function () {
+            Route::get('/test', function () {
+                return 'Test';
+            })->middleware('password.confirm:web_admin,admin.password.confirm');
+        });
+
         $this->registerTestRoute(
             '/login',
             LoginController::class,
@@ -124,7 +149,7 @@ abstract class TestCase extends BaseTestCase
             HomeController::class,
             'index',
             name: 'home',
-            middlewares: ['active:web']
+            middlewares: ['auth:web', 'active:web', 'password-update-not-required:web']
         );
 
         // Email Verification
@@ -136,6 +161,26 @@ abstract class TestCase extends BaseTestCase
             Route::get('/', [VerificationController::class, 'show'])->name('notice');
             Route::post('email/resend', [VerificationController::class, 'resend'])->name('resend');
             Route::get('email/{id}/{hash}', [VerificationController::class, 'verify'])->name('verify');
+        });
+
+        Route::group([
+            'prefix' => 'password',
+            'as' => 'password.',
+            'middleware' => ['web']
+        ], function () {
+            // Forgot Password
+            Route::get('reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('request');
+            Route::post('email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('email');
+            Route::get('reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('reset');
+            Route::post('reset', [ResetPasswordController::class, 'reset'])->name('update');
+
+            // Confirm Password
+            Route::get('confirm', [ConfirmPasswordController::class, 'showConfirmForm'])->name('confirm');
+            Route::post('confirm', [ConfirmPasswordController::class, 'confirm'])->name('confirm-post');
+
+            // Password Update
+            Route::get('update', [UpdatePasswordController::class, 'showPasswordUpdateForm'])->name('new-password');
+            Route::post('update', [UpdatePasswordController::class, 'updatePassword'])->name('new-password-post');
         });
     }
 }
