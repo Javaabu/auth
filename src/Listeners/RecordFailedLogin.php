@@ -9,6 +9,7 @@ class RecordFailedLogin
 {
     public function handle(Failed $event)
     {
+        /** @var User $user */
         $user = $event->user;
 
         if ($user) {

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Listeners;
+namespace Javaabu\Auth\Listeners;
 
 use Illuminate\Auth\Events\Logout;
+use Javaabu\Auth\Models\User;
 
 class RecordLogout
 {
@@ -22,8 +23,9 @@ class RecordLogout
      * @param  Logout  $event
      * @return void
      */
-    public function handle(Logout $event)
+    public function handle(Logout $event): void
     {
+        /** @var User $user */
         $user = $event->user;
 
         if ($user) {

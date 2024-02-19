@@ -168,7 +168,6 @@ class LoginControllerTest extends TestCase
         $response = $this->get($response->headers->get('Location'))
             ->assertRedirect('/verify');
 
-
         $this->get($response->headers->get('Location'))
             ->assertStatus(200)
             ->assertSee('Your account has been locked due to too many login attempts')

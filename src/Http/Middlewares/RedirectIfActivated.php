@@ -2,9 +2,9 @@
 
 namespace Javaabu\Auth\Http\Middlewares;
 
-use App\Helpers\User\User;
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Javaabu\Auth\Models\User;
 
 class RedirectIfActivated
 {

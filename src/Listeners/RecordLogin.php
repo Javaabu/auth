@@ -4,6 +4,7 @@ namespace Javaabu\Auth\Listeners;
 
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Login;
+use Javaabu\Auth\Models\User;
 
 class RecordLogin
 {
@@ -23,8 +24,9 @@ class RecordLogin
      * @param  Login  $event
      * @return void
      */
-    public function handle(Login $event)
+    public function handle(Login $event): void
     {
+        /** @var User $user */
         $user = $event->user;
 
         if ($user) {
