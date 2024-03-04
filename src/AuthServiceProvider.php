@@ -35,10 +35,16 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->app->register(EventServiceProvider::class);
 
+        $this->registerMiddlewareAliases();
+    }
+
+    public function registerMiddlewareAliases(): void
+    {
         app('router')->aliasMiddleware('active', RedirectIfNotActivated::class);
         app('router')->aliasMiddleware('inactive', RedirectIfActivated::class);
         app('router')->aliasMiddleware('password-update-not-required', RedirectIfPasswordUpdateRequired::class);
         app('router')->aliasMiddleware('password-update-required', RedirectIfPasswordUpdateNotRequired::class);
         app('router')->aliasMiddleware('needs-verification', RedirectIfEmailVerificationNotNeeded::class);
+
     }
 }
