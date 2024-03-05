@@ -9,8 +9,6 @@ trait DeterminesRedirectPaths
 {
     /**
      * Get the post register / login redirect path.
-     *
-     * @return string
      */
     public function redirectPath(): string
     {
@@ -20,8 +18,6 @@ trait DeterminesRedirectPaths
     /**
      * Determine the User Model to use when determining the path for redirect.
      * Should return new
-     *
-     * @return UserContract
      */
     public function determinePathForRedirectUsing(): UserContract
     {

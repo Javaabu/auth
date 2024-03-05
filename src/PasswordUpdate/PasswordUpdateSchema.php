@@ -8,8 +8,6 @@ class PasswordUpdateSchema
 {
     /**
      * Adds the columns needed for email verification
-     *
-     * @param  Blueprint  $table
      */
     public static function columns(Blueprint $table): void
     {

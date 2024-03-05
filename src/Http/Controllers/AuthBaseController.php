@@ -10,6 +10,6 @@ use Javaabu\Helpers\Traits\ControllerHelpers;
 class AuthBaseController extends Controller
 {
     use AuthorizesRequests;
-    use ValidatesRequests;
     use ControllerHelpers;
+    use ValidatesRequests;
 }

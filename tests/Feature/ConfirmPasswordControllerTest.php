@@ -9,8 +9,8 @@ use Javaabu\Auth\Tests\TestCase;
 
 class ConfirmPasswordControllerTest extends TestCase
 {
-    use RefreshDatabase;
     use InteractsWithDatabase;
+    use RefreshDatabase;
 
     public function setUp(): void
     {
@@ -20,17 +20,17 @@ class ConfirmPasswordControllerTest extends TestCase
         $this->seedDefaultUsers();
     }
 
-//    /** @test */
-//    public function it_redirects_to_the_password_confirmation_page_if_the_user_is_required_to_confirm_the_password()
-//    {
-//        $this->withoutExceptionHandling();
-//        $user = $this->getUser('user@example.com');
-//
-//        $this->actingAs($user, 'web');
-//
-//        $this->get('/test')
-//            ->assertRedirect('/password/confirm');
-//    }
+    //    /** @test */
+    //    public function it_redirects_to_the_password_confirmation_page_if_the_user_is_required_to_confirm_the_password()
+    //    {
+    //        $this->withoutExceptionHandling();
+    //        $user = $this->getUser('user@example.com');
+    //
+    //        $this->actingAs($user, 'web');
+    //
+    //        $this->get('/test')
+    //            ->assertRedirect('/password/confirm');
+    //    }
 
     /** @test */
     public function it_can_display_the_password_confirmation_page()
@@ -54,7 +54,7 @@ class ConfirmPasswordControllerTest extends TestCase
 
         $this->actingAs($user, 'web');
 
-        $this->post("/password/confirm", [
+        $this->post('/password/confirm', [
             'password' => '12312312',
         ])
             ->assertSessionHasErrors('password')
@@ -62,27 +62,27 @@ class ConfirmPasswordControllerTest extends TestCase
             ->assertRedirect();
     }
 
-//    /** @test */
-//    public function it_can_confirm_the_password()
-//    {
-//        $this->withoutExceptionHandling();
-//
-//        $user = $this->getUser('user@example.com');
-//
-//        $this->assertTrue(Hash::check('password', $user->password), 'Invalid password');
-//
-//        $this->actingAs($user, 'web');
-//
-//        $this->followingRedirects()
-//             ->get('/test')
-//             ->assertStatus(200)
-//             ->assertSee('Confirm Password');
-//
-//        $this->post("/password/confirm", [
-//            'password' => 'password',
-//        ])
-//            ->assertSessionMissing('errors')
-//            ->assertSessionHas('web.auth.password_confirmed_at')
-//            ->assertRedirect('/test');
-//    }
+    //    /** @test */
+    //    public function it_can_confirm_the_password()
+    //    {
+    //        $this->withoutExceptionHandling();
+    //
+    //        $user = $this->getUser('user@example.com');
+    //
+    //        $this->assertTrue(Hash::check('password', $user->password), 'Invalid password');
+    //
+    //        $this->actingAs($user, 'web');
+    //
+    //        $this->followingRedirects()
+    //             ->get('/test')
+    //             ->assertStatus(200)
+    //             ->assertSee('Confirm Password');
+    //
+    //        $this->post("/password/confirm", [
+    //            'password' => 'password',
+    //        ])
+    //            ->assertSessionMissing('errors')
+    //            ->assertSessionHas('web.auth.password_confirmed_at')
+    //            ->assertRedirect('/test');
+    //    }
 }

@@ -8,7 +8,6 @@ trait EnumsTrait
 
     /**
      * Initialize labels
-     * @return void
      */
     protected static function initLabels(): void
     {
@@ -17,9 +16,6 @@ trait EnumsTrait
 
     /**
      * Get label for key
-     *
-     * @param $key
-     * @return string
      */
     public static function getLabel($key): string
     {
@@ -28,7 +24,6 @@ trait EnumsTrait
 
     /**
      * Get type labels
-     * @return array
      */
     public static function getLabels(): array
     {
@@ -42,8 +37,6 @@ trait EnumsTrait
 
     /**
      * Get keys
-     *
-     * @return array
      */
     public static function getKeys(): array
     {
@@ -52,9 +45,6 @@ trait EnumsTrait
 
     /**
      * Get label for key
-     *
-     * @param $key
-     * @return string
      */
     public static function getSlug($key): string
     {
@@ -63,9 +53,6 @@ trait EnumsTrait
 
     /**
      * Check if is a valid key
-     *
-     * @param $key
-     * @return bool
      */
     public static function isValidKey($key): bool
     {

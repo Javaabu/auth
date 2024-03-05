@@ -7,7 +7,9 @@ abstract class UserStatuses
     use EnumsTrait;
 
     public const APPROVED = 'approved';
+
     public const PENDING = 'pending';
+
     public const BANNED = 'banned';
 
     /**
@@ -30,9 +32,9 @@ abstract class UserStatuses
     protected static function initMessages(): void
     {
         static::$messages = [
-            self::APPROVED    => __('Your account is approved.'),
-            self::PENDING   => __('Your account needs to be approved before you can access it.'),
-            self::BANNED    => __('Your account has been banned.'),
+            self::APPROVED => __('Your account is approved.'),
+            self::PENDING => __('Your account needs to be approved before you can access it.'),
+            self::BANNED => __('Your account has been banned.'),
         ];
     }
 
@@ -42,17 +44,14 @@ abstract class UserStatuses
     protected static function initLabels(): void
     {
         static::$labels = [
-            self::APPROVED    => __('Approved'),
-            self::PENDING   => __('Pending'),
-            self::BANNED    => __('Banned'),
+            self::APPROVED => __('Approved'),
+            self::PENDING => __('Pending'),
+            self::BANNED => __('Banned'),
         ];
     }
 
     /**
      * Get label for key
-     *
-     * @param $key
-     * @return string
      */
     public static function getMessage($key): string
     {

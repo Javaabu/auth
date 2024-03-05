@@ -2,13 +2,13 @@
 
 namespace Javaabu\Auth;
 
-use Illuminate\View\View;
 use App\Events\EmailUpdated;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 trait VerifiesEmails
 {
@@ -17,7 +17,6 @@ trait VerifiesEmails
     /**
      * Show the email verification notice.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response|\Illuminate\View\View
      */
     public function show(Request $request)
@@ -32,35 +31,23 @@ trait VerifiesEmails
     /**
      * Show verified message
      *
-     * @param Request $request
-     * @param User $user
-     * @param string $message
+     * @param  string  $message
      * @return \Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function showEmailVerificationForm(Request $request, User $user, $message)
-    {
-        return view('admin.auth.verification.verify')->with(compact('user', 'message'));
-    }
+    abstract public function showEmailVerificationForm(Request $request, User $user, $message);
 
     /**
      * Show verification result message
      *
-     * @param Request $request
-     * @param null $data
-     * @param null $errors
+     * @param  null  $data
+     * @param  null  $errors
      * @return Response|View
      */
-    public function showVerificationResult(Request $request, $data = null, $errors = null)
-    {
-        return view('verification.result')
-            ->with($data)
-            ->withErrors($errors);
-    }
+    abstract public function showVerificationResult(Request $request, $data = null, $errors = null);
 
     /**
      * Mark the authenticated user's email address as verified.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -71,11 +58,11 @@ trait VerifiesEmails
         $user = $request->user();
 
         try {
-            if (!hash_equals((string)$request->route('id'), (string)$user->getKey())) {
+            if (! hash_equals((string) $request->route('id'), (string) $user->getKey())) {
                 throw new AuthorizationException();
             }
 
-            if (!hash_equals((string)$request->route('hash'), sha1($user->getEmailForVerification()))) {
+            if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
                 throw new AuthorizationException();
             }
         } catch (AuthorizationException $e) {
@@ -134,7 +121,6 @@ trait VerifiesEmails
     /**
      * Resend the email verification notification.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response|\Illuminate\Http\Response
      */
     public function resend(Request $request)
@@ -163,9 +149,10 @@ trait VerifiesEmails
     protected function sendVerifyLinkResponse()
     {
         $status = __('We\'ve emailed you the verification link');
+
         return back()->with([
             'status' => $status,
-            'resent' => true
+            'resent' => true,
         ]);
     }
 }

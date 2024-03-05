@@ -5,10 +5,11 @@ namespace Javaabu\Auth\Http\Controllers\Auth;
 use Illuminate\Foundation\Auth\ConfirmsPasswords;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Javaabu\Auth\Contracts\ConfirmPasswordContract;
 use Javaabu\Auth\Http\Controllers\AuthBaseController;
 use Javaabu\Auth\Traits\DeterminesRedirectPaths;
 
-abstract class ConfirmPasswordController extends AuthBaseController
+abstract class ConfirmPasswordController extends AuthBaseController implements ConfirmPasswordContract
 {
     use ConfirmsPasswords;
     use DeterminesRedirectPaths {
@@ -17,8 +18,6 @@ abstract class ConfirmPasswordController extends AuthBaseController
 
     /**
      * Where to redirect users when the intended url fails.
-     *
-     * @var string
      */
     protected string $redirectTo = '/';
 
@@ -34,15 +33,15 @@ abstract class ConfirmPasswordController extends AuthBaseController
 
     /**
      * Display the password confirmation view.
-     *
-     * @return View
      */
-    abstract public function showConfirmForm(): View;
+    public function showConfirmForm(): View
+    {
+        return $this->getConfirmForm();
+    }
 
     /**
      * Reset the password confirmation timeout.
      *
-     * @param  Request  $request
      * @return void
      */
     protected function resetPasswordConfirmationTimeout(Request $request)
@@ -64,8 +63,6 @@ abstract class ConfirmPasswordController extends AuthBaseController
 
     /**
      * Get the password confirmation timeout key.
-     *
-     * @return string
      */
     public function resetPasswordConfirmationTimeoutKey(): string
     {
@@ -75,8 +72,6 @@ abstract class ConfirmPasswordController extends AuthBaseController
     /**
      * Apply middlewares for the controller. Used in the constructor.
      * Helps with applying/changing applied middlewares for the controller.
-     *
-     * @return void
      */
     public function applyMiddlewares(): void
     {

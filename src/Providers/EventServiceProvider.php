@@ -12,12 +12,12 @@ class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
         Failed::class => [
-            RecordFailedLogin::class
+            RecordFailedLogin::class,
         ],
 
         Login::class => [
-            RecordLogin::class
-        ]
+            RecordLogin::class,
+        ],
     ];
 
     public function boot(): void

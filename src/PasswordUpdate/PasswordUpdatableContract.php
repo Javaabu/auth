@@ -7,7 +7,7 @@ interface PasswordUpdatableContract
     /**
      * Whether a password update is required
      *
-     * @return boolean
+     * @return bool
      */
     public function requiresPasswordUpdate();
 

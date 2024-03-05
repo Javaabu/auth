@@ -5,16 +5,17 @@ namespace Javaabu\Auth\Http\Controllers\Auth;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\View\View;
+use Javaabu\Auth\Contracts\UpdatePasswordContract;
 use Javaabu\Auth\Http\Controllers\AuthBaseController;
 use Javaabu\Auth\PasswordUpdate\UpdatesPassword;
 use Javaabu\Auth\Traits\DeterminesRedirectPaths;
 
-abstract class UpdatePasswordController extends AuthBaseController
+abstract class UpdatePasswordController extends AuthBaseController implements UpdatePasswordContract
 {
-    use UpdatesPassword;
     use DeterminesRedirectPaths {
         DeterminesRedirectPaths::redirectPath insteadof UpdatesPassword;
     }
+    use UpdatesPassword;
 
     /**
      * Where to redirect users after updating the password.
@@ -33,9 +34,6 @@ abstract class UpdatePasswordController extends AuthBaseController
         $this->applyMiddlewares();
     }
 
-    /**
-     * @return void
-     */
     public function applyMiddlewares(): void
     {
         $this->middleware(['auth:web_admin', 'active:web_admin', 'password-update-required:web_admin']);
@@ -43,20 +41,25 @@ abstract class UpdatePasswordController extends AuthBaseController
 
     /**
      * Define the guard
-     *
-     * @return StatefulGuard
      */
-    abstract protected function guard(): StatefulGuard;
+    protected function guard(): StatefulGuard
+    {
+        return $this->getGuard();
+    }
 
     /**
      * The user broker
      */
-    abstract public function broker(): PasswordBroker;
+    public function broker(): PasswordBroker
+    {
+        return $this->getBroker();
+    }
 
     /**
      * Show the password update form
-     *
-     * @return View
      */
-    abstract public function showPasswordUpdateForm(): View;
+    public function showPasswordUpdateForm(): View
+    {
+        return $this->getPasswordUpdateForm();
+    }
 }

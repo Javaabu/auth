@@ -2,21 +2,18 @@
 
 namespace Javaabu\Auth\Notifications;
 
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class EmailUpdateRequest extends Notification
 {
     /**
      * The new email
-     *
-     * @var string
      */
     public string $new_email;
 
     /**
      * Create a notification instance.
-     * @param $new_email
      */
     public function __construct($new_email)
     {
@@ -25,9 +22,6 @@ class EmailUpdateRequest extends Notification
 
     /**
      * Get the notification's channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array|string
      */
     public function via(mixed $notifiable): array|string
     {

@@ -30,12 +30,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\File;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-abstract class User extends Authenticatable implements
-    HasMedia,
-    AdminModel,
-    MustVerifyEmail,
-    PasswordUpdatableContract,
-    UserContract
+abstract class User extends Authenticatable implements AdminModel, HasMedia, MustVerifyEmail, PasswordUpdatableContract, UserContract
 {
     use CausesActivity;
     use HasApiTokens;
@@ -53,15 +48,11 @@ abstract class User extends Authenticatable implements
 
     /**
      * The attributes that would be logged
-     *
-     * @var array
      */
     protected static array $logAttributes = ['*'];
 
     /**
      * Log only changed attributes
-     *
-     * @var boolean
      */
     protected static bool $logOnlyDirty = true;
 
@@ -71,12 +62,12 @@ abstract class User extends Authenticatable implements
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'email'
+        'password', 'remember_token', 'email',
     ];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'last_login_at'     => 'datetime',
+        'last_login_at' => 'datetime',
     ];
 
     /**
@@ -89,8 +80,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Convert dates to Carbon
-     *
-     * @param $date
      */
     public function setLastLoginAtAttribute($date): void
     {
@@ -99,8 +88,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Hash the password before saving
-     *
-     * @param $value
      */
     public function setPasswordAttribute($value): void
     {
@@ -111,7 +98,6 @@ abstract class User extends Authenticatable implements
      * Send the password reset notification.
      *
      * @param  string  $token
-     * @return void
      */
     public function sendPasswordResetNotification($token): void
     {
@@ -120,8 +106,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Send the email verification notification.
-     *
-     * @return void
      */
     public function sendEmailVerificationNotification(): void
     {
@@ -142,8 +126,6 @@ abstract class User extends Authenticatable implements
      * Notify the current email that
      * there has been a request to change
      * the email address
-     *
-     * @param $new_email
      */
     public function sendEmailUpdateRequestNotification($new_email): void
     {
@@ -153,9 +135,6 @@ abstract class User extends Authenticatable implements
     /**
      * Inform the old email that it has
      * been updated to the new email
-     *
-     * @param $old_email
-     * @param $new_email
      */
     public function sendEmailUpdatedNotification($old_email, $new_email): void
     {
@@ -191,9 +170,6 @@ abstract class User extends Authenticatable implements
     /**
      * Request for an email update
      * Saves the new email until it can be verified
-     *
-     * @param $new_email
-     * @return bool
      */
     public function requestEmailUpdate($new_email): bool
     {
@@ -245,9 +221,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Only allow active users for passport
-     *
-     * @param $username
-     * @return mixed
      */
     public function findForPassport($username): mixed
     {
@@ -258,8 +231,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Get pending key
-     *
-     * @return int
      */
     public function getPendingKey(): int
     {
@@ -268,31 +239,24 @@ abstract class User extends Authenticatable implements
 
     /**
      * Pending users scope
-     *
-     * @param $query
-     * @return
      */
     public function scopePending($query)
     {
-        return $query->where($this->getTable() . '.status', $this->getPendingKey());
+        return $query->where($this->getTable().'.status', $this->getPendingKey());
     }
 
     /**
      * Check if new email is available
-     *
-     * @return boolean
      */
     public function isNewEmailAvailable(): bool
     {
-        return !static::where('email', $this->new_email)
+        return ! static::where('email', $this->new_email)
             ->withTrashed()
             ->exists();
     }
 
     /**
      * Check whether the current user's email should be verified
-     *
-     * @return bool
      */
     public function shouldVerifyEmail(): bool
     {
@@ -301,8 +265,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Check if wants new email
-     *
-     * @return boolean
      */
     public function wantsNewEmail(): bool
     {
@@ -314,19 +276,15 @@ abstract class User extends Authenticatable implements
      * Email verification is needed if the user is
      * allowed to verify email and does not have
      * a verified email or wants a new email
-     *
-     * @return boolean
      */
     public function needsEmailVerification(): bool
     {
         return $this->shouldVerifyEmail() &&
-            (!$this->hasVerifiedEmail() || $this->wantsNewEmail());
+            (! $this->hasVerifiedEmail() || $this->wantsNewEmail());
     }
 
     /**
      * Get the email address that should be used for verification.
-     *
-     * @return string
      */
     public function getEmailForVerification(): string
     {
@@ -335,39 +293,31 @@ abstract class User extends Authenticatable implements
 
     /**
      * Email unverified scope
-     *
-     * @param $query
-     * @return mixed
      */
     public function scopeEmailUnverified($query): mixed
     {
-        return $query->whereNull($this->getTable() . '.email_verified_at');
+        return $query->whereNull($this->getTable().'.email_verified_at');
     }
 
     /**
      * Email verified scope
-     *
-     * @param $query
-     * @return
      */
     public function scopeEmailVerified($query)
     {
-        return $query->whereNotNull($this->getTable() . '.email_verified_at');
+        return $query->whereNotNull($this->getTable().'.email_verified_at');
     }
 
     /**
      * Get the user status message
-     *
-     * @return string
      */
     public function getStatusMessageAttribute(): string
     {
         if ($this->is_locked_out) {
-            return __('Your account has been locked due to too many login attempts. ' .
+            return __('Your account has been locked due to too many login attempts. '.
                 'Contact our staff to reset your account password');
         }
 
-        if ($this->shouldVerifyEmail() && !$this->hasVerifiedEmail()) {
+        if ($this->shouldVerifyEmail() && ! $this->hasVerifiedEmail()) {
             return __('Please verify your email address to access your account.');
         }
 
@@ -378,12 +328,11 @@ abstract class User extends Authenticatable implements
      * Set email verified at
      *
      * @param  bool  $verified
-     * @return void
      */
     public function setEmailVerificationStatus($verified): void
     {
         if ($verified) {
-            if (!$this->hasVerifiedEmail()) {
+            if (! $this->hasVerifiedEmail()) {
                 $this->email_verified_at = $this->freshTimestamp();
             }
         } else {
@@ -393,9 +342,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Should verify email scope
-     *
-     * @param $query
-     * @return
      */
     public function scopeShouldVerifyEmail($query)
     {
@@ -404,20 +350,14 @@ abstract class User extends Authenticatable implements
 
     /**
      * Approved users scope
-     *
-     * @param $query
-     * @return
      */
     public function scopeApproved($query)
     {
-        return $query->where($this->getTable() . '.status', UserStatuses::APPROVED);
+        return $query->where($this->getTable().'.status', UserStatuses::APPROVED);
     }
 
     /**
      * Active users scope
-     *
-     * @param $query
-     * @return
      */
     public function scopeActive($query)
     {
@@ -428,20 +368,16 @@ abstract class User extends Authenticatable implements
 
     /**
      * Check if the user is active
-     *
-     * @return bool
      */
     public function getIsActiveAttribute(): bool
     {
         return $this->hasVerifiedEmail() &&
             $this->status == UserStatuses::APPROVED &&
-            (!$this->is_locked_out);
+            (! $this->is_locked_out);
     }
 
     /**
      * Get the max login attempts
-     *
-     * @return int
      */
     public function maxLoginAttempts(): int
     {
@@ -450,8 +386,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Check if is locked out
-     *
-     * @return boolean
      */
     public function getIsLockedOutAttribute(): bool
     {
@@ -460,9 +394,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Locked out users scope
-     *
-     * @param $query
-     * @return
      */
     public function scopeLockedOut($query)
     {
@@ -471,9 +402,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Not locked out users scope
-     *
-     * @param $query
-     * @return
      */
     public function scopeNotLockedOut($query)
     {
@@ -483,8 +411,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Check if is approved
-     *
-     * @return bool
      */
     public function getIsApprovedAttribute(): bool
     {
@@ -493,8 +419,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Check if is banned
-     *
-     * @return bool
      */
     public function getIsBannedAttribute(): bool
     {
@@ -503,8 +427,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Check if is pending
-     *
-     * @return bool
      */
     public function getIsPendingAttribute(): bool
     {
@@ -515,11 +437,10 @@ abstract class User extends Authenticatable implements
      * Check if the user has any of the following permissions
      *
      * @param  array|string  $permissions
-     * @return bool
      */
     public function anyPermission($permissions): bool
     {
-        if (!is_array($permissions)) {
+        if (! is_array($permissions)) {
             $permissions = [$permissions];
         }
 
@@ -534,9 +455,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * User visible
-     *
-     * @param $query
-     * @return mixed
      */
     public function scopeUserVisible($query): mixed
     {
@@ -555,8 +473,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Get is published attribute
-     *
-     * @return bool
      */
     public function getIsPublishedAttribute(): bool
     {
@@ -565,8 +481,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Get email verification redirect url
-     *
-     * @return string
      */
     public function emailVerificationRedirectUrl(): string
     {
@@ -575,8 +489,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Get initials attribute
-     *
-     * @return string
      */
     public function getInitialsAttribute(): string
     {
@@ -592,8 +504,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Increment login attempts
-     *
-     * @return void
      */
     public function incrementLoginAttempts(): void
     {
@@ -602,8 +512,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Reset login attempts
-     *
-     * @return void
      */
     public function resetLoginAttempts(): void
     {
@@ -625,10 +533,9 @@ abstract class User extends Authenticatable implements
     /**
      * Register image conversions
      *
-     * @param  Media|null  $media
      * @throws \Spatie\Image\Exceptions\InvalidManipulation
      */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('avatar')
             ->width(200)
@@ -644,19 +551,16 @@ abstract class User extends Authenticatable implements
 
     /**
      * Get the avatar url
-     *
-     * @return string
      */
     public function getAvatarAttribute(): string
     {
         $avatar = $this->getFirstMediaUrl('avatar', 'avatar');
+
         return $avatar ?: asset(get_setting('default_avatar'));
     }
 
     /**
      * Get the provider for this user type
-     *
-     * @return string
      */
     public function getProvider(): string
     {
@@ -665,8 +569,6 @@ abstract class User extends Authenticatable implements
 
     /**
      * Get the list name
-     *
-     * @return string
      */
     public function getListNameAttribute(): string
     {

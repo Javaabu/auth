@@ -11,9 +11,8 @@ class RedirectIfEmailVerificationNotNeeded
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
-     * @param mixed ...$guards
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  ...$guards
      * @return mixed
      */
     public function handle($request, Closure $next, ...$guards)
@@ -25,7 +24,7 @@ class RedirectIfEmailVerificationNotNeeded
                 /** @var User $user */
                 $user = Auth::guard($guard)->user();
 
-                if (!$user->needsEmailVerification()) {
+                if (! $user->needsEmailVerification()) {
                     if (expects_json($request)) {
                         abort(403, 'Users that do not need email verification not allowed');
                     }

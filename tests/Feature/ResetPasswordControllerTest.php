@@ -10,8 +10,8 @@ use Javaabu\Auth\Tests\TestCase;
 
 class ResetPasswordControllerTest extends TestCase
 {
-    use RefreshDatabase;
     use InteractsWithDatabase;
+    use RefreshDatabase;
 
     public function setUp(): void
     {
@@ -24,9 +24,7 @@ class ResetPasswordControllerTest extends TestCase
     /**
      * Get the token for the user
      *
-     * @param        $user
      * @param  null  $broker
-     * @return string
      */
     protected function getResetToken($user, $broker = null): string
     {
@@ -54,10 +52,10 @@ class ResetPasswordControllerTest extends TestCase
 
         $this->assertTrue(Hash::check('password', $user->password), 'Invalid password');
 
-        $this->post("/password/reset", [
-            'token'                 => $token,
-            'email'                 => 'user@example.com',
-            'password'              => 'abc12345',
+        $this->post('/password/reset', [
+            'token' => $token,
+            'email' => 'user@example.com',
+            'password' => 'abc12345',
             'password_confirmation' => 'abc12345',
         ])
             ->assertSessionMissing('errors');
@@ -74,10 +72,10 @@ class ResetPasswordControllerTest extends TestCase
 
         $this->assertTrue(Hash::check('password', $user->password), 'Invalid password');
 
-        $this->post("/password/reset", [
-            'token'                 => 'invalid_token',
-            'email'                 => 'user@example.com',
-            'password'              => 'abc12345',
+        $this->post('/password/reset', [
+            'token' => 'invalid_token',
+            'email' => 'user@example.com',
+            'password' => 'abc12345',
             'password_confirmation' => 'abc12345',
         ])
             ->assertSessionHasErrors('email');

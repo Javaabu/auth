@@ -14,7 +14,7 @@ class User extends \Javaabu\Auth\User
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getAdminUrlAttribute(): string
     {
@@ -22,7 +22,7 @@ class User extends \Javaabu\Auth\User
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function passwordUpdateUrl(): string
     {
@@ -30,7 +30,7 @@ class User extends \Javaabu\Auth\User
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function homeUrl(): string
     {
@@ -38,7 +38,7 @@ class User extends \Javaabu\Auth\User
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function loginUrl(): string
     {
@@ -46,7 +46,7 @@ class User extends \Javaabu\Auth\User
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getRouteForPasswordReset(): string
     {
@@ -54,7 +54,7 @@ class User extends \Javaabu\Auth\User
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getRouteForEmailVerification(): string
     {
@@ -62,7 +62,7 @@ class User extends \Javaabu\Auth\User
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function inactiveNoticeUrl(): string
     {

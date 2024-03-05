@@ -5,10 +5,9 @@ namespace Javaabu\Auth\Tests\Feature\Http\Controllers;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Javaabu\Auth\Contracts\LoginControllerContract;
 use Javaabu\Auth\Http\Controllers\Auth\LoginController as JavaabuLoginController;
 
-class LoginController extends JavaabuLoginController implements LoginControllerContract
+class LoginController extends JavaabuLoginController
 {
     public function applyMiddlewares(): void
     {

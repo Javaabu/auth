@@ -9,45 +9,45 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Javaabu\Auth\Contracts\ResetPasswordContract;
 use Javaabu\Auth\Http\Controllers\AuthBaseController;
-use Javaabu\Auth\Models\User;
 use Javaabu\Auth\Traits\DeterminesRedirectPaths;
-use Javaabu\Auth\User as UserContract;
 
-abstract class ResetPasswordController extends AuthBaseController
+abstract class ResetPasswordController extends AuthBaseController implements ResetPasswordContract
 {
-    use ResetsPasswords;
     use DeterminesRedirectPaths {
         DeterminesRedirectPaths::redirectPath insteadof ResetsPasswords;
     }
+    use ResetsPasswords;
 
     /**
      * Where to redirect users after resetting their password.
-     *
-     * @var string
      */
-    protected $redirectTo = '/';
-
+    protected string $redirectTo = '/';
 
     /**
      * Define the password broker
-     *
-     * @return PasswordBroker
      */
-    abstract public function broker(): PasswordBroker;
+    public function broker(): PasswordBroker
+    {
+        return $this->getBroker();
+    }
 
     /**
      * Define the guard
      *
      * @return mixed
      */
-    abstract protected function guard(): StatefulGuard;
+    public function guard(): StatefulGuard
+    {
+        return $this->getGuard();
+    }
 
     /**
      * Set the user's password.
      *
      * @param  CanResetPassword  $user
-     * @param  string            $password
+     * @param  string  $password
      * @return void
      */
     protected function setUserPassword($user, $password)
@@ -57,8 +57,6 @@ abstract class ResetPasswordController extends AuthBaseController
 
     /**
      * Get the view name for the showResetForm method
-     *
-     * @return string
      */
     abstract public function getResetFormViewName(): string;
 
@@ -67,7 +65,6 @@ abstract class ResetPasswordController extends AuthBaseController
      *
      * If no token is present, display the link request form.
      *
-     * @param  Request      $request
      * @param  string|null  $token
      * @return Factory|View
      */

@@ -10,8 +10,8 @@ use Javaabu\Auth\Tests\TestCase;
 
 class ForgotPasswordControllerTest extends TestCase
 {
-    use RefreshDatabase;
     use InteractsWithDatabase;
+    use RefreshDatabase;
 
     public function setUp(): void
     {

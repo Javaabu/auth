@@ -20,7 +20,7 @@ class AuthServiceProvider extends ServiceProvider
         // declare publishes
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/config.php' => config_path('auth.php'),
+                __DIR__.'/../config/config.php' => config_path('auth.php'),
             ], 'auth-config');
         }
     }
@@ -31,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
     public function register(): void
     {
         // merge package config with user defined config
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'auth');
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'auth');
 
         $this->app->register(EventServiceProvider::class);
 

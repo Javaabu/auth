@@ -10,8 +10,6 @@ class ConfirmPasswordController extends \Javaabu\Auth\Http\Controllers\Auth\Conf
     /**
      * Apply middlewares for the controller. Used in the constructor.
      * Helps with applying/changing applied middlewares for the controller.
-     *
-     * @return void
      */
     public function applyMiddlewares(): void
     {
@@ -20,10 +18,8 @@ class ConfirmPasswordController extends \Javaabu\Auth\Http\Controllers\Auth\Conf
 
     /**
      * Display the password confirmation view.
-     *
-     * @return View
      */
-    public function showConfirmForm(): View
+    public function getConfirmForm(): View
     {
         return view('passwords.confirm');
     }
@@ -31,7 +27,6 @@ class ConfirmPasswordController extends \Javaabu\Auth\Http\Controllers\Auth\Conf
     /**
      * Reset the password confirmation timeout.
      *
-     * @param  Request  $request
      * @return void
      */
     protected function resetPasswordConfirmationTimeout(Request $request)
