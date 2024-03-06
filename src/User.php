@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Javaabu\Activitylog\Traits\LogsActivity;
 use Javaabu\Auth\Enums\UserStatuses;
+use Javaabu\Auth\Mail\EmailUpdated;
+use Javaabu\Auth\Mail\NewEmailVerification;
 use Javaabu\Auth\Notifications\EmailUpdateRequest;
 use Javaabu\Auth\Notifications\ResetPassword;
 use Javaabu\Auth\Notifications\VerifyEmail;
@@ -241,7 +243,7 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
     /**
      * Get pending key
      */
-    public function getPendingKey(): int
+    public function getPendingKey(): UserStatuses
     {
         return UserStatuses::PENDING;
     }
