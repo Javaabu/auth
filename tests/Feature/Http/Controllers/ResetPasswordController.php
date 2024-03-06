@@ -6,6 +6,7 @@ use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
+use Javaabu\Auth\Tests\Feature\Models\User;
 
 class ResetPasswordController extends \Javaabu\Auth\Http\Controllers\Auth\ResetPasswordController
 {
@@ -22,5 +23,10 @@ class ResetPasswordController extends \Javaabu\Auth\Http\Controllers\Auth\ResetP
     public function getResetFormViewName(): string
     {
         return 'passwords.reset';
+    }
+
+    public function determinePathForRedirectUsing(): \Javaabu\Auth\User
+    {
+        return new User();
     }
 }

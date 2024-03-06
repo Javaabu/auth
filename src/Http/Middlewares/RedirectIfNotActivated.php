@@ -5,7 +5,7 @@ namespace Javaabu\Auth\Http\Middlewares;
 use Closure;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Auth;
-use Javaabu\Auth\Models\User;
+use Javaabu\Auth\Tests\Feature\Models\User;
 
 class RedirectIfNotActivated
 {

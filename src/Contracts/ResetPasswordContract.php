@@ -10,4 +10,6 @@ interface ResetPasswordContract
     public function getBroker(): PasswordBroker;
 
     public function getGuard(): StatefulGuard;
+
+    public function determinePathForRedirectUsing(): \Javaabu\Auth\User;
 }

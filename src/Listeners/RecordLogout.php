@@ -3,7 +3,7 @@
 namespace Javaabu\Auth\Listeners;
 
 use Illuminate\Auth\Events\Logout;
-use Javaabu\Auth\Models\User;
+use Javaabu\Auth\User;
 
 class RecordLogout
 {

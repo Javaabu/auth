@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Route;
 use Javaabu\Activitylog\ActivitylogServiceProvider;
 use Javaabu\Auth\AuthServiceProvider;
 use Javaabu\Auth\Enums\UserStatuses;
-use Javaabu\Auth\Models\User;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\ConfirmPasswordController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\ForgotPasswordController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\HomeController;
@@ -17,6 +16,7 @@ use Javaabu\Auth\Tests\Feature\Http\Controllers\LoginController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\ResetPasswordController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\UpdatePasswordController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\VerificationController;
+use Javaabu\Auth\Tests\Feature\Models\User;
 use Javaabu\Helpers\HelpersServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 

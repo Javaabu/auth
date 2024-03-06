@@ -13,4 +13,6 @@ interface UpdatePasswordContract
     public function getBroker(): PasswordBroker;
 
     public function getPasswordUpdateForm(): View;
+
+    public function determinePathForRedirectUsing(): \Javaabu\Auth\User;
 }

@@ -6,10 +6,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Javaabu\Auth\Enums\UserStatuses;
 
-class UserFactory extends Factory
+abstract class UserFactory extends Factory
 {
-    protected $model = \Javaabu\Auth\Models\User::class;
-
     public function definition(): array
     {
         return [

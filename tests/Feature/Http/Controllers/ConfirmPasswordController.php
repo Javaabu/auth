@@ -4,6 +4,7 @@ namespace Javaabu\Auth\Tests\Feature\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Javaabu\Auth\Tests\Feature\Models\User;
 
 class ConfirmPasswordController extends \Javaabu\Auth\Http\Controllers\Auth\ConfirmPasswordController
 {
@@ -44,5 +45,10 @@ class ConfirmPasswordController extends \Javaabu\Auth\Http\Controllers\Auth\Conf
         return [
             'password' => 'required|current_password',
         ];
+    }
+
+    public function determinePathForRedirectUsing(): \Javaabu\Auth\User
+    {
+        return new User();
     }
 }

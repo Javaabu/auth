@@ -7,4 +7,6 @@ use Illuminate\View\View;
 interface ConfirmPasswordContract
 {
     public function getConfirmForm(): View;
+
+    public function determinePathForRedirectUsing(): \Javaabu\Auth\User;
 }

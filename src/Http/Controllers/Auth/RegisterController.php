@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Javaabu\Auth\Contracts\RegisterContract;
 use Javaabu\Auth\Http\Controllers\AuthBaseController;
-use Javaabu\Auth\Models\User;
-use Javaabu\Auth\User as UserContract;
 
 abstract class RegisterController extends AuthBaseController implements RegisterContract
 {
@@ -76,15 +74,6 @@ abstract class RegisterController extends AuthBaseController implements Register
     public function redirectPath()
     {
         return with($this->determinePathForRedirectUsing())->homeUrl();
-    }
-
-    /**
-     * Determine the User Model to use when determining the path for redirect.
-     * Should return new
-     */
-    public function determinePathForRedirectUsing(): UserContract
-    {
-        return new User();
     }
 
     /**

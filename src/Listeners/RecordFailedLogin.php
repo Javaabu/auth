@@ -3,7 +3,7 @@
 namespace Javaabu\Auth\Listeners;
 
 use Illuminate\Auth\Events\Failed;
-use Javaabu\Auth\Models\User;
+use Javaabu\Auth\User;
 
 class RecordFailedLogin
 {

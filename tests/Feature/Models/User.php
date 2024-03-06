@@ -1,16 +1,17 @@
 <?php
 
-namespace Javaabu\Auth\Models;
+namespace Javaabu\Auth\Tests\Feature\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Javaabu\Auth\Tests\Feature\UserFactory;
 
 class User extends \Javaabu\Auth\User
 {
     use HasFactory;
 
-    protected static function newFactory(): \Javaabu\Auth\Factories\UserFactory
+    protected static function newFactory()
     {
-        return \Javaabu\Auth\Factories\UserFactory::new();
+        return new UserFactory();
     }
 
     /**

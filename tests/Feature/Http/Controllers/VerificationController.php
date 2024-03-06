@@ -3,7 +3,7 @@
 namespace Javaabu\Auth\Tests\Feature\Http\Controllers;
 
 use Illuminate\View\View;
-use Javaabu\Auth\Models\User;
+use Javaabu\Auth\Tests\Feature\Models\User;
 use Javaabu\Auth\VerifiesEmails;
 
 class VerificationController extends \Javaabu\Auth\Http\Controllers\Auth\VerificationController
@@ -35,5 +35,10 @@ class VerificationController extends \Javaabu\Auth\Http\Controllers\Auth\Verific
     public function redirectPath(): string
     {
         return with(new User())->emailVerificationRedirectUrl();
+    }
+
+    public function determinePathForRedirectUsing(): \Javaabu\Auth\User
+    {
+        return new User();
     }
 }

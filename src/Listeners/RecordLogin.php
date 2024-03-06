@@ -4,7 +4,7 @@ namespace Javaabu\Auth\Listeners;
 
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Login;
-use Javaabu\Auth\Models\User;
+use Javaabu\Auth\User;
 
 class RecordLogin
 {
