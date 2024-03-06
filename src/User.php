@@ -68,6 +68,7 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
     protected $casts = [
         'email_verified_at' => 'datetime',
         'last_login_at' => 'datetime',
+        'status' => UserStatuses::class,
     ];
 
     /**
