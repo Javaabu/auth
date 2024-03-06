@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Javaabu\Activitylog\Traits\LogsActivity;
 use Javaabu\Auth\Enums\UserStatuses;
 use Javaabu\Auth\Notifications\EmailUpdateRequest;
 use Javaabu\Auth\Notifications\ResetPassword;
@@ -22,9 +23,7 @@ use Javaabu\Helpers\Media\UpdateMedia;
 use Javaabu\Helpers\Traits\HasStatus;
 use Javaabu\Passport\Traits\HasUserIdentifier;
 use Laravel\Passport\HasApiTokens;
-use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\CausesActivity;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\File;
@@ -59,11 +58,14 @@ abstract class User extends Authenticatable implements
     protected static array $logAttributes = ['*'];
 
     /**
-     * Log only changed attributes
+     * Never log these attributes
      *
-     * @var boolean
+     * @var array
      */
-    protected static bool $logOnlyDirty = true;
+    protected static array $logExceptAttributes = [
+        'password',
+        'remember_token',
+    ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -71,7 +73,9 @@ abstract class User extends Authenticatable implements
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'email'
+        'password',
+        'remember_token',
+        'email'
     ];
 
     protected $casts = [
@@ -671,11 +675,5 @@ abstract class User extends Authenticatable implements
     public function getListNameAttribute(): string
     {
         return __(':name (:email)', ['name' => $this->name, 'email' => $this->email]);
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(static::$logAttributes);
     }
 }

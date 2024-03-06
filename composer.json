@@ -15,7 +15,7 @@
         "javaabu/helpers": "^1.9",
         "javaabu/activitylog": "^1.1",
         "laravel/ui": "^4.4",
-        "javaabu/passport": "^1.0",
+        "javaabu/passport": "^1.1",
         "spatie/laravel-medialibrary": "^10.15"
     },
     "require-dev": {
