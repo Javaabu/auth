@@ -33,7 +33,6 @@ abstract class TestCase extends BaseTestCase
         // Set the view path to include your package's views directory
         $this->app['config']->set('view.paths', [__DIR__.'/Feature/views']);
 
-        $this->app['config']->set('database.default', 'mysql');
         $this->app['config']->set('app.api_prefix', 'api/v1');
 
         $this->app['config']->set('auth.providers.users.model', User::class);
@@ -43,16 +42,6 @@ abstract class TestCase extends BaseTestCase
             'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
-        ]);
-
-        $this->app['config']->set('database.connections.mysql', [
-            'driver' => 'mysql',
-            'database' => env('DB_DATABASE'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'username' => env('DB_USERNAME'),
-            'password' => env('DB_PASSWORD', ''),
-            'prefix' => '',
         ]);
 
         $this->registerRoutes();

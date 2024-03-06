@@ -23,7 +23,6 @@ use Javaabu\Helpers\Media\UpdateMedia;
 use Javaabu\Helpers\Traits\HasStatus;
 use Javaabu\Passport\Traits\HasUserIdentifier;
 use Laravel\Passport\HasApiTokens;
-use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -48,13 +47,20 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
 
     /**
      * The attributes that would be logged
+     *
+     * @var array
      */
     protected static array $logAttributes = ['*'];
 
     /**
-     * Log only changed attributes
+     * Never log these attributes
+     *
+     * @var array
      */
-    protected static bool $logOnlyDirty = true;
+    protected static array $logExceptAttributes = [
+        'password',
+        'remember_token',
+    ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -62,7 +68,9 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'email',
+        'password',
+        'remember_token',
+        'email'
     ];
 
     protected $casts = [
@@ -574,11 +582,5 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
     public function getListNameAttribute(): string
     {
         return __(':name (:email)', ['name' => $this->name, 'email' => $this->email]);
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(static::$logAttributes);
     }
 }
