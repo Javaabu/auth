@@ -110,11 +110,11 @@ abstract class TestCase extends BaseTestCase
     protected function registerRoutes(): void
     {
         Route::group([
-            'middleware' => ['auth:web', 'active:web', 'password-update-not-required:web'],
+            'middleware' => ['web', 'auth:web', 'active:web', 'password-update-not-required:web'],
         ], function () {
             Route::get('/test', function () {
                 return 'Test';
-            })->middleware('password.confirm:web_admin,admin.password.confirm');
+            })->middleware('password.confirm:password.confirm');
         });
 
         $this->registerTestRoute(
