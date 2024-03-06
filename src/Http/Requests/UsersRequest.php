@@ -31,9 +31,9 @@ abstract class UsersRequest extends FormRequest
 
     abstract protected function editingCurrentUser(): bool;
 
-    abstract protected function getRouteUser(): User;
+    abstract protected function getRouteUser(): ?User;
 
-    protected function getUserBeingEdited(): User
+    protected function getUserBeingEdited(): ?User
     {
         if ($this->editingCurrentUser()) {
             return $this->user();
