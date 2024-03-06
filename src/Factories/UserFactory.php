@@ -13,20 +13,11 @@ abstract class UserFactory extends Factory
         return [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
-            'password' => 'password',
+            'password' => env('DEFAULT_USER_PASSWORD', 'password'),
             'remember_token' => Str::random(10),
             'status' => $this->faker->randomElement(UserStatuses::getKeys()),
             'email_verified_at' => $this->faker->randomElement([now(), null]),
         ];
-    }
-
-    public function suspended(): UserFactory
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'account_status' => 'suspended',
-            ];
-        });
     }
 
     public function unverified(): UserFactory
