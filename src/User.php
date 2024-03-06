@@ -445,26 +445,6 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
     }
 
     /**
-     * Check if the user has any of the following permissions
-     *
-     * @param  array|string  $permissions
-     */
-    public function anyPermission($permissions): bool
-    {
-        if (! is_array($permissions)) {
-            $permissions = [$permissions];
-        }
-
-        foreach ($permissions as $permission) {
-            if ($this->can($permission)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * User visible
      */
     public function scopeUserVisible($query): mixed
