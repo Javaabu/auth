@@ -5,7 +5,6 @@ namespace Javaabu\Auth\Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
-use Tests\Feature\Controllers\Admin\AdminTestCase;
 
 class RegisterControllerTest extends TestCase
 {
@@ -35,7 +34,7 @@ class RegisterControllerTest extends TestCase
             'name' => 'User',
             'email' => 'user@javaabu.com',
             'password' => 'Jv7528222',
-            'password_confirmation' => 'Jv7528222'
+            'password_confirmation' => 'Jv7528222',
         ])
             ->assertStatus(404);
 

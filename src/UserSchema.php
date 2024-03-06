@@ -8,10 +8,6 @@ class UserSchema
 {
     /**
      * Adds the columns needed for email verification
-     *
-     * @param Blueprint  $table
-     * @param  bool      $password_required
-     * @param  bool      $email_required
      */
     public static function columns(Blueprint $table, bool $password_required = true, bool $email_required = true): void
     {

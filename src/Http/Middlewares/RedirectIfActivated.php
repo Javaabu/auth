@@ -11,9 +11,8 @@ class RedirectIfActivated
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
-     * @param mixed ...$guards
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  ...$guards
      * @return mixed
      */
     public function handle($request, Closure $next, ...$guards)

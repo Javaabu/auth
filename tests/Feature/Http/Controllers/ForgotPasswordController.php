@@ -11,8 +11,6 @@ class ForgotPasswordController extends \Javaabu\Auth\Http\Controllers\Auth\Forgo
     /**
      * Apply middlewares for the controller. Used in the constructor.
      * Helps with applying/changing applied middlewares for the controller.
-     *
-     * @return void
      */
     public function applyMiddlewares(): void
     {
@@ -24,17 +22,15 @@ class ForgotPasswordController extends \Javaabu\Auth\Http\Controllers\Auth\Forgo
      *
      * @return \Illuminate\Contracts\Auth\PasswordBroker
      */
-    public function broker(): PasswordBroker
+    public function getBroker(): PasswordBroker
     {
         return Password::broker('users');
     }
 
     /**
      * Display the form to request a password reset link.
-     *
-     * @return View
      */
-    public function showLinkRequestForm(): View
+    public function getPasswordResetForm(): View
     {
         return view('passwords.email');
     }

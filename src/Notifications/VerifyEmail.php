@@ -3,8 +3,8 @@
 namespace Javaabu\Auth\Notifications;
 
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\URL;
 
 class VerifyEmail extends \Illuminate\Auth\Notifications\VerifyEmail
 {

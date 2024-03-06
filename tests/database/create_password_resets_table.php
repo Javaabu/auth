@@ -8,8 +8,6 @@ class CreatePasswordResetsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up(): void
     {
@@ -17,10 +15,9 @@ class CreatePasswordResetsTable extends Migration
             \Javaabu\Auth\PasswordUpdate\PasswordUpdateSchema::columns($table);
         });
     }
+
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {

@@ -5,13 +5,17 @@ namespace Javaabu\Auth\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+use Javaabu\Auth\Contracts\VerificationContract;
 use Javaabu\Auth\Http\Controllers\AuthBaseController;
-use Javaabu\Auth\Models\User;
 use Javaabu\Auth\Traits\DeterminesRedirectPaths;
+use Javaabu\Auth\User;
 use Javaabu\Auth\VerifiesEmails;
 
-abstract class VerificationController extends AuthBaseController
+abstract class VerificationController extends AuthBaseController implements VerificationContract
 {
+    use DeterminesRedirectPaths {
+        DeterminesRedirectPaths::redirectPath insteadof VerifiesEmails;
+    }
     /*
     |--------------------------------------------------------------------------
     | Email Verification Controller
@@ -24,9 +28,6 @@ abstract class VerificationController extends AuthBaseController
     */
 
     use VerifiesEmails;
-    use DeterminesRedirectPaths {
-        DeterminesRedirectPaths::redirectPath insteadof VerifiesEmails;
-    }
 
     /**
      * Where to redirect users after verification.
@@ -48,22 +49,27 @@ abstract class VerificationController extends AuthBaseController
     /**
      * Show verified message
      *
-     * @param  Request  $request
-     * @param  User     $user
-     * @param  string   $message
+     * @param  string  $message
      * @return Response|View
      */
-    abstract public function showEmailVerificationForm(Request $request, User $user, $message);
+    public function showEmailVerificationForm(Request $request, User $user, $message)
+    {
+        return $this->getEmailVerificationView()->with(compact('user', 'message'));
+    }
 
     /**
      * Show verification result message
      *
-     * @param  Request  $request
-     * @param  null     $data
-     * @param  null     $errors
+     * @param  null  $data
+     * @param  null  $errors
      * @return Response|View
      */
-    abstract public function showVerificationResult(Request $request, $data = null, $errors = null);
+    public function showVerificationResult(Request $request, $data = null, $errors = null)
+    {
+        return $this->getVerificationResultView()
+            ->with($data)
+            ->withErrors($errors);
+    }
 
     public function applyMiddlewares(): void
     {

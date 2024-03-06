@@ -2,18 +2,16 @@
 
 namespace Javaabu\Auth\Http\Controllers\Auth;
 
-use Illuminate\View\View;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
+use Javaabu\Auth\Contracts\RegisterContract;
 use Javaabu\Auth\Http\Controllers\AuthBaseController;
 use Javaabu\Auth\Models\User;
 use Javaabu\Auth\User as UserContract;
 
-abstract class RegisterController extends AuthBaseController
+abstract class RegisterController extends AuthBaseController implements RegisterContract
 {
     use RegistersUsers;
 
@@ -34,11 +32,9 @@ abstract class RegisterController extends AuthBaseController
         $this->applyMiddlewares();
     }
 
-
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -53,7 +49,6 @@ abstract class RegisterController extends AuthBaseController
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
      * @return User
      */
     protected function create(array $data)
@@ -67,10 +62,8 @@ abstract class RegisterController extends AuthBaseController
 
     /**
      * Display the registration form
-     *
-     * @return Application|Factory|Response|View
      */
-    public function showRegistrationForm()
+    public function showRegistrationForm(): View
     {
         return view('admin.auth.register');
     }
@@ -82,14 +75,12 @@ abstract class RegisterController extends AuthBaseController
      */
     public function redirectPath()
     {
-        return with(new User())->homeUrl();
+        return with($this->determinePathForRedirectUsing())->homeUrl();
     }
 
     /**
      * Determine the User Model to use when determining the path for redirect.
      * Should return new
-     *
-     * @return UserContract
      */
     public function determinePathForRedirectUsing(): UserContract
     {
@@ -99,8 +90,6 @@ abstract class RegisterController extends AuthBaseController
     /**
      * Apply middlewares for the controller. Used in the constructor.
      * Helps with applying/changing applied middlewares for the controller.
-     *
-     * @return void
      */
     public function applyMiddlewares(): void
     {

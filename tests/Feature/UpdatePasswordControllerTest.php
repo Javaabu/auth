@@ -93,7 +93,7 @@ class UpdatePasswordControllerTest extends TestCase
 
         $this->actingAs($user, 'web');
 
-        $this->post("/password/update", [
+        $this->post('/password/update', [
             'current_password' => '12312312',
             'password' => 'abc12345',
             'password_confirmation' => 'abc12345',
@@ -127,7 +127,7 @@ class UpdatePasswordControllerTest extends TestCase
 
         $this->actingAs($user, 'web');
 
-        $this->post("/password/update", [
+        $this->post('/password/update', [
             'current_password' => 'password',
             'password' => 'password',
             'password_confirmation' => 'password',
@@ -158,7 +158,7 @@ class UpdatePasswordControllerTest extends TestCase
 
         $this->actingAs($user, 'web');
 
-        $this->post("/password/update", [
+        $this->post('/password/update', [
             'current_password' => 'password',
             'password' => 'abc12345',
             'password_confirmation' => 'abc1234',
@@ -192,7 +192,7 @@ class UpdatePasswordControllerTest extends TestCase
 
         $this->actingAs($user, 'web');
 
-        $this->post("/password/update", [
+        $this->post('/password/update', [
             'current_password' => 'password',
             'password' => 'abc12345',
             'password_confirmation' => 'abc12345',

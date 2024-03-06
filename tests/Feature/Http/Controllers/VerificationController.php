@@ -2,12 +2,9 @@
 
 namespace Javaabu\Auth\Tests\Feature\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Javaabu\Auth\Models\User;
 use Javaabu\Auth\VerifiesEmails;
-use function Laravel\Prompts\error;
 
 class VerificationController extends \Javaabu\Auth\Http\Controllers\Auth\VerificationController
 {
@@ -22,30 +19,18 @@ class VerificationController extends \Javaabu\Auth\Http\Controllers\Auth\Verific
         $this->middleware('needs-verification')->except('show');
     }
 
-    public function showEmailVerificationForm($request, $user, $message): View
+    public function getEmailVerificationView(): View
     {
-        return view('verification.verify')->with(compact('user', 'message'));
+        return view('verification.verify');
     }
 
-    /**
-     * Show verification result message
-     *
-     * @param  Request  $request
-     * @param  null     $data
-     * @param  null     $errors
-     * @return Response|View
-     */
-    public function showVerificationResult(Request $request, $data = null, $errors = null)
+    public function getVerificationResultView()
     {
-        return view('verification.result')
-            ->with($data)
-            ->withErrors($errors);
+        return view('verification.result');
     }
 
     /**
      * Get the post register / login redirect path.
-     *
-     * @return string
      */
     public function redirectPath(): string
     {

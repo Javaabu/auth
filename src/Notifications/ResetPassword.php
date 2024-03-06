@@ -15,12 +15,6 @@ class ResetPassword extends \Illuminate\Auth\Notifications\ResetPassword
      */
     public static $createUrlCallback = [self::class, 'createPasswordResetUrl'];
 
-    /**
-     *
-     * @param $notifiable
-     * @param $token
-     * @return Application|UrlGenerator|string
-     */
     public static function createPasswordResetUrl($notifiable, $token): string|UrlGenerator|Application
     {
         return url(route($notifiable->getRouteForPasswordReset(), [

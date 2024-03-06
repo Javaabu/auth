@@ -12,10 +12,10 @@ class RedirectIfNotActivated
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
-     * @param mixed ...$guards
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  ...$guards
      * @return mixed
+     *
      * @throws AuthorizationException
      */
     public function handle($request, Closure $next, ...$guards)
@@ -27,7 +27,7 @@ class RedirectIfNotActivated
                 /** @var User $user */
                 $user = Auth::guard($guard)->user();
 
-                if (!$user->is_active) {
+                if (! $user->is_active) {
                     if (expects_json($request)) {
                         throw new AuthorizationException('Account not activated');
                     }

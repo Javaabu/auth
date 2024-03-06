@@ -29,18 +29,18 @@ class VerificationControllerTest extends TestCase
     public function it_redirects_to_email_verification_page_if_the_user_is_not_verified()
     {
         $user = User::factory()
-                ->unverified()
-                ->pending()
-                ->create([
-                    'email' => 'verification-test-user@example.com',
-                ]);
+            ->unverified()
+            ->pending()
+            ->create([
+                'email' => 'verification-test-user@example.com',
+            ]);
 
         $this->actingAs($user);
 
-        $this->get("/")
+        $this->get('/')
             ->assertRedirect('/verify');
 
-        $this->get("/verify")
+        $this->get('/verify')
             ->assertSee('Resend Verification');
     }
 
@@ -56,7 +56,7 @@ class VerificationControllerTest extends TestCase
 
         $this->actingAs($user);
 
-        $this->post("/verify/email/resend")
+        $this->post('/verify/email/resend')
             ->assertSessionMissing('errors');
 
         Notification::assertSentTo(

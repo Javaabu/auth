@@ -22,7 +22,6 @@ use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
@@ -32,7 +31,7 @@ abstract class TestCase extends BaseTestCase
         $this->app['config']->set('session.serialization', 'php');
 
         // Set the view path to include your package's views directory
-        $this->app['config']->set('view.paths', [__DIR__ . '/Feature/views']);
+        $this->app['config']->set('view.paths', [__DIR__.'/Feature/views']);
 
         $this->app['config']->set('app.api_prefix', 'api/v1');
 
@@ -56,7 +55,7 @@ abstract class TestCase extends BaseTestCase
         return [
             HelpersServiceProvider::class,
             AuthServiceProvider::class,
-            ActivitylogServiceProvider::class
+            ActivitylogServiceProvider::class,
         ];
     }
 
@@ -65,10 +64,9 @@ abstract class TestCase extends BaseTestCase
         string $controller,
         $function,
         string $method = 'get',
-        string $name = null,
+        ?string $name = null,
         array $middlewares = ['web']
-    ): void
-    {
+    ): void {
         Route::middleware(array_merge(['web'], $middlewares ?? []))
             ->group(function () use ($uri, $controller, $function, $method, $name) {
                 $route = Route::$method($uri, [$controller, $function]);
@@ -81,7 +79,7 @@ abstract class TestCase extends BaseTestCase
 
     public function seedDatabase(): void
     {
-        if (!SeedState::$seeded) {
+        if (! SeedState::$seeded) {
             $this->seedDefaultUsers();
 
             SeedState::$seeded = true;
@@ -112,7 +110,7 @@ abstract class TestCase extends BaseTestCase
     protected function registerRoutes(): void
     {
         Route::group([
-            'middleware' => ['auth:web', 'active:web', 'password-update-not-required:web']
+            'middleware' => ['auth:web', 'active:web', 'password-update-not-required:web'],
         ], function () {
             Route::get('/test', function () {
                 return 'Test';
@@ -144,7 +142,7 @@ abstract class TestCase extends BaseTestCase
         Route::group([
             'namespace' => 'Auth',
             'prefix' => 'verify',
-            'as' => 'verification.'
+            'as' => 'verification.',
         ], function () {
             Route::get('/', [VerificationController::class, 'show'])->name('notice');
             Route::post('email/resend', [VerificationController::class, 'resend'])->name('resend');
@@ -154,7 +152,7 @@ abstract class TestCase extends BaseTestCase
         Route::group([
             'prefix' => 'password',
             'as' => 'password.',
-            'middleware' => ['web']
+            'middleware' => ['web'],
         ], function () {
             // Forgot Password
             Route::get('reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('request');

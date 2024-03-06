@@ -2,8 +2,8 @@
 
 namespace Javaabu\Auth\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Javaabu\Auth\Enums\UserStatuses;
 use Javaabu\Auth\User;
 use Javaabu\Helpers\Media\AllowedMimeTypes;
@@ -45,13 +45,13 @@ abstract class UsersRequest extends FormRequest
     protected function baseRules(bool $password_required = true, bool $email_required = true): array
     {
         $rules = [
-            'email'                   => 'string|email|max:255|unique:'.$this->tableName(),
-            'name'                    => 'string|max:255',
-            'email_verified'          => 'nullable|boolean',
-            'password'                => 'string|min:8|confirmed',
-            'status'                  => [Rule::in(UserStatuses::getKeys()),],
-            'avatar'                  => AllowedMimeTypes::getValidationRule('image'),
-            'action'                  => 'in:approve,ban,mark_pending,update_password',
+            'email' => 'string|email|max:255|unique:'.$this->tableName(),
+            'name' => 'string|max:255',
+            'email_verified' => 'nullable|boolean',
+            'password' => 'string|min:8|confirmed',
+            'status' => [Rule::in(UserStatuses::getKeys())],
+            'avatar' => AllowedMimeTypes::getValidationRule('image'),
+            'action' => 'in:approve,ban,mark_pending,update_password',
             'require_password_update' => 'boolean',
         ];
 
@@ -61,13 +61,13 @@ abstract class UsersRequest extends FormRequest
 
         // updating
         if ($user = $this->getUserBeingEdited()) {
-            $rules['email'] .= ',email,' . $user->id;
+            $rules['email'] .= ',email,'.$user->id;
             $rules['password'] .= '|required_if:action,update_password';
 
             // current password required
             if ($this->editingCurrentUser() && $user->password) {
                 $rules['current_password'] = 'required_with:password|passcheck:'.$this->tableName().
-                                             ',password,id,' . $user->id;
+                                             ',password,id,'.$user->id;
             }
         } else { // creation
             if ($password_required) {

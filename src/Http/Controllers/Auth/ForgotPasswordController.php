@@ -3,12 +3,13 @@
 namespace Javaabu\Auth\Http\Controllers\Auth;
 
 use Illuminate\Auth\Passwords\PasswordBroker;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
+use Javaabu\Auth\Contracts\ForgotPasswordContract;
 use Javaabu\Auth\Http\Controllers\AuthBaseController;
 
-abstract class ForgotPasswordController extends AuthBaseController
+abstract class ForgotPasswordController extends AuthBaseController implements ForgotPasswordContract
 {
     use SendsPasswordResetEmails;
 
@@ -27,14 +28,25 @@ abstract class ForgotPasswordController extends AuthBaseController
      *
      * @return \Illuminate\Contracts\Auth\PasswordBroker
      */
-    abstract public function broker(): PasswordBroker;
+    public function broker(): PasswordBroker
+    {
+        return $this->getBroker();
+    }
 
     /**
      * Display the form to request a password reset link.
-     *
-     * @return View
      */
-    abstract public function showLinkRequestForm(): View;
+    public function showLinkRequestForm(): View
+    {
+        return $this->getPasswordResetForm();
+    }
 
-
+    /**
+     * Apply middlewares for the controller. Used in the constructor.
+     * Helps with applying/changing applied middlewares for the controller.
+     */
+    public function applyMiddlewares(): void
+    {
+        $this->middleware('auth:web_admin');
+    }
 }

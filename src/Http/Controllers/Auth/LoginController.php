@@ -6,10 +6,11 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Javaabu\Auth\Contracts\LoginContract;
 use Javaabu\Auth\Http\Controllers\AuthBaseController;
 use Javaabu\Auth\Traits\DeterminesRedirectPaths;
 
-abstract class LoginController extends AuthBaseController
+abstract class LoginController extends AuthBaseController implements LoginContract
 {
     use AuthenticatesUsers;
     use DeterminesRedirectPaths {
@@ -18,8 +19,6 @@ abstract class LoginController extends AuthBaseController
 
     /**
      * Where to redirect users after login.
-     *
-     * @var string
      */
     protected string $redirectTo = '/';
 
@@ -35,8 +34,6 @@ abstract class LoginController extends AuthBaseController
 
     /**
      * Show the application's login form.
-     *
-     * @return View
      */
     public function showLoginForm(): View
     {
@@ -45,8 +42,6 @@ abstract class LoginController extends AuthBaseController
 
     /**
      * Get the guard to be used during authentication.
-     *
-     * @return StatefulGuard
      */
     public function guard(): StatefulGuard
     {
@@ -56,7 +51,6 @@ abstract class LoginController extends AuthBaseController
     /**
      * The user has logged out of the application.
      *
-     * @param  Request  $request
      * @return mixed
      */
     protected function loggedOut(Request $request)
@@ -67,8 +61,6 @@ abstract class LoginController extends AuthBaseController
     /**
      * Apply middlewares for the controller. Used in the constructor.
      * Helps with applying/changing applied middlewares for the controller.
-     *
-     * @return void
      */
     public function applyMiddlewares(): void
     {

@@ -3,15 +3,15 @@
 namespace Javaabu\Auth\PasswordUpdate;
 
 use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Javaabu\Auth\User;
-use Illuminate\Http\Request;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Builder;
 
 trait UpdatesPassword
 {
@@ -19,8 +19,6 @@ trait UpdatesPassword
 
     /**
      * Define the guard
-     *
-     * @return Guard
      */
     protected function guard(): Guard
     {
@@ -39,8 +37,6 @@ trait UpdatesPassword
 
     /**
      * The user broker
-     *
-     * @return Builder
      */
     public function broker(): Builder
     {
@@ -49,8 +45,6 @@ trait UpdatesPassword
 
     /**
      * Show the password update form
-     *
-     * @return Factory|View
      */
     public function showPasswordUpdateForm(): Factory|View
     {
@@ -60,7 +54,6 @@ trait UpdatesPassword
     /**
      * Update the password
      *
-     * @param  Request  $request
      * @return RedirectResponse
      */
     public function updatePassword(Request $request)
@@ -77,8 +70,6 @@ trait UpdatesPassword
 
     /**
      * Validate the password update request
-     *
-     * @param  Request  $request
      */
     protected function validatePasswordUpdateRequest(Request $request)
     {
@@ -93,8 +84,6 @@ trait UpdatesPassword
 
     /**
      * Update the user password
-     *
-     * @param  Request  $request
      */
     protected function updateUserPassword(Request $request): void
     {
@@ -108,9 +97,6 @@ trait UpdatesPassword
 
     /**
      * Get the response for a successful password update.
-     *
-     * @param  string  $message
-     * @return RedirectResponse
      */
     protected function sendPasswordUpdatedResponse(string $message = ''): RedirectResponse
     {
@@ -120,7 +106,7 @@ trait UpdatesPassword
                     'type' => 'success',
                     'title' => '',
                     'text' => $message ?: __('Your password has been updated successfully!'),
-                ]
+                ],
             ]);
     }
 }
