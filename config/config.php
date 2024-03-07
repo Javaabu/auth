@@ -14,7 +14,7 @@ return [
 
     'defaults' => [
         'guard' => env('AUTH_GUARD', 'web_admin'),
-        'passwords' => 'users',
+        'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
     /*
@@ -98,7 +98,7 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_reset_tokens',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
         ],
@@ -116,18 +116,6 @@ return [
     */
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
-
-    /*
-     |--------------------------------------------------------------------------
-     | Max login attempts
-     |--------------------------------------------------------------------------
-     |
-     | The maximum login attempts allowed before a user gets locked out.
-     | This is a custom configuration.
-     |
-     */
-
-    'default_guard' => 'web_admin',
 
     /*
      |--------------------------------------------------------------------------
