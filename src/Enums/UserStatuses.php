@@ -2,6 +2,9 @@
 
 namespace Javaabu\Auth\Enums;
 
+use Javaabu\Helpers\Enums\IsEnum;
+use Javaabu\Helpers\Enums\NativeEnumsTrait;
+
 enum UserStatuses: string implements IsEnum
 {
     use NativeEnumsTrait;

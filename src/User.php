@@ -30,6 +30,8 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\File;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Image\Enums\Fit;
+
 
 abstract class User extends Authenticatable implements AdminModel, HasMedia, MustVerifyEmail, PasswordUpdatableContract, UserContract
 {
@@ -542,7 +544,7 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
         $this->addMediaConversion('avatar')
             ->width(200)
             ->height(200)
-            ->fit('crop', 200, 200)
+            ->fit(Fit::Crop, 200, 200)
             ->keepOriginalImageFormat()
             ->performOnCollections('avatar');
 
