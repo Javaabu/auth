@@ -65,6 +65,17 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
     ];
 
     /**
+     * Ignore changes to these attributes
+     * 
+     * @var array|string[]
+     */
+    protected static array $ignoreChangedAttributes = [
+        'updated_at',
+        'created_at',
+        'last_login_at'
+    ];
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array

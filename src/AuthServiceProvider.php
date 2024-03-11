@@ -45,6 +45,5 @@ class AuthServiceProvider extends ServiceProvider
         app('router')->aliasMiddleware('password-update-not-required', RedirectIfPasswordUpdateRequired::class);
         app('router')->aliasMiddleware('password-update-required', RedirectIfPasswordUpdateNotRequired::class);
         app('router')->aliasMiddleware('needs-verification', RedirectIfEmailVerificationNotNeeded::class);
-
     }
 }
