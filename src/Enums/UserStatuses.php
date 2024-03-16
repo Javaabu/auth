@@ -25,9 +25,9 @@ enum UserStatuses: string implements IsEnum
         ];
     }
 
-    public static function getMessage(): string
+    public static function getMessage($status): string
     {
-        return self::messages()[$this->value];
+        return self::messages()[$status];
     }
 
     public static function getMessageFromKey(string $key): string
