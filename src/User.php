@@ -345,7 +345,7 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
             return __('Please verify your email address to access your account.');
         }
 
-        return UserStatuses::getMessage($this->status);
+        return $this->status->getMessage();
     }
 
     /**
