@@ -68,7 +68,7 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
 
     /**
      * Ignore changes to these attributes
-     * 
+     *
      * @var array|string[]
      */
     protected static array $ignoreChangedAttributes = [

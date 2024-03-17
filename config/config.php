@@ -40,6 +40,11 @@ return [
             'provider' => 'users',
         ],
 
+        'api_admin' => [
+            'driver' => 'passport',
+            'provider' => 'users',
+        ],
+
         'api' => [
             'driver' => 'passport',
             'provider' => 'users',
@@ -140,6 +145,7 @@ return [
     */
 
     'passport_guards' => [
+        'api_admin',
         'api',
     ],
 ];
