@@ -90,10 +90,25 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
         'email'
     ];
 
+    /**
+     * The attributes that are cast to native types
+     *
+     * @var array
+     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'last_login_at' => 'datetime',
         'status' => UserStatuses::class,
+    ];
+
+    /**
+     * The searchable attributes
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'name',
+        'email',
     ];
 
     /**
