@@ -7,19 +7,6 @@
 
 Laravel Authentication Helpers
 
-
-## Package setup instructions
-1. Search and replace the following:
-auth
-Auth
-Auth
-Laravel Authentication Helpers
-
-2. Rename AuthServiceProvider.php
-
-3. Remove these instructions
-
-
 ## Documentation
 
 You'll find the documentation on [https://docs.javaabu.com/docs/auth](https://docs.javaabu.com/docs/auth).
