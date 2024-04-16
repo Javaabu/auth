@@ -20,8 +20,8 @@ enum UserStatuses: string implements IsEnum
     {
         return [
             self::APPROVED->value => __('Your account is approved.'),
-            self::PENDING->value  => __('Your account needs to be approved before you can access it.'),
-            self::BANNED->value   => __('Your account has been banned.'),
+            self::PENDING->value => __('Your account needs to be approved before you can access it.'),
+            self::BANNED->value => __('Your account has been banned.'),
         ];
     }
 
@@ -39,8 +39,8 @@ enum UserStatuses: string implements IsEnum
     {
         return [
             self::APPROVED->value => __("Approved"),
-            self::PENDING->value  => __("Pending"),
-            self::BANNED->value   => __("Banned"),
+            self::PENDING->value => __("Pending"),
+            self::BANNED->value => __("Banned"),
         ];
     }
 }

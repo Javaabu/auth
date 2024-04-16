@@ -20,8 +20,8 @@ class NewPasswordNotification extends Notification implements ShouldQueue
      * @param string $password
      */
     public function __construct(
-        protected string $password)
-    {
+        protected string $password
+    ) {
     }
 
     /**
@@ -33,7 +33,7 @@ class NewPasswordNotification extends Notification implements ShouldQueue
     public function via(User $notifiable): array
     {
         return [
-            'mail'
+            'mail',
         ];
     }
 

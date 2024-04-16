@@ -128,7 +128,8 @@ abstract class TestCase extends BaseTestCase
             '/login',
             LoginController::class,
             'login',
-            method: 'post');
+            method: 'post'
+        );
 
         $this->registerTestRoute(
             '/',

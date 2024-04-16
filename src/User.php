@@ -26,12 +26,11 @@ use Javaabu\Helpers\Traits\HasStatus;
 use Javaabu\Passport\Traits\HasUserIdentifier;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Activitylog\Traits\CausesActivity;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\File;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\Image\Enums\Fit;
-
 
 abstract class User extends Authenticatable implements AdminModel, HasMedia, MustVerifyEmail, PasswordUpdatableContract, UserContract
 {
@@ -87,7 +86,7 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
     protected $hidden = [
         'password',
         'remember_token',
-        'email'
+        'email',
     ];
 
     /**

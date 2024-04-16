@@ -2,15 +2,15 @@
 
 namespace Javaabu\Auth\Mail;
 
-use Javaabu\Auth\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\URL;
+use Javaabu\Auth\User;
 
 class NewEmailVerification extends Mailable
 {
@@ -18,7 +18,7 @@ class NewEmailVerification extends Mailable
     use SerializesModels;
 
     /**
-     * @var User $user
+     * @var User
      */
     protected $user;
 

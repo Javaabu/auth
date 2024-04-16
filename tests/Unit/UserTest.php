@@ -3,11 +3,6 @@
 namespace Javaabu\Auth\Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\URL;
-use Javaabu\Auth\Enums\UserStatuses;
-use Javaabu\Auth\Notifications\VerifyEmail;
 use Javaabu\Auth\Tests\Feature\Models\User;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
