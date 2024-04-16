@@ -2,7 +2,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/javaabu/auth.svg?style=flat-square)](https://packagist.org/packages/javaabu/auth)
 [![Test Status](../../actions/workflows/run-tests.yml/badge.svg)](../../actions/workflows/run-tests.yml)
-[![Quality Score](https://img.shields.io/scrutinizer/g/javaabu/auth.svg?style=flat-square)](https://scrutinizer-ci.com/g/javaabu/auth)
+[![Code Style Status](../../actions/workflows/php-cs-fixer.yml/badge.svg)](../../actions/workflows/php-cs-fixer.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/javaabu/auth.svg?style=flat-square)](https://packagist.org/packages/javaabu/auth)
 
 Laravel Authentication Helpers
