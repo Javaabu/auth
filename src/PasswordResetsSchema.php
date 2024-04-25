@@ -1,10 +1,10 @@
 <?php
 
-namespace Javaabu\Auth\PasswordUpdate;
+namespace Javaabu\Auth;
 
 use Illuminate\Database\Schema\Blueprint;
 
-class PasswordUpdateSchema
+class PasswordResetsSchema
 {
     /**
      * Adds the columns needed for email verification

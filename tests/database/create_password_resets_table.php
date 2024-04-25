@@ -12,7 +12,7 @@ class CreatePasswordResetsTable extends Migration
     public function up(): void
     {
         Schema::create('password_resets', function (Blueprint $table) {
-            \Javaabu\Auth\PasswordUpdate\PasswordUpdateSchema::columns($table);
+            \Javaabu\Auth\PasswordResetsSchema::columns($table);
         });
     }
 

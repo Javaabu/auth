@@ -117,11 +117,29 @@ abstract class TestCase extends BaseTestCase
             })->middleware('password.confirm:password.confirm');
         });
 
+        Route::group([
+            'middleware' => ['web'],
+        ], function () {
+            Route::post('/session-test', function () {
+                session()->put('test_key', 'test_value');
+
+                return 'Done!';
+            });
+        });
+
         $this->registerTestRoute(
             '/login',
             LoginController::class,
             'getLoginForm',
             name: 'login'
+        );
+
+        $this->registerTestRoute(
+            '/logout',
+            LoginController::class,
+            'logout',
+            method: 'post',
+            name: 'logout'
         );
 
         $this->registerTestRoute(

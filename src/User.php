@@ -4,6 +4,7 @@ namespace Javaabu\Auth;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,6 +19,7 @@ use Javaabu\Auth\Notifications\ResetPassword;
 use Javaabu\Auth\Notifications\VerifyEmail;
 use Javaabu\Auth\PasswordUpdate\PasswordUpdatable;
 use Javaabu\Auth\PasswordUpdate\PasswordUpdatableContract;
+use Javaabu\Auth\Session\Session;
 use Javaabu\Helpers\AdminModel\AdminModel;
 use Javaabu\Helpers\AdminModel\IsAdminModel;
 use Javaabu\Helpers\Media\AllowedMimeTypes;
@@ -593,5 +595,29 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
     public function getListNameAttribute(): string
     {
         return __(':name (:email)', ['name' => $this->name, 'email' => $this->email]);
+    }
+
+    /**
+     * Get the sessions of the user
+     */
+    public function sessions(): MorphMany
+    {
+        return $this->morphMany(Session::class, 'user');
+    }
+
+    /**
+     * Delete the other browser session records from storage.
+     *
+     * @return void
+     */
+    public function deleteOtherSessionRecords()
+    {
+        if (config('session.driver') !== 'multi_auth_database') {
+            return;
+        }
+
+        $this->sessions()
+            ->where('id', '!=', request()->session()->getId())
+            ->delete();
     }
 }

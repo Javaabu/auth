@@ -39,6 +39,31 @@ class LoginControllerTest extends TestCase
         ])
             ->assertSessionDoesntHaveErrors()
             ->assertRedirect('/');
+
+        $this->assertEquals($user->id, Auth::guard('web')->id());
+    }
+
+    /** @test */
+    public function it_can_logout_a_user(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->getUser('user@example.com');
+
+        $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ])
+            ->assertSessionDoesntHaveErrors()
+            ->assertRedirect('/');
+
+        $this->assertEquals($user->id, Auth::guard('web')->id());
+
+        $this->post('/logout')
+            ->assertSessionDoesntHaveErrors()
+            ->assertRedirect('/');
+
+        $this->assertNull(Auth::guard('web')->id(), 'Invalid logged in user id');
     }
 
     /** @test */

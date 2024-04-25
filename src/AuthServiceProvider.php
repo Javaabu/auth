@@ -2,6 +2,8 @@
 
 namespace Javaabu\Auth;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 use Javaabu\Auth\Http\Middlewares\RedirectIfActivated;
 use Javaabu\Auth\Http\Middlewares\RedirectIfEmailVerificationNotNeeded;
@@ -9,6 +11,7 @@ use Javaabu\Auth\Http\Middlewares\RedirectIfNotActivated;
 use Javaabu\Auth\PasswordUpdate\Middleware\RedirectIfPasswordUpdateNotRequired;
 use Javaabu\Auth\PasswordUpdate\Middleware\RedirectIfPasswordUpdateRequired;
 use Javaabu\Auth\Providers\EventServiceProvider;
+use Javaabu\Auth\Session\MultiAuthDatabaseSessionHandler;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -23,6 +26,18 @@ class AuthServiceProvider extends ServiceProvider
                 __DIR__.'/../config/config.php' => config_path('auth.php'),
             ], 'auth-config');
         }
+
+        Session::extend('multi_auth_database', function (Application $app) {
+            $table = config('session.table');
+
+            $lifetime = config('session.lifetime');
+
+            $connection = config('session.connection');
+
+            $db_connection = $app->make('db')->connection($connection);
+
+            return new MultiAuthDatabaseSessionHandler($db_connection, $table, $lifetime, $app);
+        });
     }
 
     /**
