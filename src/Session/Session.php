@@ -18,7 +18,7 @@ class Session extends Model
      * @var array
      */
     protected $casts = [
-        'last_activity' => 'datetime'
+        'last_activity' => 'datetime',
     ];
 
 

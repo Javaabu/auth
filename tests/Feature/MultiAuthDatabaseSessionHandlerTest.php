@@ -5,7 +5,6 @@ namespace Javaabu\Auth\Tests\Feature;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Auth;
 use Javaabu\Auth\Agent;
 use Javaabu\Auth\Session\Session;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
