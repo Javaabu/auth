@@ -98,9 +98,14 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
      * @var array
      */
     protected $casts = [
+        'name' => 'string',
+        'email' => 'string',
         'email_verified_at' => 'datetime',
         'last_login_at' => 'datetime',
+        'login_attempts' => 'integer',
+        'require_password_update' => 'boolean',
         'status' => UserStatuses::class,
+        'new_email' => 'string',
     ];
 
     /**
