@@ -4,6 +4,7 @@ namespace Javaabu\Auth;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -619,5 +620,12 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
         $this->sessions()
             ->where('id', '!=', request()->session()->getId())
             ->delete();
+    }
+
+    public function emailVerified(): Attribute
+    {
+        return Attribute::get(function () {
+            return $this->hasVerifiedEmail();
+        });
     }
 }
