@@ -93,22 +93,6 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
     ];
 
     /**
-     * The attributes that are cast to native types
-     *
-     * @var array
-     */
-    protected $casts = [
-        'name' => 'string',
-        'email' => 'string',
-        'email_verified_at' => 'datetime',
-        'last_login_at' => 'datetime',
-        'login_attempts' => 'integer',
-        'require_password_update' => 'boolean',
-        'status' => UserStatuses::class,
-        'new_email' => 'string',
-    ];
-
-    /**
      * The searchable attributes
      *
      * @var array
@@ -117,6 +101,25 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
         'name',
         'email',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'name' => 'string',
+            'email' => 'string',
+            'email_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
+            'login_attempts' => 'integer',
+            'require_password_update' => 'boolean',
+            'status' => UserStatuses::class,
+            'new_email' => 'string',
+        ];
+    }
 
     /**
      * Get the user identifier
