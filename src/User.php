@@ -103,6 +103,15 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
     ];
 
     /**
+     * The default values
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'status' => UserStatuses::PENDING,
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

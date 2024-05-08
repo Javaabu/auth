@@ -13,6 +13,7 @@ use Javaabu\Auth\Tests\Feature\Http\Controllers\ConfirmPasswordController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\ForgotPasswordController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\HomeController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\LoginController;
+use Javaabu\Auth\Tests\Feature\Http\Controllers\RegisterController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\ResetPasswordController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\UpdatePasswordController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\VerificationController;
@@ -147,6 +148,19 @@ abstract class TestCase extends BaseTestCase
             LoginController::class,
             'login',
             method: 'post'
+        );
+
+        $this->registerTestRoute(
+            '/register',
+            RegisterController::class,
+            'register',
+            method: 'post'
+        );
+
+        $this->registerTestRoute(
+            '/register',
+            RegisterController::class,
+            'showRegistrationForm',
         );
 
         $this->registerTestRoute(

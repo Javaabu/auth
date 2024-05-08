@@ -8,6 +8,8 @@ use Javaabu\Auth\User;
 
 interface LoginContract
 {
+    public function applyMiddlewares(): void;
+
     public function getGuard(): StatefulGuard;
 
     public function getLoginForm(): View;

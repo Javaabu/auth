@@ -8,6 +8,8 @@ use Illuminate\View\View;
 
 interface UpdatePasswordContract
 {
+    public function applyMiddlewares(): void;
+
     public function getGuard(): StatefulGuard;
 
     public function getBroker(): PasswordBroker;
