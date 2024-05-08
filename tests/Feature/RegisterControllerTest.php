@@ -5,6 +5,7 @@ namespace Javaabu\Auth\Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Javaabu\Auth\Enums\UserStatuses;
 use Javaabu\Auth\Notifications\VerifyEmail;
 use Javaabu\Auth\Tests\Feature\Models\User;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
@@ -54,6 +55,7 @@ class RegisterControllerTest extends TestCase
             'name' => 'User',
             'email' => 'user@javaabu.com',
             'email_verified_at' => null,
+            'status' => UserStatuses::PENDING,
         ]);
 
         $this->assertEquals($user->id, Auth::guard('web')->id());
