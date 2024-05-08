@@ -42,7 +42,7 @@ class RegisterControllerTest extends TestCase
             'name' => 'User',
             'email' => 'user@javaabu.com',
             'password' => 'TestPass123',
-            'password_confirmation' => 'TestPass123'
+            'password_confirmation' => 'TestPass123',
         ])
             ->assertSessionMissing('errors')
             ->assertRedirect('');

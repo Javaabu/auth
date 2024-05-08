@@ -71,7 +71,7 @@ abstract class UsersRequest extends FormRequest
             if ($this->editingCurrentUser() && $user->password) {
                 $rules['current_password'] = [
                     'required_with:password',
-                    'passcheck:'.$this->tableName().',password,id,'.$user->id
+                    'passcheck:'.$this->tableName().',password,id,'.$user->id,
                 ];
             }
         } else { // creation

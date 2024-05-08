@@ -3,7 +3,6 @@
 namespace Javaabu\Auth\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 use Javaabu\Auth\Contracts\RegisterContract;
