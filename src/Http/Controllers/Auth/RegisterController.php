@@ -41,7 +41,7 @@ abstract class RegisterController extends AuthBaseController implements Register
 
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique((new $user_class)->getTable(), 'email')],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique((new $user_class())->getTable(), 'email')],
             'password' => ['required', 'string', Password::min(8), 'confirmed'],
         ]);
     }
