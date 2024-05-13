@@ -2,7 +2,6 @@
 
 namespace Javaabu\Auth\Enums;
 
-use Javaabu\Helpers\Enums\IsEnum;
 use Javaabu\Helpers\Enums\IsStatusEnum;
 use Javaabu\Helpers\Enums\NativeEnumsTrait;
 
