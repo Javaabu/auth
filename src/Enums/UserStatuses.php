@@ -3,9 +3,10 @@
 namespace Javaabu\Auth\Enums;
 
 use Javaabu\Helpers\Enums\IsEnum;
+use Javaabu\Helpers\Enums\IsStatusEnum;
 use Javaabu\Helpers\Enums\NativeEnumsTrait;
 
-enum UserStatuses: string implements IsEnum
+enum UserStatuses: string implements IsStatusEnum
 {
     use NativeEnumsTrait;
 
@@ -35,12 +36,12 @@ enum UserStatuses: string implements IsEnum
         return self::messages()[$key] ?? '';
     }
 
-    public static function labels(): array
+    public function getColor(): string
     {
-        return [
-            self::APPROVED->value => __("Approved"),
-            self::PENDING->value => __("Pending"),
-            self::BANNED->value => __("Banned"),
-        ];
+        return match($this) {
+            self::APPROVED => 'success',
+            self::PENDING => 'info',
+            self::BANNED => 'danger'
+        };
     }
 }
