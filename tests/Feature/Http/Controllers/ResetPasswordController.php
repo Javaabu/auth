@@ -15,11 +15,6 @@ class ResetPasswordController extends \Javaabu\Auth\Http\Controllers\Auth\ResetP
         return Password::broker('users');
     }
 
-    public function getGuard(): StatefulGuard
-    {
-        return Auth::guard('web');
-    }
-
     public function getResetFormViewName(): string
     {
         return 'passwords.reset';

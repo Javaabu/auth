@@ -64,6 +64,6 @@ abstract class LoginController extends AuthBaseController implements LoginContra
      */
     public function applyMiddlewares(): void
     {
-        $this->middleware('guest:web_admin')->except('logout');
+        $this->middleware('guest:' . $this->guardName())->except('logout');
     }
 }

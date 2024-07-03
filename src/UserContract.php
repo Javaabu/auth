@@ -8,6 +8,11 @@ namespace Javaabu\Auth;
 interface UserContract
 {
     /**
+     * Name of the user guard
+     */
+    public function guardName(): string;
+
+    /**
      * Get home url attribute
      *
      * @return string

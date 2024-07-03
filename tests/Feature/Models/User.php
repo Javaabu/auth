@@ -69,4 +69,9 @@ class User extends \Javaabu\Auth\User
     {
         return route('verification.notice');
     }
+
+    public function guardName(): string
+    {
+        return 'web';
+    }
 }

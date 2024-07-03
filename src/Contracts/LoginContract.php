@@ -2,17 +2,11 @@
 
 namespace Javaabu\Auth\Contracts;
 
-use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\View\View;
-use Javaabu\Auth\User;
 
-interface LoginContract
+interface LoginContract extends HasUserTypeRedirectContract
 {
     public function applyMiddlewares(): void;
 
-    public function getGuard(): StatefulGuard;
-
     public function getLoginForm(): View;
-
-    public function determinePathForRedirectUsing(): User;
 }

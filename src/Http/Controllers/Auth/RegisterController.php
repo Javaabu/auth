@@ -8,10 +8,12 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Javaabu\Auth\Contracts\RegisterContract;
 use Javaabu\Auth\Http\Controllers\AuthBaseController;
+use Javaabu\Auth\Traits\DeterminesRedirectPaths;
 
 abstract class RegisterController extends AuthBaseController implements RegisterContract
 {
     use RegistersUsers;
+    use DeterminesRedirectPaths;
 
     /**
      * Where to redirect users after registration.
@@ -28,6 +30,11 @@ abstract class RegisterController extends AuthBaseController implements Register
     public function __construct()
     {
         $this->applyMiddlewares();
+    }
+
+    public function applyMiddlewares(): void
+    {
+        $this->middleware('guest:' . $this->guardName());
     }
 
     /**
