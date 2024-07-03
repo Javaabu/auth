@@ -17,9 +17,9 @@ class RedirectIfEmailNotVerified
      */
     public function handle($request, Closure $next)
     {
-        if (!$request->user() ||
+        if (! $request->user() ||
             ($request->user() instanceof MustVerifyEmail &&
-                !$request->user()->hasVerifiedEmail())) {
+                ! $request->user()->hasVerifiedEmail())) {
 
             if (expects_json($request)) {
                 abort(403, 'Your email address is not verified.');
