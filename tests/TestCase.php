@@ -3,6 +3,7 @@
 namespace Javaabu\Auth\Tests;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
@@ -57,6 +58,7 @@ abstract class TestCase extends BaseTestCase
         return [
             SchemaServiceProvider::class,
             HelpersServiceProvider::class,
+            EventServiceProvider::class,
             AuthServiceProvider::class,
             ActivitylogServiceProvider::class,
         ];
