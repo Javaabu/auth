@@ -64,6 +64,11 @@ class RegisterControllerTest extends TestCase
             [$user],
             VerifyEmail::class
         );
+
+        Notification::assertSentToTimes(
+            $user,
+            VerifyEmail::class,
+            1);
     }
 
     /** @test */
