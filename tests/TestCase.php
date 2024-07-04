@@ -19,6 +19,7 @@ use Javaabu\Auth\Tests\Feature\Http\Controllers\UpdatePasswordController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\VerificationController;
 use Javaabu\Auth\Tests\Feature\Models\User;
 use Javaabu\Helpers\HelpersServiceProvider;
+use Javaabu\Schema\SchemaServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -54,6 +55,7 @@ abstract class TestCase extends BaseTestCase
     protected function getPackageProviders($app)
     {
         return [
+            SchemaServiceProvider::class,
             HelpersServiceProvider::class,
             AuthServiceProvider::class,
             ActivitylogServiceProvider::class,

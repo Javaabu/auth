@@ -66,7 +66,7 @@ abstract class ConfirmPasswordController extends AuthBaseController implements C
      */
     public function resetPasswordConfirmationTimeoutKey(): string
     {
-        return 'web_admin.auth.password_confirmed_at';
+        return $this->guardName() . '.auth.password_confirmed_at';
     }
 
     /**
@@ -75,6 +75,6 @@ abstract class ConfirmPasswordController extends AuthBaseController implements C
      */
     public function applyMiddlewares(): void
     {
-        $this->middleware('auth:web_admin');
+        $this->middleware('auth:' . $this->guardName());
     }
 }

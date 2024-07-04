@@ -40,13 +40,4 @@ abstract class ForgotPasswordController extends AuthBaseController implements Fo
     {
         return $this->getPasswordResetForm();
     }
-
-    /**
-     * Apply middlewares for the controller. Used in the constructor.
-     * Helps with applying/changing applied middlewares for the controller.
-     */
-    public function applyMiddlewares(): void
-    {
-        $this->middleware('auth:web_admin');
-    }
 }

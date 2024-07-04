@@ -3,6 +3,7 @@
 namespace Javaabu\Auth;
 
 use Illuminate\Database\Schema\Blueprint;
+use Javaabu\Auth\Enums\UserStatuses;
 
 class UserSchema
 {
@@ -35,7 +36,7 @@ class UserSchema
         $table->timestamp('last_login_at')->nullable()->index();
         $table->unsignedInteger('login_attempts')->nullable();
         $table->boolean('require_password_update')->default(false);
-        $table->string('status')->index();
+        $table->nativeEnum('status', UserStatuses::class)->index();
         $table->string('new_email')->index()->nullable();
         $table->softDeletes();
     }

@@ -36,7 +36,11 @@ abstract class UpdatePasswordController extends AuthBaseController implements Up
 
     public function applyMiddlewares(): void
     {
-        $this->middleware(['auth:web_admin', 'active:web_admin', 'password-update-required:web_admin']);
+        $this->middleware([
+            'auth:' . $this->guardName(),
+            'active:' . $this->guardName(),
+            'password-update-required:' . $this->guardName()
+        ]);
     }
 
     /**

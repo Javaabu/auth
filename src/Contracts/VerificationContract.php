@@ -2,13 +2,11 @@
 
 namespace Javaabu\Auth\Contracts;
 
-interface VerificationContract
+interface VerificationContract extends HasUserTypeRedirectContract
 {
     public function applyMiddlewares(): void;
 
     public function getEmailVerificationView();
 
     public function getVerificationResultView();
-
-    public function determinePathForRedirectUsing(): \Javaabu\Auth\User;
 }

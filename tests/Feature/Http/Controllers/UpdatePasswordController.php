@@ -10,16 +10,6 @@ use Javaabu\Auth\Tests\Feature\Models\User;
 
 class UpdatePasswordController extends \Javaabu\Auth\Http\Controllers\Auth\UpdatePasswordController
 {
-    public function applyMiddlewares(): void
-    {
-        $this->middleware(['auth:web', 'active:web', 'password-update-required:web']);
-    }
-
-    public function getGuard(): StatefulGuard
-    {
-        return Auth::guard('web');
-    }
-
     public function getBroker(): PasswordBroker
     {
         return Password::broker('users');
