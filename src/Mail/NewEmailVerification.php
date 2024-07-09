@@ -49,7 +49,7 @@ class NewEmailVerification extends Mailable
             ->action(Lang::get('Verify New Email Address'), $verificationUrl)
             ->line(Lang::get('If you did not request to update your email, no further action is required.'));
 
-        return $this->markdown('vendor.notifications.email')->with($message->data());
+        return $this->markdown('notifications::email')->with($message->data());
     }
 
     /**
