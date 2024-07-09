@@ -4,9 +4,11 @@ namespace Javaabu\Auth\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 use Javaabu\Auth\Enums\UserStatuses;
+use Javaabu\Auth\Mail\EmailUpdated;
 use Javaabu\Auth\Notifications\VerifyEmail;
 use Javaabu\Auth\Tests\Feature\Models\User;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
@@ -68,6 +70,8 @@ class VerificationControllerTest extends TestCase
     /** @test */
     public function it_can_verify_the_email()
     {
+        $this->withoutExceptionHandling();
+
         $user = User::factory()
             ->unverified()
             ->pending()
@@ -98,6 +102,51 @@ class VerificationControllerTest extends TestCase
             ->assertSee('Your email has been verified successfully');
 
         $this->assertNotNull($user->email_verified_at);
+    }
+
+    /** @test */
+    public function it_can_verify_the_new_email()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = User::factory()
+            ->active()
+            ->create([
+                'email' => 'old@example.com',
+                'new_email' => 'new-email@example.com'
+            ]);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'email' => 'old@example.com',
+            'new_email' => 'new-email@example.com',
+        ]);
+
+        $this->actingAs($user);
+
+        $url = URL::temporarySignedRoute(
+            $user->getRouteForEmailVerification(),
+            \Illuminate\Support\Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
+            [
+                'id' => $user->getKey(),
+                'hash' => sha1($user->getEmailForVerification()),
+            ]
+        );
+
+        $this->get($url)
+            ->assertStatus(200)
+            ->assertSessionMissing('errors')
+            ->assertSee('Your email has been updated successfully to new-email@example.com');
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'email' => 'new-email@example.com',
+            'new_email' => null,
+        ]);
+
+        Mail::assertSent(EmailUpdated::class, function (EmailUpdated $mail) {
+            return $mail->hasTo('old@example.com');
+        });
     }
 
     /** @test */
