@@ -45,6 +45,6 @@ class EmailUpdated extends Mailable
             ->line('You can no longer login using your old email address.')
             ->line('If you did not make this request, contact us immediately.');
 
-        return $this->markdown('vendor.notifications.email')->with($message->data());
+        return $this->markdown('notifications::email')->with($message->data());
     }
 }

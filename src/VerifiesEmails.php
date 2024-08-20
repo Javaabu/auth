@@ -2,7 +2,7 @@
 
 namespace Javaabu\Auth;
 
-use App\Events\EmailUpdated;
+use Javaabu\Auth\Events\EmailUpdated;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\RedirectResponse;
