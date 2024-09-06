@@ -6,6 +6,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 use Javaabu\Auth\Http\Middlewares\RedirectIfActivated;
+use Javaabu\Auth\Http\Middlewares\RedirectIfActivatedAndEmailVerified;
 use Javaabu\Auth\Http\Middlewares\RedirectIfEmailNotVerified;
 use Javaabu\Auth\Http\Middlewares\RedirectIfEmailVerificationNotNeeded;
 use Javaabu\Auth\Http\Middlewares\RedirectIfNotActivated;
@@ -62,5 +63,6 @@ class AuthServiceProvider extends ServiceProvider
         app('router')->aliasMiddleware('password-update-required', RedirectIfPasswordUpdateNotRequired::class);
         app('router')->aliasMiddleware('needs-verification', RedirectIfEmailVerificationNotNeeded::class);
         app('router')->aliasMiddleware('email.verified', RedirectIfEmailNotVerified::class);
+        app('router')->aliasMiddleware('inactive-email.unverified', RedirectIfActivatedAndEmailVerified::class);
     }
 }

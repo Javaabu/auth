@@ -195,8 +195,7 @@ class LoginControllerTest extends TestCase
 
         $this->get($response->headers->get('Location'))
             ->assertStatus(200)
-            ->assertSee('Your account has been locked due to too many login attempts')
-            ->assertSee('Contact our staff to reset your account password');
+            ->assertSee('Your account has been locked due to too many login attempts');
 
         $this->assertEquals($user->id, Auth::guard('web')->id(), 'Invalid logged in user id');
 

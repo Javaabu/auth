@@ -66,7 +66,7 @@ trait VerifiesEmails
                 throw new AuthorizationException();
             }
         } catch (AuthorizationException $e) {
-            return $this->showVerificationResult($request, null, ['token' => 'Verification token is invalid.']);
+            return $this->showVerificationResult($request, null, ['token' => __('Verification token is invalid.')]);
         }
 
         if (! $user->needsEmailVerification()) {

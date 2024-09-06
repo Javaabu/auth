@@ -373,8 +373,7 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
     public function getStatusMessageAttribute(): string
     {
         if ($this->is_locked_out) {
-            return __('Your account has been locked due to too many login attempts. '.
-                'Contact our staff to reset your account password');
+            return __('Your account has been locked due to too many login attempts. Use forgot password to reset your account password.');
         }
 
         if ($this->shouldVerifyEmail() && ! $this->hasVerifiedEmail()) {

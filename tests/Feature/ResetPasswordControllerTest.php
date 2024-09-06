@@ -45,6 +45,41 @@ class ResetPasswordControllerTest extends TestCase
     }
 
     /** @test */
+    public function it_resets_the_login_attempts_when_the_password_is_reset()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->getUser('user@example.com');
+        $user->login_attempts = 6;
+        $user->save();
+
+        $token = $this->getResetToken($user, 'users');
+
+        $this->assertTrue(Hash::check('password', $user->password), 'Invalid password');
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'login_attempts' => 6,
+        ]);
+
+        $this->post('/password/reset', [
+            'token' => $token,
+            'email' => 'user@example.com',
+            'password' => 'abc12345',
+            'password_confirmation' => 'abc12345',
+        ])
+            ->assertRedirect()
+            ->assertSessionMissing('errors');
+
+        $user = $user->fresh();
+        $this->assertTrue(Hash::check('abc12345', $user->password), 'Invalid password');
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'login_attempts' => null,
+        ]);
+    }
+
+    /** @test */
     public function it_can_reset_the_password()
     {
         $user = $this->getUser('user@example.com');

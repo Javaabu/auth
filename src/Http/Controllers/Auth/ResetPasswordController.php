@@ -18,7 +18,9 @@ abstract class ResetPasswordController extends AuthBaseController implements Res
     use DeterminesRedirectPaths {
         DeterminesRedirectPaths::redirectPath insteadof ResetsPasswords;
     }
-    use ResetsPasswords;
+    use ResetsPasswords {
+        resetPassword as protected traitResetPassword;
+    }
 
     /**
      * Where to redirect users after resetting their password.
@@ -73,5 +75,13 @@ abstract class ResetPasswordController extends AuthBaseController implements Res
         return view($this->getResetFormViewName())->with(
             ['token' => $token, 'email' => $request->email]
         );
+    }
+
+    protected function resetPassword($user, $password)
+    {
+        // reset login attempts
+        $user->login_attempts = null;
+
+        $this->traitResetPassword($user, $password);
     }
 }
