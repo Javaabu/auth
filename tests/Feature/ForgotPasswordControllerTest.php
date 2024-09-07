@@ -72,11 +72,11 @@ class ForgotPasswordControllerTest extends TestCase
         $log = Activity::latest('id')->first();
 
         $this->assertDatabaseHas('activity_log', [
-            //'id' => $log->id,
+            'id' => $log->id,
             'description' => 'password_reset_link_sent',
             'causer_type' => $user->getMorphClass(),
             'causer_id' => $user->id,
-            //'created_at' => $now,
+            'created_at' => $now,
         ]);
     }
 
