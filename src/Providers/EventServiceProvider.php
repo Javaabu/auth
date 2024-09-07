@@ -20,9 +20,19 @@ use Javaabu\Auth\Listeners\RecordPasswordResetLinkSent;
 
 class EventServiceProvider extends ServiceProvider
 {
-    protected function configureEmailVerification(){
+    protected function configureEmailVerification() {
         // fix for Registered Event listener getting registered multiple times
         // see https://github.com/laravel/framework/issues/50783#issuecomment-2072411615
+    }
+
+    /**
+     * Determine if events and listeners should be automatically discovered.
+     *
+     * @return bool
+     */
+    public function shouldDiscoverEvents()
+    {
+        return false;
     }
 
     protected $listen = [
