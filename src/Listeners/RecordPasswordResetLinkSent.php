@@ -2,7 +2,6 @@
 
 namespace Javaabu\Auth\Listeners;
 
-use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Events\PasswordResetLinkSent;
 use Javaabu\Auth\User;
 
