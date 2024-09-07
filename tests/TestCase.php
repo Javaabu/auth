@@ -4,6 +4,7 @@ namespace Javaabu\Auth\Tests;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
@@ -17,11 +18,14 @@ use Javaabu\Auth\Tests\Feature\Http\Controllers\LoginController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\RegisterController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\ResetPasswordController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\UpdatePasswordController;
+use Javaabu\Auth\Tests\Feature\Http\Controllers\UserController;
 use Javaabu\Auth\Tests\Feature\Http\Controllers\VerificationController;
 use Javaabu\Auth\Tests\Feature\Models\User;
 use Javaabu\Helpers\HelpersServiceProvider;
 use Javaabu\Schema\SchemaServiceProvider;
+use Javaabu\Settings\SettingsServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use Spatie\MediaLibrary\MediaLibraryServiceProvider;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -47,6 +51,13 @@ abstract class TestCase extends BaseTestCase
             'expire' => 60,
         ]);
 
+        if (empty(glob($this->app->databasePath('migrations/*_create_activity_log_table.php')))) {
+            Artisan::call('vendor:publish', [
+                '--provider' => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
+                '--tag' => 'activitylog-migrations',
+            ]);
+        }
+
         $this->registerRoutes();
 
         Mail::fake();
@@ -57,6 +68,7 @@ abstract class TestCase extends BaseTestCase
     {
         return [
             SchemaServiceProvider::class,
+            SettingsServiceProvider::class,
             HelpersServiceProvider::class,
             EventServiceProvider::class,
             AuthServiceProvider::class,
@@ -204,6 +216,22 @@ abstract class TestCase extends BaseTestCase
             // Password Update
             Route::get('update', [UpdatePasswordController::class, 'showPasswordUpdateForm'])->name('new-password');
             Route::post('update', [UpdatePasswordController::class, 'updatePassword'])->name('new-password-post');
+        });
+
+        /**
+         * Protected routes
+         */
+        Route::group([
+            'middleware' => [
+                'auth',
+                'active',
+                'password-update-not-required'
+            ],
+        ], function () {
+            Route::get('account', function () {
+                return 'User Account Edit';
+            })->name('user.account');
+            Route::match(['PUT', 'PATCH'], 'account', [UserController::class, 'update'])->name('account.update');
         });
     }
 }

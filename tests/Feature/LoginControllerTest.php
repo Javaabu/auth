@@ -4,8 +4,10 @@ namespace Javaabu\Auth\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
+use Spatie\Activitylog\Models\Activity;
 
 class LoginControllerTest extends TestCase
 {
@@ -44,6 +46,46 @@ class LoginControllerTest extends TestCase
     }
 
     /** @test */
+    public function it_records_the_login_event()
+    {
+        $now = '2024-09-08 12:56:00';
+
+        $this->travelTo($now);
+
+        $user = $this->getUser('user@example.com');
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'last_login_at' => null,
+        ]);
+
+        $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ])
+            ->assertSessionDoesntHaveErrors()
+            ->assertRedirect('/');
+
+        $this->assertEquals($user->id, Auth::guard('web')->id());
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'last_login_at' => $now,
+        ]);
+
+        /** @var Activity $log */
+        $log = Activity::latest('id')->first();
+
+        $this->assertDatabaseHas('activity_log', [
+            'id' => $log->id,
+            'description' => 'login',
+            'causer_type' => $user->getMorphClass(),
+            'causer_id' => $user->id,
+            'created_at' => $now,
+        ]);
+    }
+
+    /** @test */
     public function it_can_logout_a_user(): void
     {
         $this->withoutExceptionHandling();
@@ -64,6 +106,44 @@ class LoginControllerTest extends TestCase
             ->assertRedirect('/');
 
         $this->assertNull(Auth::guard('web')->id(), 'Invalid logged in user id');
+    }
+
+    /** @test */
+    public function it_records_logout_events(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $now = '2024-09-08 12:56:00';
+
+        $this->travelTo($now);
+
+        $user = $this->getUser('user@example.com');
+
+        $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ])
+            ->assertSessionDoesntHaveErrors()
+            ->assertRedirect('/');
+
+        $this->assertEquals($user->id, Auth::guard('web')->id());
+
+        $this->post('/logout')
+            ->assertSessionDoesntHaveErrors()
+            ->assertRedirect('/');
+
+        $this->assertNull(Auth::guard('web')->id(), 'Invalid logged in user id');
+
+        /** @var Activity $log */
+        $log = Activity::latest('id')->first();
+
+        $this->assertDatabaseHas('activity_log', [
+            'id' => $log->id,
+            'description' => 'logout',
+            'causer_type' => $user->getMorphClass(),
+            'causer_id' => $user->id,
+            'created_at' => $now,
+        ]);
     }
 
     /** @test */
@@ -89,6 +169,40 @@ class LoginControllerTest extends TestCase
     }
 
     /** @test */
+    public function it_records_failed_login_events()
+    {
+        $now = '2024-09-08 12:56:00';
+
+        $this->travelTo($now);
+
+        $user = $this->getUser('user@example.com');
+
+        $this->post('/login', [
+            'email' => 'user@example.com',
+            'password' => '9876544',
+        ])
+            ->assertSessionHasErrors('email');
+
+        $this->assertNull(Auth::guard('web')->id(), 'Invalid logged in user id');
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'last_login_at' => null,
+        ]);
+
+        /** @var Activity $log */
+        $log = Activity::latest('id')->first();
+
+        $this->assertDatabaseHas('activity_log', [
+            'id' => $log->id,
+            'description' => 'failed_login',
+            'causer_type' => $user->getMorphClass(),
+            'causer_id' => $user->id,
+            'created_at' => $now,
+        ]);
+    }
+
+    /** @test */
     public function it_increments_the_users_login_attempts_if_an_invalid_password_is_entered()
     {
         $user = $this->getUser('user@example.com');
@@ -109,6 +223,35 @@ class LoginControllerTest extends TestCase
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
             'login_attempts' => 1,
+        ]);
+    }
+
+    /** @test */
+    public function it_records_lockout_events()
+    {
+        $now = '2024-09-08 12:56:00';
+
+        $this->travelTo($now);
+
+        $user = $this->getUser('user@example.com');
+
+        for ($i = 0; $i < 6; $i++) {
+            $this->post('/login', [
+                'email' => $user->email,
+                'password' => 'not-the-password',
+            ])
+                ->assertSessionHasErrors('email');
+
+            $this->assertNull(Auth::guard('web')->id(), 'Invalid logged in user id');
+        }
+
+        /** @var Activity $log */
+        $log = Activity::latest('id')->first();
+
+        $this->assertDatabaseHas('activity_log', [
+            'id' => $log->id,
+            'description' => 'lockout',
+            'created_at' => $now,
         ]);
     }
 

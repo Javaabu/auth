@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Notification;
 use Javaabu\Auth\Notifications\ResetPassword;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
+use Spatie\Activitylog\Models\Activity;
 
 class ForgotPasswordControllerTest extends TestCase
 {
@@ -43,6 +44,37 @@ class ForgotPasswordControllerTest extends TestCase
             $user,
             ResetPassword::class,
         );
+    }
+
+    /** @test */
+    public function it_records_the_password_reset_link_sent_event()
+    {
+        $now = '2024-09-08 12:56:00';
+
+        $this->travelTo($now);
+
+        $user = $this->getUser('user@example.com');
+
+        $this->post('/password/email', [
+            'email' => 'user@example.com',
+        ])
+            ->assertSessionMissing('errors');
+
+        Notification::assertSentToTimes(
+            $user,
+            ResetPassword::class,
+        );
+
+        /** @var Activity $log */
+        $log = Activity::latest('id')->first();
+
+        $this->assertDatabaseHas('activity_log', [
+            'id' => $log->id,
+            'description' => 'password_reset_link_sent',
+            'causer_type' => $user->getMorphClass(),
+            'causer_id' => $user->id,
+            'created_at' => $now,
+        ]);
     }
 
     /** @test */

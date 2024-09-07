@@ -4,6 +4,10 @@ namespace Javaabu\Auth\PasswordUpdate;
 
 interface PasswordUpdatableContract
 {
+    public function shouldLogPasswordChanged(): bool;
+
+    public function markAsPasswordReset();
+
     /**
      * Whether a password update is required
      *

@@ -82,6 +82,8 @@ abstract class ResetPasswordController extends AuthBaseController implements Res
         // reset login attempts
         $user->login_attempts = null;
 
+        $user->markAsPasswordReset();
+
         $this->traitResetPassword($user, $password);
     }
 }

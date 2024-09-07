@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
+use Spatie\Activitylog\Models\Activity;
 
 class ResetPasswordControllerTest extends TestCase
 {
@@ -82,6 +83,8 @@ class ResetPasswordControllerTest extends TestCase
     /** @test */
     public function it_can_reset_the_password()
     {
+        $this->withoutExceptionHandling();
+
         $user = $this->getUser('user@example.com');
         $token = $this->getResetToken($user, 'users');
 
@@ -93,10 +96,45 @@ class ResetPasswordControllerTest extends TestCase
             'password' => 'abc12345',
             'password_confirmation' => 'abc12345',
         ])
-            ->assertSessionMissing('errors');
+            ->assertSessionMissing('errors')
+            ->assertRedirect();
 
         $user = $user->fresh();
         $this->assertTrue(Hash::check('abc12345', $user->password), 'Invalid password');
+    }
+
+    /** @test */
+    public function it_records_the_password_reset_event()
+    {
+        $this->withoutExceptionHandling();
+
+        $now = '2024-09-08 12:56:00';
+
+        $this->travelTo($now);
+
+        $user = $this->getUser('user@example.com');
+        $token = $this->getResetToken($user, 'users');
+
+        $this->assertTrue(Hash::check('password', $user->password), 'Invalid password');
+
+        $this->post('/password/reset', [
+            'token' => $token,
+            'email' => 'user@example.com',
+            'password' => 'abc12345',
+            'password_confirmation' => 'abc12345',
+        ])
+            ->assertSessionMissing('errors')
+            ->assertRedirect();
+
+        $user = $user->fresh();
+        $this->assertTrue(Hash::check('abc12345', $user->password), 'Invalid password');
+
+        $this->assertDatabaseHas('activity_log', [
+            'description' => 'password_reset',
+            'causer_type' => $user->getMorphClass(),
+            'causer_id' => $user->id,
+            'created_at' => $now,
+        ]);
     }
 
     /** @test */

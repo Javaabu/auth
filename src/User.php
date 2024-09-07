@@ -76,6 +76,7 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
     protected static array $ignoreChangedAttributes = [
         'updated_at',
         'created_at',
+        'password',
         'last_login_at',
         'remember_token',
         'login_attempts',
