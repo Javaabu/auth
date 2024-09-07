@@ -49,6 +49,8 @@ class ForgotPasswordControllerTest extends TestCase
     /** @test */
     public function it_records_the_password_reset_link_sent_event()
     {
+        $this->withoutExceptionHandling();
+
         $now = '2024-09-08 12:56:00';
 
         $this->travelTo($now);
@@ -58,7 +60,8 @@ class ForgotPasswordControllerTest extends TestCase
         $this->post('/password/email', [
             'email' => 'user@example.com',
         ])
-            ->assertSessionMissing('errors');
+            ->assertSessionMissing('errors')
+            ->assertRedirect();
 
         Notification::assertSentToTimes(
             $user,
