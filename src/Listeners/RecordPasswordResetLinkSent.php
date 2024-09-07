@@ -25,7 +25,7 @@ class RecordPasswordResetLinkSent
     {
         /** @var User $user */
         $user = $event->user;
-dd('here');
+
         if ($user) {
             // log the logout
             activity()
