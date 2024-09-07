@@ -25,16 +25,6 @@ class EventServiceProvider extends ServiceProvider
         // see https://github.com/laravel/framework/issues/50783#issuecomment-2072411615
     }
 
-    /**
-     * Determine if events and listeners should be automatically discovered.
-     *
-     * @return bool
-     */
-    public function shouldDiscoverEvents()
-    {
-        return false;
-    }
-
     protected $listen = [
         Failed::class => [
             RecordFailedLogin::class,
