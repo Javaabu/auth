@@ -11,7 +11,6 @@ use Javaabu\Auth\Rules\UniqueGmail;
 use App\Models\User;
 
 $rule = new UniqueGmail(User::class);
-
 ```
 
 The class takes in the following arguments:
