@@ -234,4 +234,16 @@ abstract class TestCase extends BaseTestCase
             Route::match(['PUT', 'PATCH'], 'account', [UserController::class, 'update'])->name('account.update');
         });
     }
+
+    protected function checkRule(mixed $rule, string $attribute, mixed $value): bool
+    {
+        $passed = true;
+        $fail = function () use (&$passed) {
+            $passed = false;
+        };
+
+        $rule->validate($attribute, $value, $fail);
+
+        return $passed;
+    }
 }

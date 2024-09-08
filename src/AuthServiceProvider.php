@@ -27,7 +27,13 @@ class AuthServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('auth.php'),
             ], 'auth-config');
+
+            $this->publishes([
+                __DIR__ . '/../lang' => lang_path('vendor/auth'),
+            ], 'auth-translations');
         }
+
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'auth');
 
         Session::extend('multi_auth_database', function (Application $app) {
             $table = config('session.table');
