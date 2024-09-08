@@ -21,6 +21,7 @@ use Javaabu\Auth\Notifications\VerifyEmail;
 use Javaabu\Auth\PasswordUpdate\PasswordUpdatable;
 use Javaabu\Auth\PasswordUpdate\PasswordUpdatableContract;
 use Javaabu\Auth\Session\Session;
+use Javaabu\Auth\Traits\DetectsGmailAliases;
 use Javaabu\Helpers\AdminModel\AdminModel;
 use Javaabu\Helpers\AdminModel\IsAdminModel;
 use Javaabu\Helpers\Media\AllowedMimeTypes;
@@ -48,6 +49,7 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
     use PasswordUpdatable;
     use SoftDeletes;
     use UpdateMedia;
+    use DetectsGmailAliases;
 
     protected static string $status_class = UserStatuses::class;
 
