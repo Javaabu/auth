@@ -84,7 +84,10 @@ class UniqueGmail implements ValidationRule
                          ->exists();
 
         if ($has_alias) {
-            $fail(trans('auth::validation.unique-gmail', ['attribute' => $attribute]));
+            $attribute_key = 'validation.attributes.' . $attribute;
+            $attribute = trans()->has($attribute_key) ? trans($attribute_key) : $attribute;
+
+            $fail(trans('auth::validation.unique-gmail', compact('attribute')));
         }
     }
 }
