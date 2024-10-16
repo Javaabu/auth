@@ -92,7 +92,6 @@ abstract class User extends Authenticatable implements AdminModel, HasMedia, Mus
     protected $hidden = [
         'password',
         'remember_token',
-        'email',
     ];
 
     /**
