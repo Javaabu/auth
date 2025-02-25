@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Javaabu\Auth\Tests\Feature\Models\User;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class DetectsGmailAliasesTest extends TestCase
 {
@@ -19,7 +20,7 @@ class DetectsGmailAliasesTest extends TestCase
         $this->runMigrations();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_detect_exact_same_gmail()
     {
         $user_1 = User::factory()
@@ -40,7 +41,7 @@ class DetectsGmailAliasesTest extends TestCase
         $this->assertEquals($user_1->id, $users->first()->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_detect_plus_variation_in_db()
     {
         $user_1 = User::factory()
@@ -61,7 +62,7 @@ class DetectsGmailAliasesTest extends TestCase
         $this->assertEquals($user_1->id, $users->first()->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_detect_plus_variation_in_given_email()
     {
         $user_1 = User::factory()
@@ -82,7 +83,7 @@ class DetectsGmailAliasesTest extends TestCase
         $this->assertEquals($user_1->id, $users->first()->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_detect_plus_variation_in_given_email_and_db()
     {
         $user_1 = User::factory()
@@ -103,7 +104,7 @@ class DetectsGmailAliasesTest extends TestCase
         $this->assertEquals($user_1->id, $users->first()->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_detect_dot_variation_in_db()
     {
         $user_1 = User::factory()
@@ -124,7 +125,7 @@ class DetectsGmailAliasesTest extends TestCase
         $this->assertEquals($user_1->id, $users->first()->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_detect_dot_variation_in_given_email()
     {
         $user_1 = User::factory()
@@ -145,7 +146,7 @@ class DetectsGmailAliasesTest extends TestCase
         $this->assertEquals($user_1->id, $users->first()->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_detect_dot_variation_in_given_email_and_db()
     {
         $user_1 = User::factory()
@@ -166,7 +167,7 @@ class DetectsGmailAliasesTest extends TestCase
         $this->assertEquals($user_1->id, $users->first()->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_detect_combined_dot_and_plus_variation()
     {
         $user_1 = User::factory()
@@ -187,7 +188,7 @@ class DetectsGmailAliasesTest extends TestCase
         $this->assertEquals($user_1->id, $users->first()->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_handle_different_case_in_db()
     {
         $user_1 = User::factory()
@@ -208,7 +209,7 @@ class DetectsGmailAliasesTest extends TestCase
         $this->assertEquals($user_1->id, $users->first()->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_handle_different_case_in_the_given_email()
     {
         $user_1 = User::factory()
@@ -229,7 +230,7 @@ class DetectsGmailAliasesTest extends TestCase
         $this->assertEquals($user_1->id, $users->first()->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_works_even_if_there_is_no_matching_gmail()
     {
         $user_1 = User::factory()
@@ -249,7 +250,7 @@ class DetectsGmailAliasesTest extends TestCase
         $this->assertEquals(0, $users->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_works_even_if_there_is_no_gmails_in_the_db()
     {
         $user_1 = User::factory()
@@ -269,7 +270,7 @@ class DetectsGmailAliasesTest extends TestCase
         $this->assertEquals(0, $users->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_works_even_if_there_is_no_gmails_in_the_given_email()
     {
         $user_1 = User::factory()

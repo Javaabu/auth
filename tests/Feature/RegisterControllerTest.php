@@ -10,6 +10,7 @@ use Javaabu\Auth\Notifications\VerifyEmail;
 use Javaabu\Auth\Tests\Feature\Models\User;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class RegisterControllerTest extends TestCase
 {
@@ -24,7 +25,7 @@ class RegisterControllerTest extends TestCase
         $this->seedDefaultUsers();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_display_the_user_registration_page()
     {
         $this->withoutExceptionHandling();
@@ -34,7 +35,7 @@ class RegisterControllerTest extends TestCase
             ->assertSee('Register');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_register_a_user()
     {
         $this->withoutExceptionHandling();
@@ -71,7 +72,7 @@ class RegisterControllerTest extends TestCase
             1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_the_registration_inputs()
     {
         $this->post('/register', [

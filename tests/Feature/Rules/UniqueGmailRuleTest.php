@@ -7,6 +7,7 @@ use Javaabu\Auth\Rules\UniqueGmail;
 use Javaabu\Auth\Tests\Feature\Models\User;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class UniqueGmailRuleTest extends TestCase
 {
@@ -20,7 +21,7 @@ class UniqueGmailRuleTest extends TestCase
         $this->runMigrations();
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_if_there_is_a_matching_gmail()
     {
         $user_1 = User::factory()
@@ -41,7 +42,7 @@ class UniqueGmailRuleTest extends TestCase
         $this->assertFalse($passed);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_specify_custom_field_name()
     {
         $user_1 = User::factory()
@@ -62,7 +63,7 @@ class UniqueGmailRuleTest extends TestCase
         $this->assertFalse($passed);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_ignore_user_ids()
     {
         $user_1 = User::factory()
@@ -83,7 +84,7 @@ class UniqueGmailRuleTest extends TestCase
         $this->assertTrue($passed);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_ignore_user_custom_user_ids()
     {
         $user_1 = User::factory()
@@ -104,7 +105,7 @@ class UniqueGmailRuleTest extends TestCase
         $this->assertTrue($passed);
     }
 
-    /** @test */
+    #[Test]
     public function it_passes_if_there_is_no_matching_gmail()
     {
         $user_1 = User::factory()
@@ -125,7 +126,7 @@ class UniqueGmailRuleTest extends TestCase
         $this->assertTrue($passed);
     }
 
-    /** @test */
+    #[Test]
     public function it_passes_if_it_is_not_a_gmail()
     {
         $user_1 = User::factory()

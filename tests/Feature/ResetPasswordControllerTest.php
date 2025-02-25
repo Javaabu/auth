@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Spatie\Activitylog\Models\Activity;
 
 class ResetPasswordControllerTest extends TestCase
@@ -34,7 +35,7 @@ class ResetPasswordControllerTest extends TestCase
             ->createToken($user);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_display_the_reset_password_page()
     {
         $user = $this->getUser('user@example.com');
@@ -45,7 +46,7 @@ class ResetPasswordControllerTest extends TestCase
             ->assertSee('Reset Password');
     }
 
-    /** @test */
+    #[Test]
     public function it_resets_the_login_attempts_when_the_password_is_reset()
     {
         $this->withoutExceptionHandling();
@@ -80,7 +81,7 @@ class ResetPasswordControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_reset_the_password()
     {
         $this->withoutExceptionHandling();
@@ -103,7 +104,7 @@ class ResetPasswordControllerTest extends TestCase
         $this->assertTrue(Hash::check('abc12345', $user->password), 'Invalid password');
     }
 
-    /** @test */
+    #[Test]
     public function it_records_the_password_reset_event()
     {
         $this->withoutExceptionHandling();
@@ -137,7 +138,7 @@ class ResetPasswordControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_allow_the_password_to_reset_using_an_invalid_token()
     {
         $user = $this->getUser('user@example.com');

@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ConfirmPasswordControllerTest extends TestCase
 {
@@ -20,7 +21,7 @@ class ConfirmPasswordControllerTest extends TestCase
         $this->seedDefaultUsers();
     }
 
-    /** @test */
+    #[Test]
     public function it_redirects_to_the_password_confirmation_page_if_the_user_is_required_to_confirm_the_password()
     {
         $user = $this->getUser('user@example.com');
@@ -31,7 +32,7 @@ class ConfirmPasswordControllerTest extends TestCase
             ->assertRedirect('/password/confirm');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_display_the_password_confirmation_page()
     {
         $this->withoutExceptionHandling();
@@ -44,7 +45,7 @@ class ConfirmPasswordControllerTest extends TestCase
             ->assertSee('Confirm Password');
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_allow_the_password_to_be_confirmed_using_an_invalid_current_password()
     {
         $user = $this->getUser('user@example.com');
@@ -61,7 +62,7 @@ class ConfirmPasswordControllerTest extends TestCase
             ->assertRedirect();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_confirm_the_password()
     {
         $this->withoutExceptionHandling();

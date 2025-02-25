@@ -13,6 +13,7 @@ use Javaabu\Auth\Notifications\VerifyEmail;
 use Javaabu\Auth\Tests\Feature\Models\User;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class VerificationControllerTest extends TestCase
 {
@@ -27,7 +28,7 @@ class VerificationControllerTest extends TestCase
         $this->seedDefaultUsers();
     }
 
-    /** @test */
+    #[Test]
     public function it_redirects_to_email_verification_page_if_the_user_is_not_verified()
     {
         $user = User::factory()
@@ -46,7 +47,7 @@ class VerificationControllerTest extends TestCase
             ->assertSee('Resend Verification');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_resend_the_email_verification()
     {
         $user = User::factory()
@@ -67,7 +68,7 @@ class VerificationControllerTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_verify_the_email()
     {
         $this->withoutExceptionHandling();
@@ -104,7 +105,7 @@ class VerificationControllerTest extends TestCase
         $this->assertNotNull($user->email_verified_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_verify_the_new_email()
     {
         $this->withoutExceptionHandling();
@@ -149,7 +150,7 @@ class VerificationControllerTest extends TestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_allow_the_email_to_be_verified_using_an_invalid_token()
     {
         $this->withoutExceptionHandling();

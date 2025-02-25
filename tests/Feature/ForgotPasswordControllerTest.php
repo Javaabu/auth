@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Notification;
 use Javaabu\Auth\Notifications\ResetPassword;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Spatie\Activitylog\Models\Activity;
 
 class ForgotPasswordControllerTest extends TestCase
@@ -22,7 +23,7 @@ class ForgotPasswordControllerTest extends TestCase
         $this->seedDefaultUsers();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_display_the_forgot_password_page()
     {
         $this->get('/password/reset')
@@ -30,7 +31,7 @@ class ForgotPasswordControllerTest extends TestCase
             ->assertSee('Forgot Password');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_send_the_forgot_password_link()
     {
         $user = $this->getUser('user@example.com');
@@ -46,7 +47,7 @@ class ForgotPasswordControllerTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_records_the_password_reset_link_sent_event()
     {
         $this->withoutExceptionHandling();
@@ -80,7 +81,7 @@ class ForgotPasswordControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_the_forgot_password_inputs()
     {
         $user = $this->getUser('user@example.com');

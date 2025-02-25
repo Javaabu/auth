@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Spatie\Activitylog\Models\Activity;
 
 class LoginControllerTest extends TestCase
@@ -22,7 +23,7 @@ class LoginControllerTest extends TestCase
         $this->seedDefaultUsers();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_show_the_login_form_page(): void
     {
         $this->get('/login')
@@ -30,7 +31,7 @@ class LoginControllerTest extends TestCase
             ->assertViewIs('login');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_login_a_user(): void
     {
         $user = $this->getUser('user@example.com');
@@ -45,7 +46,7 @@ class LoginControllerTest extends TestCase
         $this->assertEquals($user->id, Auth::guard('web')->id());
     }
 
-    /** @test */
+    #[Test]
     public function it_records_the_login_event()
     {
         $now = '2024-09-08 12:56:00';
@@ -85,7 +86,7 @@ class LoginControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_logout_a_user(): void
     {
         $this->withoutExceptionHandling();
@@ -108,7 +109,7 @@ class LoginControllerTest extends TestCase
         $this->assertNull(Auth::guard('web')->id(), 'Invalid logged in user id');
     }
 
-    /** @test */
+    #[Test]
     public function it_records_logout_events(): void
     {
         $this->withoutExceptionHandling();
@@ -146,7 +147,7 @@ class LoginControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_the_login_inputs()
     {
         $this->post('/login', [
@@ -156,7 +157,7 @@ class LoginControllerTest extends TestCase
             ->assertSessionHasErrors('password', 'email');
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_allow_a_user_to_be_logged_in_using_an_invalid_password()
     {
         $this->post('/login', [
@@ -168,7 +169,7 @@ class LoginControllerTest extends TestCase
         $this->assertNull(Auth::guard('web')->id(), 'Invalid logged in user id');
     }
 
-    /** @test */
+    #[Test]
     public function it_records_failed_login_events()
     {
         $now = '2024-09-08 12:56:00';
@@ -202,7 +203,7 @@ class LoginControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_increments_the_users_login_attempts_if_an_invalid_password_is_entered()
     {
         $user = $this->getUser('user@example.com');
@@ -226,7 +227,7 @@ class LoginControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_records_lockout_events()
     {
         $now = '2024-09-08 12:56:00';
@@ -255,7 +256,7 @@ class LoginControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_resets_the_login_attempts_when_the_correct_password_is_entered()
     {
         $this->withoutExceptionHandling();
@@ -284,7 +285,7 @@ class LoginControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_reset_the_login_attempts_if_the_user_is_already_locked_out_even_when_the_correct_password_is_entered()
     {
         $user = $this->getUser('user@example.com');
@@ -312,7 +313,7 @@ class LoginControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_a_lock_out_message_if_there_are_too_many_login_attempts()
     {
         $this->withoutExceptionHandling();

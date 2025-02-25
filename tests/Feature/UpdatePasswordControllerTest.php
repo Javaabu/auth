@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class UpdatePasswordControllerTest extends TestCase
 {
@@ -20,7 +21,7 @@ class UpdatePasswordControllerTest extends TestCase
         $this->seedDefaultUsers();
     }
 
-    /** @test */
+    #[Test]
     public function it_redirects_to_the_password_update_page_if_the_user_is_required_to_update_the_password()
     {
         $user = $this->getUser('user@example.com');
@@ -39,7 +40,7 @@ class UpdatePasswordControllerTest extends TestCase
             ->assertRedirect('/password/update');
     }
 
-    /** @test */
+    #[Test]
     public function it_redirects_to_the_dashboard_if_password_update_is_not_required()
     {
         $user = $this->getUser('user@example.com');
@@ -56,7 +57,7 @@ class UpdatePasswordControllerTest extends TestCase
             ->assertDontSee('Update Password');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_display_the_password_update_page()
     {
         $user = $this->getUser('user@example.com');
@@ -76,7 +77,7 @@ class UpdatePasswordControllerTest extends TestCase
             ->assertSee('Update Password');
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_allow_the_password_to_be_updated_using_an_invalid_current_password()
     {
         $user = $this->getUser('user@example.com');
@@ -110,7 +111,7 @@ class UpdatePasswordControllerTest extends TestCase
         $this->assertFalse(Hash::check('abc12345', $user->password), 'Invalid password');
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_allow_the_password_to_be_updated_using_a_same_password_as_the_current_password()
     {
         $user = $this->getUser('user@example.com');
@@ -141,7 +142,7 @@ class UpdatePasswordControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_requires_the_new_password_to_be_confirmed_when_updating_the_password()
     {
         $user = $this->getUser('user@example.com');
@@ -175,7 +176,7 @@ class UpdatePasswordControllerTest extends TestCase
         $this->assertFalse(Hash::check('abc12345', $user->password), 'Invalid password');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_update_the_password()
     {
         $user = $this->getUser('user@example.com');

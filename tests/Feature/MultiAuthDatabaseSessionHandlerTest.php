@@ -9,6 +9,7 @@ use Javaabu\Auth\Agent;
 use Javaabu\Auth\Session\Session;
 use Javaabu\Auth\Tests\InteractsWithDatabase;
 use Javaabu\Auth\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class MultiAuthDatabaseSessionHandlerTest extends TestCase
 {
@@ -25,7 +26,7 @@ class MultiAuthDatabaseSessionHandlerTest extends TestCase
         $this->seedDefaultUsers();
     }
 
-    /** @test */
+    #[Test]
     public function it_records_the_user_type_in_the_sessions_table(): void
     {
         $user = $this->getUser('user@example.com');
@@ -46,7 +47,7 @@ class MultiAuthDatabaseSessionHandlerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_record_session_data_even_when_not_logged_in(): void
     {
         $this->post('/session-test')
@@ -62,7 +63,7 @@ class MultiAuthDatabaseSessionHandlerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_retrieve_the_sessions_of_a_user(): void
     {
         $user = $this->getUser('user@example.com');
@@ -84,7 +85,7 @@ class MultiAuthDatabaseSessionHandlerTest extends TestCase
         $this->assertEquals('user@example.com', $last_session->user->email);
     }
 
-    /** @test */
+    #[Test]
     public function it_knows_the_current_device(): void
     {
         $user = $this->getUser('user@example.com');
@@ -120,7 +121,7 @@ class MultiAuthDatabaseSessionHandlerTest extends TestCase
         $this->assertEquals($user->getMorphClass(), $old_session->user_type);
     }
 
-    /** @test */
+    #[Test]
     public function it_creates_the_session_user_agent(): void
     {
         $user = $this->getUser('user@example.com');
@@ -142,7 +143,7 @@ class MultiAuthDatabaseSessionHandlerTest extends TestCase
         $this->assertInstanceOf(Agent::class, $last_session->agent);
     }
 
-    /** @test */
+    #[Test]
     public function it_records_the_last_activity_time(): void
     {
         $user = $this->getUser('user@example.com');
@@ -164,7 +165,7 @@ class MultiAuthDatabaseSessionHandlerTest extends TestCase
         $this->assertInstanceOf(Carbon::class, $last_session->last_activity);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_delete_other_sessions_of_the_user(): void
     {
         $user = $this->getUser('user@example.com');
