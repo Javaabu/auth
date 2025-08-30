@@ -8,5 +8,5 @@ interface ConfirmPasswordContract extends HasUserTypeRedirectContract
 {
     public function applyMiddlewares(): void;
 
-    public function getConfirmForm(): View;
+    public function getConfirmForm();
 }

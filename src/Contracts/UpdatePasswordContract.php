@@ -11,5 +11,5 @@ interface UpdatePasswordContract extends HasUserTypeRedirectContract
 
     public function getBroker(): PasswordBroker;
 
-    public function getPasswordUpdateForm(): View;
+    public function getPasswordUpdateForm();
 }

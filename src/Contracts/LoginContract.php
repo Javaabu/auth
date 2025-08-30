@@ -8,5 +8,5 @@ interface LoginContract extends HasUserTypeRedirectContract
 {
     public function applyMiddlewares(): void;
 
-    public function getLoginForm(): View;
+    public function getLoginForm();
 }

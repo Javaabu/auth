@@ -62,7 +62,7 @@ abstract class UpdatePasswordController extends AuthBaseController implements Up
     /**
      * Show the password update form
      */
-    public function showPasswordUpdateForm(): View
+    public function showPasswordUpdateForm()
     {
         return $this->getPasswordUpdateForm();
     }

@@ -36,7 +36,7 @@ abstract class ForgotPasswordController extends AuthBaseController implements Fo
     /**
      * Display the form to request a password reset link.
      */
-    public function showLinkRequestForm(): View
+    public function showLinkRequestForm()
     {
         return $this->getPasswordResetForm();
     }

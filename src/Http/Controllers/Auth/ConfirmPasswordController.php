@@ -34,7 +34,7 @@ abstract class ConfirmPasswordController extends AuthBaseController implements C
     /**
      * Display the password confirmation view.
      */
-    public function showConfirmForm(): View
+    public function showConfirmForm()
     {
         return $this->getConfirmForm();
     }

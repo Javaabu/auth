@@ -11,5 +11,5 @@ interface ForgotPasswordContract
 
     public function getBroker(): PasswordBroker;
 
-    public function getPasswordResetForm(): View;
+    public function getPasswordResetForm();
 }

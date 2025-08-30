@@ -35,7 +35,7 @@ abstract class LoginController extends AuthBaseController implements LoginContra
     /**
      * Show the application's login form.
      */
-    public function showLoginForm(): View
+    public function showLoginForm()
     {
         return $this->getLoginForm();
     }
