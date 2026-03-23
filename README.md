@@ -1,7 +1,7 @@
 # Auth
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/javaabu/auth.svg?style=flat-square)](https://packagist.org/packages/javaabu/auth)
-[![Test Status](../../actions/workflows/run-tests.yml/badge.svg)](../../actions/workflows/run-tests.yml)
+[![Test Status](../../actions/workflows/run-tests.yml/badge.svg?branch=1.x)](../../actions/workflows/run-tests.yml)
 ![Code Coverage Badge](./.github/coverage.svg)
 [![Total Downloads](https://img.shields.io/packagist/dt/javaabu/auth.svg?style=flat-square)](https://packagist.org/packages/javaabu/auth)
 
