@@ -1,5 +1,5 @@
 {
     "name": "Auth",
     "description": "Laravel Authentication Helpers",
-    "version": "1"
+    "version": "2"
 }

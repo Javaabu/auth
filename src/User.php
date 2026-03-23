@@ -28,6 +28,7 @@ use Javaabu\Helpers\Media\AllowedMimeTypes;
 use Javaabu\Helpers\Media\UpdateMedia;
 use Javaabu\Helpers\Traits\HasStatus;
 use Javaabu\Passport\Traits\HasUserIdentifier;
+use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Image\Enums\Fit;
@@ -36,7 +37,13 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\File;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-abstract class User extends Authenticatable implements AdminModel, HasMedia, MustVerifyEmail, PasswordUpdatableContract, UserContract
+abstract class User extends Authenticatable implements
+    AdminModel,
+    HasMedia,
+    MustVerifyEmail,
+    PasswordUpdatableContract,
+    UserContract,
+    OAuthenticatable
 {
     use CausesActivity;
     use HasApiTokens;
