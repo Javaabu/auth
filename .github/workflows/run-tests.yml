@@ -23,7 +23,7 @@ jobs:
                     -   laravel: 12.*
                         testbench: 10.*
                     -   laravel: ^11.7
-                        testbench: 9.*
+                        testbench: ^9.16
 
         name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
