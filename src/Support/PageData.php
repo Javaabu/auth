@@ -81,7 +81,8 @@ class PageData
         $strings = [];
 
         foreach (Strings::ALL as $key => $english) {
-            $strings[$key] = __($english);
+            // Placeholders stay for the page to fill
+            $strings[$key] = __($english, []);
         }
 
         return $strings;

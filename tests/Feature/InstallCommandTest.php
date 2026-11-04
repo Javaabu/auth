@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\File;
 use Javaabu\Auth\Tests\TestCase;
 use Laravel\Passport\PassportServiceProvider;
 use Laravel\Sanctum\SanctumServiceProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
+#[Group('optional')]
 class InstallCommandTest extends TestCase
 {
     protected function getPackageProviders($app): array

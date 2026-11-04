@@ -25,6 +25,7 @@ class SecurityController extends Controller
             'passkeys' => $this->passkeys($type, $user),
             'sessions' => $this->sessions($type, $user),
             'api_tokens' => $this->apiTokens($type, $user),
+            'plain_text_token' => session('plain_text_token'),
         ], 'account');
     }
 
@@ -60,7 +61,10 @@ class SecurityController extends Controller
         return $user->passkeys()
             ->latest()
             ->get()
-            ->map(fn ($passkey) => method_exists($passkey, 'toDisplayArray') ? $passkey->toDisplayArray() : ['id' => $passkey->id, 'name' => $passkey->name])
+            ->map(fn ($passkey) => [
+                ...(method_exists($passkey, 'toDisplayArray') ? $passkey->toDisplayArray() : ['id' => $passkey->id, 'name' => $passkey->name]),
+                'destroy_url' => $type->route('passkey.destroy', ['passkey_id' => $passkey->id]),
+            ])
             ->all();
     }
 
@@ -85,6 +89,9 @@ class SecurityController extends Controller
             return null;
         }
 
-        return ApiTokens::list($user);
+        return array_map(fn (array $token) => [
+            ...$token,
+            'destroy_url' => $type->route('api-tokens.destroy', ['token_id' => $token['id']]),
+        ], ApiTokens::list($user));
     }
 }

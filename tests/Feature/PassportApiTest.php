@@ -13,8 +13,10 @@ use Javaabu\Auth\UserTypes;
 use Laravel\Passport\ClientRepository;
 use Laravel\Passport\Passport;
 use Laravel\Passport\PassportServiceProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
+#[Group('optional')]
 class PassportApiTest extends TestCase
 {
     protected static ?string $key_path = null;
@@ -154,7 +156,8 @@ class PassportApiTest extends TestCase
     public function the_driver_is_found_from_the_model(): void
     {
         $this->assertEquals('passport', ApiTokens::driverFor(User::class));
-        $this->assertEquals('sanctum', ApiTokens::driverFor(\Javaabu\Auth\Tests\Models\User::class));
+        $this->assertNull(ApiTokens::driverFor(\Javaabu\Auth\Tests\Models\User::class));
+        $this->assertEquals('sanctum', ApiTokens::driverFor(\Javaabu\Auth\Tests\Models\Sanctum\User::class));
         $this->assertEquals(['passport'], ApiTokens::enabledDrivers());
     }
 }

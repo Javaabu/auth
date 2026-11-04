@@ -4,14 +4,16 @@ namespace Javaabu\Auth\Tests\Feature;
 
 use Illuminate\Support\Facades\Route;
 use Javaabu\Auth\Http\Middleware\RequirePassword;
-use Javaabu\Auth\Tests\Models\Admin;
-use Javaabu\Auth\Tests\Models\User;
+use Javaabu\Auth\Tests\Models\Sanctum\Admin;
+use Javaabu\Auth\Tests\Models\Sanctum\User;
 use Javaabu\Auth\Tests\TestCase;
 use Javaabu\Auth\TwoFactor\TwoFactorProvider;
 use Javaabu\Auth\UserTypes;
 use Laravel\Sanctum\SanctumServiceProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
+#[Group('optional')]
 class SanctumApiTest extends TestCase
 {
     protected function getPackageProviders($app): array
@@ -23,6 +25,8 @@ class SanctumApiTest extends TestCase
     {
         parent::defineEnvironment($app);
 
+        $app['config']->set('auth.providers.users.model', User::class);
+        $app['config']->set('auth.providers.admins.model', Admin::class);
         $app['config']->set('auth.guards.sanctum', ['driver' => 'sanctum', 'provider' => null]);
         $app['config']->set('javaabu-auth.api', 'sanctum');
         $app['config']->set('javaabu-auth.user_types.user.features.api_tokens', true);
@@ -132,6 +136,25 @@ class SanctumApiTest extends TestCase
         $this->get('/settings/security')->assertOk()->assertSee('data-api-tokens', false)->assertSee('CI');
 
         $this->delete("/settings/api-tokens/{$token->id}")->assertSessionHasNoErrors();
+
+        $this->assertCount(0, $user->tokens()->get());
+    }
+
+    #[Test]
+    public function admins_log_users_out_of_their_api_tokens_too(): void
+    {
+        $this->app['config']->set('permissions.guards', ['web_admin']);
+        Route::userAccountActions('user', ['prefix' => 'admin/users', 'middleware' => ['web', 'auth.type:admin']]);
+        $this->artisan('permissions:sync');
+
+        $user = User::factory()->create();
+        $user->createToken('phone');
+        $admin = Admin::factory()->create();
+        $admin->givePermissionTo('log_out_users');
+
+        $this->actingAs($admin, 'web_admin')
+            ->postJson("/admin/users/{$user->id}/log-out")
+            ->assertOk();
 
         $this->assertCount(0, $user->tokens()->get());
     }

@@ -23,7 +23,7 @@
                             </span>
                         </div>
 
-                        <x-forms::form method="DELETE" :action="route($user_type->routeNameFor('api-tokens.destroy'), $token['id'])"
+                        <x-forms::form method="DELETE" :action="$token['destroy_url']"
                                        data-confirm="{{ __('Delete this token?') }}">
                             <x-forms::submit color="danger" size="sm">{{ __('Delete') }}</x-forms::submit>
                         </x-forms::form>

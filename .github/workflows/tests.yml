@@ -34,6 +34,59 @@ jobs:
             -   name: Check code style
                 run: vendor/bin/pint --test
 
+    js:
+        runs-on: ubuntu-latest
+
+        name: React pages (typecheck, tests)
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v5
+
+            -   name: Setup pnpm
+                uses: pnpm/action-setup@v4
+
+            -   name: Setup Node
+                uses: actions/setup-node@v5
+                with:
+                    node-version: 22
+                    package-manager-cache: false
+
+            # The default store is inside a node_modules folder, which breaks the declaration
+            # build of @javaabu/forms (installed from git and built on install): Javaabu/react-forms#20
+            -   name: Install dependencies
+                run: pnpm install --frozen-lockfile --store-dir "$RUNNER_TEMP/pnpm-store"
+
+            -   name: Typecheck
+                run: pnpm typecheck
+
+            -   name: Test
+                run: pnpm test
+
+    without-optional:
+        runs-on: ubuntu-latest
+
+        name: Without the optional packages
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v5
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.4
+                    extensions: curl, mbstring, zip, pdo, sqlite, pdo_sqlite
+                    coverage: none
+
+            -   name: Install dependencies without Inertia, Sanctum, Passport and activitylog
+                run: |
+                    composer remove --dev inertiajs/inertia-laravel laravel/sanctum laravel/passport spatie/laravel-activitylog --no-interaction --no-update
+                    composer update --prefer-dist --no-interaction --no-progress
+
+            -   name: Execute tests
+                run: vendor/bin/phpunit --exclude-group optional
+
     tests:
         runs-on: ubuntu-latest
 

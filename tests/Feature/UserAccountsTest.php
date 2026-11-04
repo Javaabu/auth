@@ -93,14 +93,12 @@ class UserAccountsTest extends TestCase
     public function it_logs_a_user_out_everywhere(): void
     {
         $user = User::factory()->create(['remember_token' => 'old']);
-        $user->createToken('phone');
 
         $this->actingAs($this->admin(['log_out_users']), 'web_admin')
             ->postJson("/admin/users/{$user->id}/log-out")
             ->assertOk();
 
         $this->assertNotEquals('old', $user->fresh()->remember_token);
-        $this->assertCount(0, $user->tokens()->get());
     }
 
     #[Test]

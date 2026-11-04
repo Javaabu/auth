@@ -32,7 +32,7 @@ abstract class TestCase extends BaseTestCase
     protected function getPackageProviders($app): array
     {
         return [
-            ActivitylogServiceProvider::class,
+            ...(class_exists(ActivitylogServiceProvider::class) ? [ActivitylogServiceProvider::class] : []),
             PermissionServiceProvider::class,
             PermissionsServiceProvider::class,
             ManifestServiceProvider::class,

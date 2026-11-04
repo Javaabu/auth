@@ -23,7 +23,7 @@
                             </span>
                         </div>
 
-                        <x-forms::form method="DELETE" :action="route($user_type->routeNameFor('passkey.destroy'), $passkey['id'])"
+                        <x-forms::form method="DELETE" :action="$passkey['destroy_url']"
                                        data-confirm="{{ __('Remove this passkey?') }}">
                             <x-forms::submit color="danger" size="sm">{{ __('Remove') }}</x-forms::submit>
                         </x-forms::form>
