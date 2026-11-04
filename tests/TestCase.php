@@ -48,6 +48,9 @@ abstract class TestCase extends BaseTestCase
 
         $config->set('app.key', 'base64:yWa/ByhLC/GUvfToOuaPD7zDwB64qkc/QkaQOrT5IpE=');
         $config->set('app.url', 'http://localhost');
+        $config->set('passkeys.user_handle_secret', 'test-secret');
+        $config->set('passkeys.relying_party_id', 'localhost');
+        $config->set('passkeys.allowed_origins', ['http://localhost']);
         $config->set('session.serialization', 'php');
         $config->set('view.paths', [__DIR__ . '/views', ...$config->get('view.paths', [])]);
 

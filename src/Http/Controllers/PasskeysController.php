@@ -44,11 +44,11 @@ class PasskeysController extends Controller
         ], 201);
     }
 
-    public function destroy(Request $request, string $passkey, DeletePasskey $delete): Response
+    public function destroy(Request $request, string $passkey_id, DeletePasskey $delete): Response
     {
         $user = $this->user($request);
 
-        $model = $user->passkeys()->whereKey($passkey)->firstOrFail();
+        $model = $user->passkeys()->whereKey($passkey_id)->firstOrFail();
 
         $delete($user, $model);
 

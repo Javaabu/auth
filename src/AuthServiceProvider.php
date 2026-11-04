@@ -33,6 +33,7 @@ use Javaabu\Auth\Http\Middleware\RedirectIfAuthenticated;
 use Javaabu\Auth\Http\Middleware\RequirePassword;
 use Javaabu\Auth\Http\Middleware\SetUserType;
 use Javaabu\Auth\Passkeys\Passkey;
+use Javaabu\Auth\Passkeys\StorePasskey;
 use Javaabu\Auth\Passkeys\VerifyPasskey;
 use Javaabu\Auth\Policies\UserAccountPolicy;
 use Javaabu\Auth\Routing\AuthRoutes;
@@ -43,6 +44,7 @@ use Javaabu\Auth\TwoFactor\TwoFactorProvider;
 use Javaabu\Manifest\Concerns\RegistersAssets;
 use Javaabu\Manifest\Package;
 use Javaabu\Permissions\Permissions;
+use Laravel\Passkeys\Actions\StorePasskey as BaseStorePasskey;
 use Laravel\Passkeys\Actions\VerifyPasskey as BaseVerifyPasskey;
 use Laravel\Passkeys\Passkeys;
 use PragmaRX\Google2FA\Google2FA;
@@ -97,6 +99,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(BaseVerifyPasskey::class, VerifyPasskey::class);
+        $this->app->bind(BaseStorePasskey::class, StorePasskey::class);
 
         // The package registers passkey routes per user type
         Passkeys::ignoreRoutes();

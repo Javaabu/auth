@@ -203,7 +203,7 @@ class AuthRoutes
                     $this->router->middleware([...$confirm, 'throttle:auth.passkeys'])->group(function () use ($passkeys) {
                         $this->router->get('passkeys/options', [$passkeys, 'options'])->name('passkey.registration-options');
                         $this->router->post('passkeys', [$passkeys, 'store'])->name('passkey.store');
-                        $this->router->delete('passkeys/{passkey}', [$passkeys, 'destroy'])->name('passkey.destroy');
+                        $this->router->delete('passkeys/{passkey_id}', [$passkeys, 'destroy'])->name('passkey.destroy');
                     });
                 }
 
@@ -215,7 +215,7 @@ class AuthRoutes
                     $tokens = $this->controller('api_tokens');
 
                     $this->router->post('api-tokens', [$tokens, 'store'])->middleware('throttle:auth.api-tokens')->name('api-tokens.store');
-                    $this->router->delete('api-tokens/{token}', [$tokens, 'destroy'])->name('api-tokens.destroy');
+                    $this->router->delete('api-tokens/{token_id}', [$tokens, 'destroy'])->name('api-tokens.destroy');
                 }
             });
     }
