@@ -130,6 +130,7 @@ class LoginTest extends TestCase
             ->assertRedirect('/dashboard');
 
         $this->assertNull($user->fresh()->login_attempts);
+        $this->assertNotNull($user->fresh()->last_login_at);
     }
 
     #[Test]

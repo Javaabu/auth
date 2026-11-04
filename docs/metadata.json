@@ -1,5 +1,5 @@
 {
     "name": "Auth",
-    "description": "Laravel Authentication Helpers",
-    "version": "2"
+    "description": "Multi-auth for Laravel: login, registration, password reset, email verification, two-factor authentication, passkeys and API tokens for any number of user types",
+    "version": "3"
 }
