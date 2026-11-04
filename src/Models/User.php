@@ -3,6 +3,7 @@
 namespace Javaabu\Auth\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Javaabu\Auth\Concerns\DetectsGmailAliases;
@@ -33,6 +34,7 @@ abstract class User extends Authenticatable implements HasAccountStatusContract,
     use LocksAfterFailedLogins;
     use Notifiable;
     use RequiresPasswordUpdate;
+    use SoftDeletes;
     use TwoFactorAuthenticatable;
 
     protected $hidden = [
