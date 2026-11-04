@@ -53,7 +53,7 @@ class AttemptLogin
         $provider = $type->auth()->getProvider();
         $credentials = $this->credentials($request, $type);
 
-        $user = $provider->retrieveByCredentials([$type->usernameColumn() => $credentials[$type->usernameColumn()]]);
+        $user = $type->findByUsername($credentials[$type->usernameColumn()]);
 
         if ($user instanceof LocksAfterFailedLogins && $user->isLockedOut()) {
             throw ValidationException::withMessages([
@@ -82,7 +82,7 @@ class AttemptLogin
     protected function credentials(Request $request, UserType $type): array
     {
         return [
-            $type->usernameColumn() => mb_strtolower(trim((string) $request->input($type->usernameColumn()))),
+            $type->usernameColumn() => trim((string) $request->input($type->usernameColumn())),
             'password' => (string) $request->input('password'),
         ];
     }

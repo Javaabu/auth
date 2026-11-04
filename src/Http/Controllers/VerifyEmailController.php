@@ -4,6 +4,7 @@ namespace Javaabu\Auth\Http\Controllers;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +22,10 @@ class VerifyEmailController extends Controller
 
         if (! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
             throw new AuthorizationException(__('This verification link is invalid.'));
+        }
+
+        if (! $user instanceof MustVerifyEmail) {
+            return redirect()->intended($type->homeUrl($user));
         }
 
         if (! $user->hasVerifiedEmail() && $user->markEmailAsVerified()) {

@@ -15,7 +15,7 @@ sidebar_position: 5
 6. Logs in on the type's guard, regenerates the session, clears failed attempts and records `last_login_at`.
 7. Redirects to the intended URL or the type's home. JSON requests get `{"two_factor": false, "redirect": "…"}`.
 
-A user of one type can't log in on another type's login page, even with the same email and password.
+The username is matched as typed, then lowercased (new accounts are saved lowercase; older mixed-case ones still match on case-sensitive databases). A user of one type can't log in on another type's login page, even with the same email and password.
 
 # Logging out
 

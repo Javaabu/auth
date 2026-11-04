@@ -2,6 +2,7 @@
 
 namespace Javaabu\Auth\Http\Controllers;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +14,7 @@ class EmailVerificationNotificationController extends Controller
         $type = $this->userType($request);
         $user = $this->user($request);
 
-        if ($user->hasVerifiedEmail()) {
+        if (! $user instanceof MustVerifyEmail || $user->hasVerifiedEmail()) {
             return $request->wantsJson()
                 ? new JsonResponse('', 204)
                 : redirect()->intended($type->homeUrl($user));

@@ -27,11 +27,11 @@ class IssueApiToken
         $username = $type->usernameColumn();
         $provider = $type->auth()->getProvider();
         $credentials = [
-            $username => mb_strtolower(trim((string) $request->input($username))),
+            $username => trim((string) $request->input($username)),
             'password' => (string) $request->input('password'),
         ];
 
-        $user = $provider->retrieveByCredentials([$username => $credentials[$username]]);
+        $user = $type->findByUsername($credentials[$username]);
 
         if (! $user || ! $provider->validateCredentials($user, $credentials)) {
             event(new Failed($type->guardName(), $user, $credentials));

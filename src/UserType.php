@@ -3,6 +3,7 @@
 namespace Javaabu\Auth;
 
 use Closure;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Database\Eloquent\Model;
@@ -304,6 +305,30 @@ class UserType
     public function usernameColumn(): string
     {
         return $this->username;
+    }
+
+    /**
+     * Find a user by username as entered, then lowercased, so mixed-case emails
+     * saved before the package lowercased them still match on case-sensitive databases
+     */
+    public function findByUsername(?string $username): ?Authenticatable
+    {
+        $username = trim((string) $username);
+
+        if ($username === '') {
+            return null;
+        }
+
+        $provider = $this->auth()->getProvider();
+        $column = $this->usernameColumn();
+
+        $user = $provider->retrieveByCredentials([$column => $username]);
+
+        if ($user || mb_strtolower($username) === $username) {
+            return $user;
+        }
+
+        return $provider->retrieveByCredentials([$column => mb_strtolower($username)]);
     }
 
     /**

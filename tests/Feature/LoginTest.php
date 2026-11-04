@@ -198,4 +198,26 @@ class LoginTest extends TestCase
             ->get('/dashboard')
             ->assertRedirect(route('verification.notice'));
     }
+
+    #[Test]
+    public function it_finds_mixed_case_emails_saved_before_lowercasing(): void
+    {
+        $user = User::factory()->create(['email' => 'Ahmed.Ali@Example.com']);
+
+        $this->post('/login', ['email' => 'Ahmed.Ali@Example.com', 'password' => 'password'])
+            ->assertRedirect('/dashboard');
+
+        $this->assertAuthenticatedAs($user, 'web');
+    }
+
+    #[Test]
+    public function it_finds_lowercase_emails_typed_in_mixed_case(): void
+    {
+        $user = User::factory()->create(['email' => 'ahmed@example.com']);
+
+        $this->post('/login', ['email' => ' AHMED@example.com ', 'password' => 'password'])
+            ->assertRedirect('/dashboard');
+
+        $this->assertAuthenticatedAs($user, 'web');
+    }
 }

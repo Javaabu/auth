@@ -36,9 +36,11 @@ class NewPasswordController extends Controller
             'password' => ['required', 'string'],
         ]);
 
+        $user = $type->findByUsername((string) $request->input($username));
+
         $status = $type->broker()->reset(
             [
-                $username => mb_strtolower(trim((string) $request->input($username))),
+                $username => $user?->getAttribute($username) ?? trim((string) $request->input($username)),
                 'password' => $request->input('password'),
                 'password_confirmation' => $request->input('password_confirmation'),
                 'token' => $request->input('token'),

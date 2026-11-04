@@ -26,9 +26,11 @@ class PasswordResetLinkController extends Controller
             $username => ['required', 'string', 'email'],
         ]);
 
-        $status = $type->broker()->sendResetLink([
-            $username => mb_strtolower(trim((string) $request->input($username))),
-        ]);
+        $user = $type->findByUsername((string) $request->input($username));
+
+        $status = $user
+            ? $type->broker()->sendResetLink([$username => $user->getAttribute($username)])
+            : PasswordBroker::INVALID_USER;
 
         if ($status === PasswordBroker::RESET_THROTTLED) {
             throw ValidationException::withMessages([
