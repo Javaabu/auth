@@ -211,6 +211,7 @@ return [
         'password' => Controllers\PasswordController::class,
         'sessions' => Controllers\BrowserSessionsController::class,
         'api_tokens' => Controllers\ApiTokensController::class,
+        'api_token_login' => Controllers\ApiTokenLoginController::class,
         'user_accounts' => Controllers\UserAccountsController::class,
     ],
 

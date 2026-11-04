@@ -7,6 +7,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Javaabu\Auth\Contracts\TwoFactorAuthenticatable;
 use Javaabu\Auth\Sessions\Session;
+use Javaabu\Auth\Support\ApiTokens;
 use Javaabu\Auth\UserType;
 
 /**
@@ -80,19 +81,10 @@ class SecurityController extends Controller
     /** @return array<int, array<string, mixed>>|null */
     protected function apiTokens(UserType $type, mixed $user): ?array
     {
-        if (! $type->hasFeature(UserType::API_TOKENS) || ! $type->hasRoute('api-tokens.store') || ! method_exists($user, 'tokens')) {
+        if (! $type->hasFeature(UserType::API_TOKENS) || ! $type->hasRoute('api-tokens.store') || ! ApiTokens::supports($user)) {
             return null;
         }
 
-        return $user->tokens()
-            ->latest()
-            ->get()
-            ->map(fn ($token) => [
-                'id' => $token->id,
-                'name' => $token->name,
-                'last_used_at' => $token->last_used_at?->diffForHumans(),
-                'created_at' => $token->created_at?->diffForHumans(),
-            ])
-            ->all();
+        return ApiTokens::list($user);
     }
 }

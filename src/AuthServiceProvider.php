@@ -19,6 +19,7 @@ use Javaabu\Auth\Actions\DeleteUser;
 use Javaabu\Auth\Actions\ResetUserPassword;
 use Javaabu\Auth\Actions\UpdateUserPassword;
 use Javaabu\Auth\Actions\UpdateUserProfileInformation;
+use Javaabu\Auth\Commands\InstallCommand;
 use Javaabu\Auth\Contracts\CreatesNewUsers;
 use Javaabu\Auth\Contracts\DeletesUsers;
 use Javaabu\Auth\Contracts\ResetsUserPasswords;
@@ -36,6 +37,7 @@ use Javaabu\Auth\Passkeys\Passkey;
 use Javaabu\Auth\Passkeys\StorePasskey;
 use Javaabu\Auth\Passkeys\VerifyPasskey;
 use Javaabu\Auth\Policies\UserAccountPolicy;
+use Javaabu\Auth\Routing\AuthApiRoutes;
 use Javaabu\Auth\Routing\AuthRoutes;
 use Javaabu\Auth\Routing\UserAccountRoutes;
 use Javaabu\Auth\Sessions\MultiAuthDatabaseSessionHandler;
@@ -110,6 +112,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->registerPublishing();
+
+            $this->commands([
+                InstallCommand::class,
+            ]);
         }
 
         $this->loadJsonTranslationsFrom(__DIR__ . '/../lang');
@@ -187,6 +193,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         Route::macro('authRoutes', function (?string $type = null, array $options = []) {
             AuthRoutes::register($this, $type, $options);
+        });
+
+        Route::macro('authApiRoutes', function (?string $type = null, array $options = []) {
+            AuthApiRoutes::register($this, $type, $options);
         });
 
         Route::macro('userAccountActions', function (string $type, array $options = []) {
