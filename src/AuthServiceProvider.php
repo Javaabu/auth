@@ -227,7 +227,14 @@ class AuthServiceProvider extends ServiceProvider
             }
 
             $handler->renderable(function (AuthenticationException $exception, Request $request) {
-                if ($request->expectsJson() || $exception->redirectTo($request)) {
+                if ($request->expectsJson()) {
+                    return null;
+                }
+
+                // Respect a redirect the app chose, but not Laravel's default `route('login')`
+                $redirect_to = $exception->redirectTo($request);
+
+                if ($redirect_to && (! Route::has('login') || $redirect_to !== route('login'))) {
                     return null;
                 }
 
