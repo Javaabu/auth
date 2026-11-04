@@ -1,27 +1,23 @@
 # Auth
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/javaabu/auth.svg?style=flat-square)](https://packagist.org/packages/javaabu/auth)
-[![Test Status](../../actions/workflows/run-tests.yml/badge.svg)](../../actions/workflows/run-tests.yml)
-![Code Coverage Badge](./.github/coverage.svg)
-[![Total Downloads](https://img.shields.io/packagist/dt/javaabu/auth.svg?style=flat-square)](https://packagist.org/packages/javaabu/auth)
+[![Tests](https://github.com/Javaabu/auth/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Javaabu/auth/actions/workflows/tests.yml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/Javaabu/auth/branch/main/graph/badge.svg)](https://codecov.io/gh/Javaabu/auth/tree/main)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/javaabu/auth.svg)](https://packagist.org/packages/javaabu/auth)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 
-Laravel Authentication Helpers
+Multi-auth for Laravel. Any number of user types (admins, public users, …), each with its own guard, password broker, routes, pages and settings: login, registration, password reset, email verification, password confirmation, two-factor authentication, passkeys, profile and security pages, browser sessions and API tokens. Pages ship in Blade (javaabu/forms) and Inertia React (@javaabu/forms).
 
 ## Documentation
 
-You'll find the documentation on [https://docs.javaabu.com/auth](https://docs.javaabu.com/auth).
+You'll find the documentation on [https://docs.javaabu.com/auth](https://docs.javaabu.com/auth), and in the [`docs`](docs) folder.
 
-Find yourself stuck using the package? Found a bug? Do you have general questions or suggestions for improving this package? Feel free to create an [issue](../../issues) on GitHub, we'll try to address it as soon as possible.
-
-If you've found a bug regarding security please mail [info@javaabu.com](mailto:info@javaabu.com) instead of using the issue tracker.
-
+AI coding assistants can start from [`llms.txt`](llms.txt). The package ships a [Laravel Boost](https://github.com/laravel/boost) skill and guideline, which Boost finds by itself.
 
 ## Testing
 
-You can run the tests with
-
-``` bash
-./vendor/bin/phpunit
+```bash
+composer test
+composer lint
 ```
 
 ## Changelog

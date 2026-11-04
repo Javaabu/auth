@@ -6,7 +6,7 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Test Suite">
+        <testsuite name="Package">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

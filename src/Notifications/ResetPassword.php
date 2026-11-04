@@ -2,24 +2,34 @@
 
 namespace Javaabu\Auth\Notifications;
 
-use Closure;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Auth\Notifications\ResetPassword as BaseResetPassword;
+use Javaabu\Auth\UserTypes;
 
-class ResetPassword extends \Illuminate\Auth\Notifications\ResetPassword
+/**
+ * Laravel's password reset email, linking to the user type's reset page
+ */
+class ResetPassword extends BaseResetPassword
 {
-    /**
-     * The callback that should be used to create the reset password URL.
-     *
-     * @var Closure|null
-     */
-    public static $createUrlCallback = [self::class, 'createPasswordResetUrl'];
+    public function __construct(
+        $token,
+        public ?string $user_type = null,
+    ) {
+        parent::__construct($token);
+    }
 
-    public static function createPasswordResetUrl($notifiable, $token): string|UrlGenerator|Application
+    protected function resetUrl($notifiable): string
     {
-        return url(route($notifiable->getRouteForPasswordReset(), [
-            'token' => $token,
+        if (static::$createUrlCallback) {
+            return call_user_func(static::$createUrlCallback, $notifiable, $this->token);
+        }
+
+        $type = $this->user_type
+            ? UserTypes::get($this->user_type)
+            : (UserTypes::for($notifiable) ?? UserTypes::default());
+
+        return $type->route('password.reset', [
+            'token' => $this->token,
             'email' => $notifiable->getEmailForPasswordReset(),
-        ], false));
+        ]);
     }
 }

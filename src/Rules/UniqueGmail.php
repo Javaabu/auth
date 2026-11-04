@@ -5,8 +5,8 @@ namespace Javaabu\Auth\Rules;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model as UserModel;
 use Illuminate\Support\Str;
-use Javaabu\Auth\User;
 
 class UniqueGmail implements ValidationRule
 {
@@ -17,13 +17,12 @@ class UniqueGmail implements ValidationRule
     /**
      * Constructor
      *
-     * @param class-string<User> $model_class
+     * @param  class-string<UserModel>  $model_class
      */
     public function __construct(
         protected string $model_class,
         protected string $email_column = '',
-    ) {
-    }
+    ) {}
 
     public function ignore(string|Model $user_id, string $id_column = ''): static
     {
@@ -52,7 +51,7 @@ class UniqueGmail implements ValidationRule
         $model_class = $this->model_class;
 
         /** @var Model $model */
-        $model = new $model_class();
+        $model = new $model_class;
 
         return $model->getKeyName();
     }
@@ -77,17 +76,17 @@ class UniqueGmail implements ValidationRule
         $model_class = $this->model_class;
 
         $has_alias = $model_class::query()
-                        ->hasGmailAlias($value, $this->getEmailColumn($attribute))
-                         ->when($this->getIgnoreUserId(), function ($query) {
-                             $query->where($this->getIdColumn(), '!=', $this->ignore_user_id);
-                         })
-                         ->exists();
+            ->hasGmailAlias($value, $this->getEmailColumn($attribute))
+            ->when($this->getIgnoreUserId(), function ($query) {
+                $query->where($this->getIdColumn(), '!=', $this->ignore_user_id);
+            })
+            ->exists();
 
         if ($has_alias) {
             $attribute_key = 'validation.attributes.' . $attribute;
             $attribute = trans()->has($attribute_key) ? trans($attribute_key) : $attribute;
 
-            $fail(trans('auth::validation.unique-gmail', compact('attribute')));
+            $fail(__('The same gmail :attribute is already taken.', compact('attribute')));
         }
     }
 }

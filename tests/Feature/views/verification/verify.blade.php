@@ -1,4 +1,0 @@
-Resend Verification
-
-{{ $message }}
-

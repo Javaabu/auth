@@ -2,248 +2,113 @@
 
 namespace Javaabu\Auth\Tests;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;
-use Javaabu\Activitylog\ActivitylogServiceProvider;
 use Javaabu\Auth\AuthServiceProvider;
-use Javaabu\Auth\Enums\UserStatuses;
-use Javaabu\Auth\Tests\Feature\Http\Controllers\ConfirmPasswordController;
-use Javaabu\Auth\Tests\Feature\Http\Controllers\ForgotPasswordController;
-use Javaabu\Auth\Tests\Feature\Http\Controllers\HomeController;
-use Javaabu\Auth\Tests\Feature\Http\Controllers\LoginController;
-use Javaabu\Auth\Tests\Feature\Http\Controllers\RegisterController;
-use Javaabu\Auth\Tests\Feature\Http\Controllers\ResetPasswordController;
-use Javaabu\Auth\Tests\Feature\Http\Controllers\UpdatePasswordController;
-use Javaabu\Auth\Tests\Feature\Http\Controllers\UserController;
-use Javaabu\Auth\Tests\Feature\Http\Controllers\VerificationController;
-use Javaabu\Auth\Tests\Feature\Models\User;
-use Javaabu\Helpers\HelpersServiceProvider;
-use Javaabu\Schema\SchemaServiceProvider;
-use Javaabu\Settings\SettingsServiceProvider;
+use Javaabu\Auth\Tests\Models\Admin;
+use Javaabu\Auth\Tests\Models\User;
+use Javaabu\Auth\UserType;
+use Javaabu\Auth\UserTypes;
+use Javaabu\Forms\FormsServiceProvider;
+use Javaabu\Manifest\Facades\Manifest;
+use Javaabu\Manifest\ManifestServiceProvider;
+use Javaabu\Permissions\PermissionsServiceProvider;
+use Laravel\Passkeys\PasskeysServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
-use Spatie\MediaLibrary\MediaLibraryServiceProvider;
+use Spatie\Activitylog\ActivitylogServiceProvider;
+use Spatie\Permission\PermissionServiceProvider;
 
 abstract class TestCase extends BaseTestCase
 {
-    public function setUp(): void
+    use RefreshDatabase;
+
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->app['config']->set('app.key', 'base64:yWa/ByhLC/GUvfToOuaPD7zDwB64qkc/QkaQOrT5IpE=');
-
-        $this->app['config']->set('session.serialization', 'php');
-
-        // Set the view path to include your package's views directory
-        $this->app['config']->set('view.paths', [__DIR__.'/Feature/views']);
-
-        $this->app['config']->set('app.api_prefix', 'api/v1');
-
-        $this->app['config']->set('auth.providers.users.model', User::class);
-
-        // set password reset
-        $this->app['config']->set('auth.passwords.users', [
-            'provider' => 'users',
-            'table' => 'password_resets',
-            'expire' => 60,
-        ]);
-
-        if (empty(glob($this->app->databasePath('migrations/*_create_activity_log_table.php')))) {
-            Artisan::call('vendor:publish', [
-                '--provider' => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
-                '--tag' => 'activitylog-migrations',
-            ]);
-        }
-
-        $this->registerRoutes();
-
-        Mail::fake();
-        Notification::fake();
+        Manifest::fake();
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
-            SchemaServiceProvider::class,
-            SettingsServiceProvider::class,
-            HelpersServiceProvider::class,
-            EventServiceProvider::class,
-            AuthServiceProvider::class,
             ActivitylogServiceProvider::class,
+            PermissionServiceProvider::class,
+            PermissionsServiceProvider::class,
+            ManifestServiceProvider::class,
+            FormsServiceProvider::class,
+            PasskeysServiceProvider::class,
+            AuthServiceProvider::class,
         ];
     }
 
-    protected function registerTestRoute(
-        string $uri,
-        string $controller,
-        $function,
-        string $method = 'get',
-        ?string $name = null,
-        array $middlewares = ['web']
-    ): void {
-        Route::middleware(array_merge(['web'], $middlewares ?? []))
-            ->group(function () use ($uri, $controller, $function, $method, $name) {
-                $route = Route::$method($uri, [$controller, $function]);
-
-                if ($name) {
-                    $route->name($name);
-                }
-            });
-    }
-
-    public function seedDatabase(): void
+    protected function defineEnvironment($app): void
     {
-        if (! SeedState::$seeded) {
-            $this->seedDefaultUsers();
+        $config = $app['config'];
 
-            SeedState::$seeded = true;
-        }
-    }
+        $config->set('app.key', 'base64:yWa/ByhLC/GUvfToOuaPD7zDwB64qkc/QkaQOrT5IpE=');
+        $config->set('app.url', 'http://localhost');
+        $config->set('session.serialization', 'php');
+        $config->set('view.paths', [__DIR__ . '/views', ...$config->get('view.paths', [])]);
 
-    protected function seedDefaultUsers(): void
-    {
-        Model::unguard();
-
-        User::firstOrCreate([
-            'name' => 'John Doe',
-            'email' => 'user@example.com',
-        ], [
-            'password' => 'password',
-            'status' => UserStatuses::APPROVED,
-            'email_verified_at' => now(),
+        $config->set('auth.guards', [
+            'web' => ['driver' => 'session', 'provider' => 'users'],
+            'web_admin' => ['driver' => 'session', 'provider' => 'admins'],
         ]);
 
-        Model::reguard();
-    }
+        $config->set('auth.providers', [
+            'users' => ['driver' => 'eloquent', 'model' => User::class],
+            'admins' => ['driver' => 'eloquent', 'model' => Admin::class],
+        ]);
 
-    protected function getUser(string $email): ?User
-    {
-        return User::where('email', $email)->first();
-    }
+        $config->set('auth.passwords', [
+            'users' => ['provider' => 'users', 'table' => 'password_reset_tokens', 'expire' => 60, 'throttle' => 0],
+            'admins' => ['provider' => 'admins', 'table' => 'admin_password_reset_tokens', 'expire' => 60, 'throttle' => 0],
+        ]);
 
-    protected function registerRoutes(): void
-    {
-        Route::group([
-            'middleware' => ['web', 'auth:web', 'active:web', 'password-update-not-required:web'],
-        ], function () {
-            Route::get('/test', function () {
-                return 'Test';
-            })->middleware('password.confirm:password.confirm');
-        });
-
-        Route::group([
-            'middleware' => ['web'],
-        ], function () {
-            Route::post('/session-test', function () {
-                session()->put('test_key', 'test_value');
-
-                return 'Done!';
-            });
-        });
-
-        $this->registerTestRoute(
-            '/login',
-            LoginController::class,
-            'getLoginForm',
-            name: 'login'
-        );
-
-        $this->registerTestRoute(
-            '/logout',
-            LoginController::class,
-            'logout',
-            method: 'post',
-            name: 'logout'
-        );
-
-        $this->registerTestRoute(
-            '/login',
-            LoginController::class,
-            'login',
-            method: 'post'
-        );
-
-        $this->registerTestRoute(
-            '/register',
-            RegisterController::class,
-            'register',
-            method: 'post'
-        );
-
-        $this->registerTestRoute(
-            '/register',
-            RegisterController::class,
-            'showRegistrationForm',
-        );
-
-        $this->registerTestRoute(
-            '/',
-            HomeController::class,
-            'index',
-            name: 'home',
-            middlewares: ['auth:web', 'active:web', 'password-update-not-required:web']
-        );
-
-        // Email Verification
-        Route::group([
-            'namespace' => 'Auth',
-            'prefix' => 'verify',
-            'as' => 'verification.',
-        ], function () {
-            Route::get('/', [VerificationController::class, 'show'])->name('notice');
-            Route::post('email/resend', [VerificationController::class, 'resend'])->name('resend');
-            Route::get('email/{id}/{hash}', [VerificationController::class, 'verify'])->name('verify');
-        });
-
-        Route::group([
-            'prefix' => 'password',
-            'as' => 'password.',
-            'middleware' => ['web'],
-        ], function () {
-            // Forgot Password
-            Route::get('reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('request');
-            Route::post('email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('email');
-            Route::get('reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('reset');
-            Route::post('reset', [ResetPasswordController::class, 'reset'])->name('update');
-
-            // Confirm Password
-            Route::get('confirm', [ConfirmPasswordController::class, 'showConfirmForm'])->name('confirm');
-            Route::post('confirm', [ConfirmPasswordController::class, 'confirm'])->name('confirm-post');
-
-            // Password Update
-            Route::get('update', [UpdatePasswordController::class, 'showPasswordUpdateForm'])->name('new-password');
-            Route::post('update', [UpdatePasswordController::class, 'updatePassword'])->name('new-password-post');
-        });
-
-        /**
-         * Protected routes
-         */
-        Route::group([
-            'middleware' => [
-                'auth',
-                'active',
-                'password-update-not-required'
+        $config->set('javaabu-auth.user_types', [
+            'user' => [
+                'guard' => 'web',
+                'passwords' => 'users',
+                'route_name' => '',
+                'home' => '/dashboard',
+                'features' => ['passkeys' => true, 'delete_account' => true],
             ],
-        ], function () {
-            Route::get('account', function () {
-                return 'User Account Edit';
-            })->name('user.account');
-            Route::match(['PUT', 'PATCH'], 'account', [UserController::class, 'update'])->name('account.update');
-        });
+            'admin' => [
+                'guard' => 'web_admin',
+                'passwords' => 'admins',
+                'home' => '/admin',
+                'features' => ['registration' => false, 'passkeys' => true],
+            ],
+        ]);
+
+        $config->set('javaabu-auth.layouts', [
+            'auth' => 'layouts.app',
+            'account' => 'layouts.app',
+        ]);
     }
 
-    protected function checkRule(mixed $rule, string $attribute, mixed $value): bool
+    protected function defineDatabaseMigrations(): void
     {
-        $passed = true;
-        $fail = function () use (&$passed) {
-            $passed = false;
-        };
+        $this->loadMigrationsFrom(__DIR__ . '/database');
+    }
 
-        $rule->validate($attribute, $value, $fail);
+    protected function defineRoutes($router): void
+    {
+        $this->registerAuthRoutes();
+    }
 
-        return $passed;
+    protected function registerAuthRoutes(): void
+    {
+        Route::authRoutes('user');
+        Route::authRoutes('admin', ['prefix' => 'admin']);
+
+        Route::middleware(['web', 'auth.type:user'])->get('dashboard', fn () => 'user dashboard')->name('dashboard');
+        Route::middleware(['web', 'auth.type:admin'])->get('admin', fn () => 'admin dashboard')->name('admin.home');
+    }
+
+    protected function userType(string $name = 'user'): UserType
+    {
+        return UserTypes::get($name);
     }
 }
