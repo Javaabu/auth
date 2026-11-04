@@ -9,6 +9,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -33,12 +34,15 @@ use Javaabu\Auth\Http\Middleware\RequirePassword;
 use Javaabu\Auth\Http\Middleware\SetUserType;
 use Javaabu\Auth\Passkeys\Passkey;
 use Javaabu\Auth\Passkeys\VerifyPasskey;
+use Javaabu\Auth\Policies\UserAccountPolicy;
 use Javaabu\Auth\Routing\AuthRoutes;
+use Javaabu\Auth\Routing\UserAccountRoutes;
 use Javaabu\Auth\Sessions\MultiAuthDatabaseSessionHandler;
 use Javaabu\Auth\Support\ActivityLogger;
 use Javaabu\Auth\TwoFactor\TwoFactorProvider;
 use Javaabu\Manifest\Concerns\RegistersAssets;
 use Javaabu\Manifest\Package;
+use Javaabu\Permissions\Permissions;
 use Laravel\Passkeys\Actions\VerifyPasskey as BaseVerifyPasskey;
 use Laravel\Passkeys\Passkeys;
 use PragmaRX\Google2FA\Google2FA;
@@ -118,6 +122,9 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerRateLimiters();
         $this->registerSessionDriver();
         $this->registerGuestRedirects();
+        $this->registerAbilities();
+
+        $this->app->booted(fn () => $this->registerPermissions());
 
         $this->app->make(ActivityLogger::class)->register();
     }
@@ -178,6 +185,51 @@ class AuthServiceProvider extends ServiceProvider
         Route::macro('authRoutes', function (?string $type = null, array $options = []) {
             AuthRoutes::register($this, $type, $options);
         });
+
+        Route::macro('userAccountActions', function (string $type, array $options = []) {
+            UserAccountRoutes::register($this, $type, $options);
+        });
+    }
+
+    /**
+     * The abilities of UserAccountPolicy (or javaabu-auth.policy), unless the app defined them
+     */
+    protected function registerAbilities(): void
+    {
+        $policy = config('javaabu-auth.policy', UserAccountPolicy::class);
+
+        foreach (UserAccountPolicy::ABILITIES as $ability => $action) {
+            if (Gate::has($ability)) {
+                continue;
+            }
+
+            Gate::define($ability, [$policy, str($action)->camel()->toString()]);
+        }
+    }
+
+    /**
+     * Permissions for managing each user type's accounts, through javaabu/permissions
+     */
+    protected function registerPermissions(): void
+    {
+        if (! config('javaabu-auth.register_permissions', true)) {
+            return;
+        }
+
+        $managed = config('javaabu-auth.managed_user_types') ?: array_keys(UserTypes::all());
+
+        foreach ($managed as $name) {
+            $type = UserTypes::get($name);
+            $resource = UserAccountPolicy::resource($type);
+            $permissions = [];
+
+            foreach (UserAccountPolicy::DESCRIPTIONS as $action => $description) {
+                // English, as javaabu/permissions translates descriptions when it shows them
+                $permissions[UserAccountPolicy::permission($action, $type)] = strtr($description, [':resource' => str_replace('_', ' ', $resource)]);
+            }
+
+            Permissions::register($resource, $permissions);
+        }
     }
 
     protected function registerRateLimiters(): void

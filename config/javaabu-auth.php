@@ -1,6 +1,7 @@
 <?php
 
 use Javaabu\Auth\Http\Controllers;
+use Javaabu\Auth\Policies\UserAccountPolicy;
 
 return [
 
@@ -159,6 +160,13 @@ return [
     'register_permissions' => true,
 
     'managed_user_types' => [],
+
+    /*
+    | The policy behind the auth.unlock, auth.reset-two-factor,
+    | auth.require-password-update and auth.log-out abilities.
+    */
+
+    'policy' => UserAccountPolicy::class,
 
     /*
     |--------------------------------------------------------------------------
