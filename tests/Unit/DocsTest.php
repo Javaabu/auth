@@ -27,4 +27,16 @@ class DocsTest extends TestCase
         $this->assertStringStartsWith("---\nname: javaabu-auth\n", $skill);
         $this->assertFileExists(__DIR__ . '/../../resources/boost/guidelines/core.blade.php');
     }
+
+    #[Test]
+    public function the_docs_ship_with_the_composer_package(): void
+    {
+        $attributes = file_get_contents(__DIR__ . '/../../.gitattributes');
+
+        foreach (['/docs', '/llms.txt', '/resources', '/lang', '/src', '/config', '/database'] as $path) {
+            $this->assertDoesNotMatchRegularExpression('#^' . preg_quote($path, '#') . '\\s+export-ignore#m', $attributes, "{$path} must ship with the package");
+        }
+
+        $this->assertMatchesRegularExpression('#^/tests\\s+export-ignore#m', $attributes);
+    }
 }
