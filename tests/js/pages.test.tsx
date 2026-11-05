@@ -91,3 +91,17 @@ describe("Security", () => {
     expect(screen.getByText("1|secret")).toBeTruthy();
   });
 });
+
+describe("AccountLayout", () => {
+  it("shows the account links, packages' links included, and marks the current page", () => {
+    render(<Security {...page} two_factor={null} passkeys={null} sessions={null} api_tokens={null} />);
+
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-account-link]"));
+
+    expect(links.map((link) => link.dataset.accountLink)).toEqual(["profile", "security", "mobile-number"]);
+    expect(links[2]?.getAttribute("href")).toBe("/settings/mobile-number");
+    expect(links[1]?.getAttribute("aria-current")).toBe("page");
+    expect(links[0]?.getAttribute("aria-current")).toBeNull();
+  });
+});
+

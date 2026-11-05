@@ -13,9 +13,18 @@ export type AuthUrls = Record<string, string> & { home: string };
 /** The translated strings, keyed as in Javaabu\Auth\Support\Strings */
 export type AuthStrings = Record<string, string>;
 
+/** A link in the account navigation: Profile, Security, or one a package added */
+export interface AccountLink {
+  key: string;
+  label: string;
+  url: string;
+  active: boolean;
+}
+
 export interface AuthPageProps {
   auth_type: AuthType;
   urls: AuthUrls;
+  account_links: AccountLink[];
   strings: AuthStrings;
   status?: string | null;
 }

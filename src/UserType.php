@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 use InvalidArgumentException;
 use Javaabu\Auth\Contracts\LoginMethod;
 use Javaabu\Auth\Enums\TwoFactorModes;
+use Javaabu\Auth\Support\AccountLink;
 
 /**
  * One kind of user (e.g. admins or public users) with its own model, guard,
@@ -78,6 +79,9 @@ class UserType
 
     /** @var array<string, class-string<LoginMethod>|LoginMethod> */
     protected array $login_methods = [];
+
+    /** @var array<string, AccountLink|null> null removes a link */
+    protected array $account_links = [];
 
     public function __construct(
         protected string $name,
@@ -448,6 +452,50 @@ class UserType
     public function loginMethodsList(): array
     {
         return $this->login_methods;
+    }
+
+    /**
+     * Add a link to this type's account navigation, e.g. a package's account page.
+     * It shows when the type has the route; a link with the same key replaces the other.
+     *
+     * @param  string|Closure(UserType): string  $label  an English string (translated when shown) or a closure
+     * @param  string|null  $route  the route name without the type prefix; defaults to the key
+     * @param  int  $position  Profile is 10, Security 20; lower comes first
+     */
+    public function accountLink(string $key, string|Closure $label, ?string $route = null, int $position = 100): static
+    {
+        $this->account_links[$key] = new AccountLink($key, $label, $route ?? $key, $position);
+
+        return $this;
+    }
+
+    public function withoutAccountLink(string $key): static
+    {
+        $this->account_links[$key] = null;
+
+        return $this;
+    }
+
+    /**
+     * The links of the account navigation whose routes exist: Profile, Security, then the
+     * links added for every type (UserTypes::accountLink()) and for this type, by position
+     *
+     * @return array<int, AccountLink>
+     */
+    public function accountLinks(): array
+    {
+        $links = [
+            'profile' => new AccountLink('profile', 'Profile', 'profile.edit', 10),
+            'security' => new AccountLink('security', 'Security', 'security.edit', 20),
+            ...app(UserTypeRegistry::class)->accountLinks(),
+            ...$this->account_links,
+        ];
+
+        $links = array_filter($links, fn (?AccountLink $link) => $link?->isAvailableFor($this));
+
+        uasort($links, fn (AccountLink $a, AccountLink $b) => $a->position <=> $b->position);
+
+        return array_values($links);
     }
 
     /**

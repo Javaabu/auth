@@ -82,6 +82,7 @@ Route names get the type's `route_name` prefix (`admin.login`, `admin.password.r
 - Passkeys need the `passkeys` feature, `Concerns\HasPasskeys` + `Laravel\Passkeys\Contracts\PasskeyUser` on the model, and the package's `passkeys` table (with `user_type`). Don't publish laravel/passkeys' own migration or routes.
 - API tokens: the model's `HasApiTokens` trait (Sanctum or Passport) picks the driver; create tokens with `Javaabu\Auth\Support\ApiTokens::create()`. Mobile token logins come from `Route::authApiRoutes('user')` (Sanctum).
 - Admin actions on other users (unlock, reset two-factor, require a new password, log out everywhere) come from `Route::userAccountActions('user', ['middleware' => ['web', 'auth.type:admin']])`, behind the `auth.*` abilities and the `{action}_{type plural}` permissions. Run `php artisan permissions:sync`.
+- A page in the account area (a package's or the app's) goes behind `auth.type:{type}`, uses the type's route name prefix, and is added to the account navigation with `UserTypes::accountLink('key', 'English label')` or `$type->accountLink(…)`; don't edit the navigation partial. See `docs/advanced-usage/for-package-authors.md`.
 - Every user-facing string goes through `__()` with an English key; add the Dhivehi to `lang/dv.json`. In overridden views use logical utilities (`ms-`, `text-start`), `dir="ltr"` on email, password and code inputs, `dir="auto"` on names.
 
 See [references/common-mistakes.md](references/common-mistakes.md) for what goes wrong, and [references/testing.md](references/testing.md) for tests.

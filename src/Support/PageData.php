@@ -34,6 +34,7 @@ class PageData
                 ], $type->loginMethodsList())),
             ],
             'urls' => $this->urls($type),
+            'account_links' => $this->accountLinks($type),
             'status' => session('status'),
         ];
     }
@@ -69,6 +70,16 @@ class PageData
         $urls['home'] = $type->homeUrl($type->auth()->user());
 
         return $urls;
+    }
+
+    /**
+     * The account navigation of the type: Profile, Security and the links packages added
+     *
+     * @return array<int, array{key: string, label: string, url: string, active: bool}>
+     */
+    public function accountLinks(UserType $type): array
+    {
+        return array_map(fn (AccountLink $link) => $link->toArray($type), $type->accountLinks());
     }
 
     /**

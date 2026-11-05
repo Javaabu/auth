@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
+use Javaabu\Auth\Support\AccountLink;
 
 /**
  * The user types of the app, from `config('javaabu-auth.user_types')` and `UserTypes::register()`
@@ -19,6 +20,9 @@ class UserTypeRegistry
     protected array $types = [];
 
     protected bool $loaded_config = false;
+
+    /** @var array<string, AccountLink> */
+    protected array $account_links = [];
 
     /**
      * Add a user type, or change one: `register('admin', ['guard' => 'web_admin'])`
@@ -127,6 +131,24 @@ class UserTypeRegistry
         return $name ? $this->get($name) : null;
     }
 
+    /**
+     * Add a link to the account navigation of every user type that has the route,
+     * e.g. from a package whose page each type can register
+     *
+     * @param  string|Closure(UserType): string  $label  an English string (translated when shown) or a closure
+     * @param  string|null  $route  the route name without the type prefix; defaults to the key
+     */
+    public function accountLink(string $key, string|Closure $label, ?string $route = null, int $position = 100): AccountLink
+    {
+        return $this->account_links[$key] = new AccountLink($key, $label, $route ?? $key, $position);
+    }
+
+    /** @return array<string, AccountLink> */
+    public function accountLinks(): array
+    {
+        return $this->account_links;
+    }
+
     public function forget(string $name): void
     {
         unset($this->types[$name]);
@@ -135,6 +157,7 @@ class UserTypeRegistry
     public function flush(): void
     {
         $this->types = [];
+        $this->account_links = [];
         $this->loaded_config = true;
     }
 

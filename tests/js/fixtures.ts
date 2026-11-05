@@ -40,4 +40,10 @@ export const urls = {
   "verification.send": "/email/verification-notification",
 };
 
-export const page: AuthPageProps = { auth_type: authType, urls, strings, status: null };
+export const accountLinks = [
+  { key: "profile", label: strings.profile, url: "/settings/profile", active: false },
+  { key: "security", label: strings.security, url: "/settings/security", active: true },
+  { key: "mobile-number", label: "މޮބައިލް ނަންބަރު", url: "/settings/mobile-number", active: false },
+];
+
+export const page: AuthPageProps = { auth_type: authType, urls, account_links: accountLinks, strings, status: null };

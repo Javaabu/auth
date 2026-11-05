@@ -110,6 +110,8 @@ class InertiaPagesTest extends TestCase
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('auth::Settings/Security', false)
                 ->where('two_factor.enabled', true)
+                ->where('account_links.1.key', 'security')
+                ->where('account_links.1.active', true)
                 ->where('passkeys', [])
                 ->where('sessions', null)
                 ->where('api_tokens', null)

@@ -15,9 +15,10 @@ All notable changes will be documented in this file. See [docs/upgrading.md](doc
 - Profile page (name, email, account deletion) and security page (password, two-factor, passkeys, browser sessions, API tokens)
 - `Route::userAccountActions()`: unlock, reset two-factor, require a new password and log out everywhere, behind `UserAccountPolicy` and permissions registered with javaabu/permissions
 - `LoginMethod` contract and `StartAuthenticatedSession` for alternative login methods (javaabu/mobile-verification)
+- Account navigation links for packages and apps: `UserTypes::accountLink()`, `UserType::accountLink()` / `withoutAccountLink()`, the `account_links` page prop, and `AccountLayout`'s `links`
 - Pages in Blade (javaabu/forms v2) and Inertia React (@javaabu/forms, shipped through javaabu/manifest), with a shared WebAuthn client and components exported as `@javaabu/auth`
 - Dhivehi translations; right-to-left pages
 - Optional activity logging with spatie/laravel-activitylog
-- Docs for people and agents, `llms.txt`, Laravel Boost guideline and skill
+- Docs for people and agents, `llms.txt`, Laravel Boost guideline and skill; `docs/` ships in the Composer package
 - Requires PHP 8.4, Laravel 12 or 13
 - Breaking: rewritten on top of user types instead of abstract laravel/ui controllers; config moves from `config/auth.php` to `config/javaabu-auth.php`; `Javaabu\Auth\User` is now `Javaabu\Auth\Models\User` with traits; no longer requires laravel/ui, javaabu/helpers, javaabu/activitylog, javaabu/passport, javaabu/schema or spatie/laravel-medialibrary; the new-email verification flow is removed

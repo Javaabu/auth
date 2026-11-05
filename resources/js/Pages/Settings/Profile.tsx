@@ -6,9 +6,9 @@ import { t } from "../../lib/strings";
 import type { ProfilePageProps } from "../../types";
 
 /** auth::Settings/Profile */
-export default function Profile({ auth_type, urls, strings, status, profile, must_verify_email, can_delete_account }: ProfilePageProps) {
+export default function Profile({ auth_type, urls, strings, account_links, status, profile, must_verify_email, can_delete_account }: ProfilePageProps) {
   return (
-    <AccountLayout title={t(strings, "profile")} page="settings.profile" urls={urls} strings={strings}>
+    <AccountLayout title={t(strings, "profile")} page="settings.profile" urls={urls} strings={strings} links={account_links}>
       <StatusAlert status={status} />
 
       <Card title={t(strings, "profile_information")}>

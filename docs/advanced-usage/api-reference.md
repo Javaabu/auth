@@ -17,13 +17,15 @@ All classes are in `Javaabu\Auth`.
 | `for(Model\|string $user)` | The type of a model or model class (exact class first), or `null` |
 | `forGuard(?string $guard)` | The type on a guard, or `null` |
 | `fromRequest(?Request $request = null)` | The type of the current route, or `null` |
+| `accountLink(string $key, string\|Closure $label, ?string $route = null, int $position = 100)` | `Support\AccountLink`: a link in every type's account navigation, shown where the route exists |
+| `accountLinks()` | The links added for every type |
 | `forget(string $name)`, `flush()` | For tests |
 
 `UserTypeRegistry::ROUTE_ACTION` (`auth_user_type`) is the route action key holding the type.
 
 # UserType
 
-Setters return the type: `model()`, `guard()`, `passwords()`, `routeName()`, `home()`, `views()`, `layouts()`, `username()`, `features()`, `enable(...$features)`, `disable(...$features)`, `twoFactor()`, `maxLoginAttempts()`, `loginMethods()`, `loginMethod()`. `UserType::fromArray($name, $config)` builds one from config.
+Setters return the type: `accountLink($key, $label, $route = null, $position = 100)`, `withoutAccountLink($key)`, `model()`, `guard()`, `passwords()`, `routeName()`, `home()`, `views()`, `layouts()`, `username()`, `features()`, `enable(...$features)`, `disable(...$features)`, `twoFactor()`, `maxLoginAttempts()`, `loginMethods()`, `loginMethod()`. `UserType::fromArray($name, $config)` builds one from config.
 
 | Getter | Returns |
 | --- | --- |
@@ -39,6 +41,8 @@ Setters return the type: `model()`, `guard()`, `passwords()`, `routeName()`, `ho
 | `twoFactorMode()`, `hasTwoFactor()`, `requiresTwoFactor()` | `Enums\TwoFactorModes` (`OFF`, `OPTIONAL`, `REQUIRED`) |
 | `maxLoginAttemptsAllowed()` | `?int` |
 | `loginMethodsList()` | `array<string, LoginMethod>` |
+| `accountLinks()` | `array<int, Support\AccountLink>`: the type's account navigation, built-ins included, whose routes exist, by position |
+| `findByUsername(?string $username)` | The user, matched as typed then lowercased |
 | `owns(mixed $user)` | Whether a model is one of this type's users |
 
 # Route macros
@@ -75,7 +79,8 @@ Setters return the type: `model()`, `guard()`, `passwords()`, `routeName()`, `ho
 
 - `Support\ApiTokens`: `enabledDrivers()`, `isEnabled()`, `driverFor()`, `supports()`, `create()`, `list()`, `revoke()`
 - `Support\AccountState`: `inactiveMessage($user)`, `isActive($user)`
-- `Support\PageData`: `shared($type)`, `urls($type)`, `strings()`
+- `Support\PageData`: `shared($type)`, `urls($type)`, `accountLinks($type)`, `strings()`
+- `Support\AccountLink`: `key`, `label`, `route`, `position`, `label($type)`, `isAvailableFor($type)`, `toArray($type)`
 - `Support\Strings::ALL`: the React pages' string keys and English text
 - `Support\ActivityLogger`: `isAvailable()`, `EVENTS`
 - `TwoFactor\TwoFactorProvider`: `generateSecretKey()`, `qrCodeUrl()`, `verify($secret, $code)` (each code once), `currentCode($secret)`

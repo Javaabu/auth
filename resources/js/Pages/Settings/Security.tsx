@@ -9,9 +9,9 @@ import { t } from "../../lib/strings";
 import type { SecurityPageProps } from "../../types";
 
 /** auth::Settings/Security */
-export default function Security({ urls, strings, status, two_factor, passkeys, sessions, api_tokens, plain_text_token }: SecurityPageProps) {
+export default function Security({ urls, strings, account_links, status, two_factor, passkeys, sessions, api_tokens, plain_text_token }: SecurityPageProps) {
   return (
-    <AccountLayout title={t(strings, "security")} page="settings.security" urls={urls} strings={strings}>
+    <AccountLayout title={t(strings, "security")} page="settings.security" urls={urls} strings={strings} links={account_links}>
       <StatusAlert status={status} />
 
       <Card title={t(strings, "update_password")} data-password-form>

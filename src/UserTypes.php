@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade;
+use Javaabu\Auth\Support\AccountLink;
 
 /**
  * @method static UserType register(string $name, array|Closure|null $config = null)
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static UserType|null for(Model|string $user)
  * @method static UserType|null forGuard(?string $guard)
  * @method static UserType|null fromRequest(?Request $request = null)
+ * @method static AccountLink accountLink(string $key, string|Closure $label, ?string $route = null, int $position = 100)
+ * @method static array<string, AccountLink> accountLinks()
  * @method static void forget(string $name)
  * @method static void flush()
  *

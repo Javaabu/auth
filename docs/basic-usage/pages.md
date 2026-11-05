@@ -31,6 +31,7 @@ Every page gets:
 | --- | --- |
 | `auth_type` | `{name, features, two_factor, username, login_methods}` |
 | `urls` | The type's route URLs by name without the prefix: `urls['login.store']`, `urls['profile.edit']`, `urls.home` |
+| `account_links` | The account navigation: `[{key, label, url, active}]` for Profile, Security and links packages added (see [For package authors](../advanced-usage/for-package-authors.md#account-navigation-links)) |
 | `status` | The flashed status message, if any |
 | `strings` | React only: the translated strings, keyed as in `Javaabu\Auth\Support\Strings` |
 
@@ -103,7 +104,7 @@ resolve: async (name) => {
 },
 ```
 
-Override a page with `php artisan manifest:override auth js/Pages/Login.tsx`. The components the pages use are exported from `@javaabu/auth` for building your own: `AuthCard`, `AccountLayout`, `StatusAlert`, `PasskeyButton`, `TwoFactorSettings`, `PasskeysSettings`, `SessionsSettings`, `ApiTokensSettings`, `t()`, and the WebAuthn functions.
+Override a page with `php artisan manifest:override auth js/Pages/Login.tsx`. `AccountLayout` takes the `account_links` prop as `links`. The components the pages use are exported from `@javaabu/auth` for building your own: `AuthCard`, `AccountLayout`, `StatusAlert`, `PasskeyButton`, `TwoFactorSettings`, `PasskeysSettings`, `SessionsSettings`, `ApiTokensSettings`, `t()`, and the WebAuthn functions.
 
 # Forms and stencil
 
