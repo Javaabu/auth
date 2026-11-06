@@ -60,7 +60,7 @@ Override a view with `php artisan vendor:publish --tag=auth-views`, then edit `r
 
 # Inertia React
 
-Install the Inertia adapter and the npm packages:
+Install the Inertia adapter and the npm packages. Blade-only apps skip these; `manifest:check` checks them once `@inertiajs/react` is in `package.json` (or with `--scope=pages`):
 
 ```bash
 composer require inertiajs/inertia-laravel

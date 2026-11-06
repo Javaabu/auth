@@ -22,6 +22,6 @@ Optional, each detected when installed:
 | `laravel/passport` ^13.0 | OAuth2 API authentication |
 | `spatie/laravel-activitylog` ^4.10 | Logging logins, failed logins, lockouts and password changes |
 
-The React pages need `react` and `react-dom` 18.3 or 19, `@inertiajs/react` 2 or 3, `@javaabu/forms` and `@javaabu/onu` in the app. `php artisan manifest:check` lists what's missing.
+The React pages need `react` and `react-dom` 18.3 or 19, `@inertiajs/react` 2 or 3, `@javaabu/forms` and `@javaabu/onu` in the app. Blade apps need none of them, only Vite to build the pages' scripts: the package declares them for its pages only (javaabu/manifest's `for: 'pages'`), so `php artisan manifest:check` asks for them only when the app installs an Inertia adapter. It lists what's missing.
 
 `laravel/passkeys` is still 0.x. The package pins `^0.2.1`; expect a minor update when it reaches 1.0.

@@ -17,6 +17,7 @@ All notable changes will be documented in this file. See [docs/upgrading.md](doc
 - `LoginMethod` contract and `StartAuthenticatedSession` for alternative login methods (javaabu/mobile-verification)
 - Account navigation links for packages and apps: `UserTypes::accountLink()`, `UserType::accountLink()` / `withoutAccountLink()`, the `account_links` page prop, and `AccountLayout`'s `links`
 - Pages in Blade (javaabu/forms v2) and Inertia React (@javaabu/forms, shipped through javaabu/manifest), with a shared WebAuthn client and components exported as `@javaabu/auth`
+- The React pages' npm packages (`@javaabu/forms`, `@javaabu/onu`, React, `@inertiajs/react`) are declared for the pages only, so `manifest:check` doesn't ask Blade apps for them
 - Dhivehi translations; right-to-left pages
 - Optional activity logging with spatie/laravel-activitylog
 - Docs for people and agents, `llms.txt`, Laravel Boost guideline and skill; `docs/` ships in the Composer package

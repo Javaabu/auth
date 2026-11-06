@@ -31,6 +31,7 @@
 - Nothing may assume the `web` guard, `App\Models\User` or global route names. Resolve the type from the route (`UserTypes::fromRequest()`) or the model, and test behaviour on both test types, including that one type can't use another's login, challenge, confirmation, passkeys or tokens.
 - Security-sensitive changes (login, 2FA, passkeys, tokens, password reset) need tests of the failure cases too.
 - Inertia, Sanctum, Passport and activitylog are optional: feature-detect them (`class_exists`, `function_exists`), never `use` their classes in code that always runs, and keep CI's "Without the optional packages" job green.
+- npm packages for the React pages and `@javaabu/auth` go in the provider's `npm(..., for: 'pages')` call; the Blade scripts (`auth.ts`, `passkeys.ts`, `lib/webauthn.ts`) import none, and a test keeps it that way. If one ever must, declare that package in the default (assets) scope.
 - Every page exists in Blade and React with the same props. Use logical utilities only; a test rejects `ml-`, `text-left` and the like.
 - Every user-facing string goes through `__()` with an English key and gets a Dhivehi line in `lang/dv.json` and an English line in `lang/en.json` (a test checks). React strings go in `Support\Strings`; regenerate `tests/js/strings.dv.json` after changing them:
 

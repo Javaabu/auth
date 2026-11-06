@@ -169,6 +169,7 @@ class AuthServiceProvider extends ServiceProvider
                 ->script('passkeys', 'js/passkeys.ts')
                 ->js()
                 ->pages()
+                // Only the React pages and `@javaabu/auth` imports need these; the Blade scripts import none
                 ->npm([
                     '@javaabu/forms' => 'github:Javaabu/react-forms#next-gen',
                     '@javaabu/onu' => '^0.2.1',
@@ -176,7 +177,7 @@ class AuthServiceProvider extends ServiceProvider
                     'react' => '^18.3 || ^19.0',
                     'react-dom' => '^18.3 || ^19.0',
                     '@inertiajs/react' => '^2.0 || ^3.0',
-                ]);
+                ], for: 'pages');
         });
     }
 
