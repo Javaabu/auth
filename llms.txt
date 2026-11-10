@@ -1,0 +1,56 @@
+# javaabu/auth
+
+> Multi-auth for Laravel: any number of user types (public users, admins, …), each with its own guard, password broker, routes, pages and features. Login, registration, password reset, email verification, password confirmation, TOTP two-factor authentication with recovery codes (off, optional or required per type), passkeys (laravel/passkeys), profile and security pages (password, two-factor, passkeys, browser sessions, API tokens), API authentication with Sanctum, Passport or both, account status and lockout, and admin actions on other accounts behind javaabu/permissions permissions. Pages in Blade (javaabu/forms) and Inertia React (@javaabu/forms) that work in Dhivehi and right to left. Not built on laravel/fortify, but uses its 2FA column format and route names.
+
+Paths are relative to this file. In a project, that's vendor/javaabu/auth/.
+
+## Rules
+
+- A user type is configured in `config('javaabu-auth.user_types')` or with `Javaabu\Auth\UserTypes::register()`: `model`, `guard`, `passwords`, `route_name`, `home`, `views`, `layouts`, `username`, `features`, `two_factor`, `max_login_attempts`, `login_methods`. The first type is the default.
+- Never assume the `web` guard, `App\Models\User` or `route('login')`. Get the type with `UserTypes::get()`, `for($user)`, `forGuard()` or `fromRequest()`, and URLs with `$type->route('login')`, `$type->homeUrl($user)`.
+- Register a type's routes with `Route::authRoutes('admin', ['prefix' => 'admin'])`; nothing loads automatically. Route names get the type's `route_name` prefix: `admin.login`, `admin.password.request`, `admin.profile.edit`.
+- Protect app pages with `auth.type:{type}` (guard, account status, verified email, required password change, required 2FA). Ask for the password again with `auth.password.confirm:{type}`, which is kept per type.
+- Change behaviour by binding the action contracts (`CreatesNewUsers`, `ResetsUserPasswords`, `UpdatesUserPasswords`, `UpdatesUserProfileInformation`, `DeletesUsers`), extending a controller set in `config('javaabu-auth.controllers')`, or rebinding the responses (`LoginResponse`, …). Don't write auth controllers by hand.
+- Alternative login methods implement `Javaabu\Auth\Contracts\LoginMethod` and finish with `Javaabu\Auth\Actions\StartAuthenticatedSession`; never call `Auth::login()` directly.
+- User models extend `Javaabu\Auth\Models\User`, or use the traits in `Javaabu\Auth\Concerns` with their contracts. Tables use `Javaabu\Auth\Schema\UserSchema::columns()`.
+- Two-factor columns and encryption match laravel/fortify. Passkeys use the package's `passkeys` table with `user_type`; don't publish laravel/passkeys' migration or routes.
+- API tokens: the model's `HasApiTokens` (Sanctum or Passport) decides the driver; set `config('javaabu-auth.api')` with `php artisan auth:install --api=…`. Sanctum token logins come from `Route::authApiRoutes()`.
+- Account actions (unlock, reset 2FA, require a new password, log out everywhere) come from `Route::userAccountActions()`, behind `auth.*` gate abilities taking `[$type, $account]` and the `{action}_{type plural}` permissions; run `php artisan permissions:sync`.
+- Pages render with `config('javaabu-auth.views')` (`blade` or `inertia`, per type with `views`). Blade pages extend `javaabu-auth.layouts.auth` / `.account`. React pages are `auth::Login`, …, `auth::Settings/Security`, resolved with javaabu/manifest's `resolvePage()`; their npm packages are declared `for: 'pages'`, so Blade apps install none. Override with `vendor:publish --tag=auth-views` or `php artisan manifest:override auth <file>`.
+- Packages add links to the account navigation with `UserTypes::accountLink('mobile-number', 'Mobile number')` (every type that has the route) or `$type->accountLink(…)`; pages get them as `account_links`. Render package account pages with the type's `account` layout and `PageData::shared()` props.
+- Every user-facing string is an English `__()` key with Dhivehi in `lang/dv.json`; app overrides go in the app's `lang/dv.json`. Use logical utilities (`ms-`, `text-start`) only.
+
+## Docs
+
+- [Introduction](docs/intro.md): what the package does
+- [Requirements](docs/requirements.md): PHP, Laravel, dependencies and optional packages
+- [Installation & Setup](docs/installation-and-setup.md): install, auth:install, the model and table, one and several user types, layouts, publishing, the session driver
+- [Upgrading from v2](docs/upgrading.md): config, models, controllers, routes, middleware, views and events that changed
+- [User types](docs/basic-usage/user-types.md): every option and feature, registering in code, finding a type
+- [Routes](docs/basic-usage/routes.md): Route::authRoutes() options and every route with its name
+- [Middleware](docs/basic-usage/middleware.md): auth.type, auth.guest, auth.active, auth.verified, auth.password-updated, auth.two-factor, auth.password.confirm, auth.user-type
+- [The user model](docs/basic-usage/user-models.md): the base model, each trait and contract, account status, lockout, required password changes
+- [Logging in and registering](docs/basic-usage/logging-in.md): the login steps, logout, lockout, registration, rate limits
+- [Password reset](docs/basic-usage/password-reset.md): the flow, brokers per type, the email, password rules
+- [Email verification](docs/basic-usage/email-verification.md): the flow, turning it off, Laravel's verified middleware
+- [Password confirmation](docs/basic-usage/password-confirmation.md): auth.password.confirm, timeouts, passkeys, per-type confirmation
+- [Two-factor authentication](docs/basic-usage/two-factor-authentication.md): modes, turning it on, the challenge, required setup, settings, actions, events
+- [Passkeys](docs/basic-usage/passkeys.md): setup, config, what users get, blocking logins, the browser side, events
+- [Profile and security pages](docs/basic-usage/profile-and-security.md): profile, account deletion, password, two-factor, passkeys, browser sessions, API tokens
+- [API authentication](docs/basic-usage/api-authentication.md): auth:install, Sanctum token endpoints and SPA auth, Passport with several providers, personal access tokens
+- [Pages (Blade and React)](docs/basic-usage/pages.md): every page and its props, Blade layouts, setting up Inertia React, overriding, exported components, RTL
+- [Managing accounts](docs/basic-usage/managing-accounts.md): Route::userAccountActions(), permissions, the policy and overriding it
+- [Unique Gmail rule](docs/basic-usage/unique-gmail-rule.md): the UniqueGmail validation rule
+- [For package authors](docs/advanced-usage/for-package-authors.md): account pages per user type, account navigation links, rendering like auth's pages, rules
+- [Alternative login methods](docs/advanced-usage/alternative-login-methods.md): the LoginMethod contract and StartAuthenticatedSession
+- [Actions](docs/advanced-usage/actions.md): the action contracts, the login actions, responses
+- [Overriding controllers and views](docs/advanced-usage/overriding-controllers-and-views.md): controllers from config, Blade views, React pages, per-type stacks and layouts
+- [Configuration](docs/advanced-usage/configuration.md): every option in config/javaabu-auth.php
+- [Events and activity log](docs/advanced-usage/events.md): Laravel's and the package's events, optional activitylog logging
+- [Dhivehi and translations](docs/advanced-usage/translations.md): translations, React strings, right to left, permission descriptions, strings to review
+- [API reference](docs/advanced-usage/api-reference.md): every public class and method
+- [AI assistants](docs/ai-assistants.md): Laravel Boost, and using these docs from other assistants
+- [Questions and Security](docs/questions-and-security.md): where to get help
+- [Changelog](docs/changelog.md): where changes are listed
+- [About Us](docs/about-us.md): Javaabu
+- [Contributing to the docs](docs/contributing-to-docs.md): how the docs are built

@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "types": [
+      "vitest/globals"
+    ],
+    "paths": {
+      "@javaabu/auth": [
+        "./resources/js"
+      ],
+      "@javaabu/auth/*": [
+        "./resources/js/*"
+      ]
+    },
+    "resolveJsonModule": true
+  },
+  "include": [
+    "resources/js",
+    "tests/js"
+  ]
+}

@@ -2,45 +2,51 @@
 
 namespace Javaabu\Auth\Enums;
 
-use Javaabu\Helpers\Enums\IsStatusEnum;
-use Javaabu\Helpers\Enums\NativeEnumsTrait;
-
-enum UserStatuses: string implements IsStatusEnum
+enum UserStatuses: string
 {
-    use NativeEnumsTrait;
-
     case APPROVED = 'approved';
     case PENDING = 'pending';
     case BANNED = 'banned';
 
+    public function label(): string
+    {
+        return match ($this) {
+            self::APPROVED => __('Approved'),
+            self::PENDING => __('Pending'),
+            self::BANNED => __('Banned'),
+        };
+    }
+
     /**
-     * Initialize Messages
+     * What a user with this status is told when they can't use their account
      */
-    public static function messages(): array
+    public function message(): string
     {
-        return [
-            self::APPROVED->value => __('Your account is approved.'),
-            self::PENDING->value => __('Your account needs to be approved before you can access it.'),
-            self::BANNED->value => __('Your account has been banned.'),
-        ];
+        return match ($this) {
+            self::APPROVED => __('Your account is approved.'),
+            self::PENDING => __('Your account needs to be approved before you can access it.'),
+            self::BANNED => __('Your account has been banned.'),
+        };
     }
 
-    public function getMessage(): string
+    public function color(): string
     {
-        return self::messages()[$this->value];
-    }
-
-    public static function getMessageFromKey(string $key): string
-    {
-        return self::messages()[$key] ?? '';
-    }
-
-    public function getColor(): string
-    {
-        return match($this) {
+        return match ($this) {
             self::APPROVED => 'success',
             self::PENDING => 'info',
-            self::BANNED => 'danger'
+            self::BANNED => 'danger',
         };
+    }
+
+    /** @return array<string, string> */
+    public static function labels(): array
+    {
+        $labels = [];
+
+        foreach (self::cases() as $case) {
+            $labels[$case->value] = $case->label();
+        }
+
+        return $labels;
     }
 }

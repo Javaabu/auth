@@ -1,28 +1,75 @@
 {
     "name": "javaabu/auth",
-    "description": "Laravel Authentication Helpers",
+    "description": "Multi-auth for Laravel: login, registration, password reset, email verification, two-factor authentication, passkeys and API tokens for any number of user types, with Blade and Inertia React pages",
     "homepage": "https://github.com/Javaabu/auth",
     "license": "MIT",
+    "keywords": [
+        "javaabu",
+        "laravel",
+        "auth",
+        "multi-auth",
+        "two-factor",
+        "passkeys",
+        "webauthn"
+    ],
     "authors": [
         {
             "name": "Athfan Khaleel",
             "email": "athfan@javaabu.com"
+        },
+        {
+            "name": "Arushad Ahmed",
+            "email": "arushad@javaabu.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Javaabu/forms",
+            "no-api": true
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Javaabu/manifest",
+            "no-api": true
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Javaabu/permissions",
+            "no-api": true
         }
     ],
     "require": {
-        "php": "^8.2",
-        "illuminate/support": "^11.7 || ^12.0 || ^13.0",
-        "javaabu/helpers": "^1.71",
-        "javaabu/activitylog": "^1.6",
-        "laravel/ui": "^4.6",
-        "javaabu/passport": "^2.0",
-        "spatie/laravel-medialibrary": "^11.21",
+        "php": "^8.4",
+        "bacon/bacon-qr-code": "^3.0",
+        "illuminate/auth": "^12.0 || ^13.0",
+        "illuminate/database": "^12.0 || ^13.0",
+        "illuminate/http": "^12.0 || ^13.0",
+        "illuminate/notifications": "^12.0 || ^13.0",
+        "illuminate/routing": "^12.0 || ^13.0",
+        "illuminate/support": "^12.0 || ^13.0",
+        "javaabu/forms": "^2.0@dev",
+        "javaabu/manifest": "^1.0@dev",
+        "javaabu/permissions": "^3.0@dev",
+        "laravel/passkeys": "^0.2.1",
         "mobiledetect/mobiledetectlib": "^4.8",
-        "javaabu/schema": "^1.2"
+        "pragmarx/google2fa": "^9.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^9.16 || ^10.0 || ^11.0",
-        "phpunit/phpunit": "^10.5 || ^11.5.3 || ^12.5.8 || ^13.0.3"
+        "inertiajs/inertia-laravel": "^2.0 || ^3.0",
+        "javaabu/boost-javaabu-guidelines": "^1.0",
+        "laravel/passport": "^13.0",
+        "laravel/pint": "^1.24",
+        "laravel/sanctum": "^4.0",
+        "orchestra/testbench": "^10.0 || ^11.0",
+        "phpunit/phpunit": "^11.5.3 || ^12.5.8",
+        "spatie/laravel-activitylog": "^4.10"
+    },
+    "suggest": {
+        "inertiajs/inertia-laravel": "Renders the auth pages with Inertia React when javaabu-auth.views is inertia (^2.0 || ^3.0)",
+        "laravel/sanctum": "API tokens and SPA authentication when javaabu-auth.api includes sanctum (^4.0)",
+        "laravel/passport": "OAuth2 API authentication when javaabu-auth.api includes passport (^13.0)",
+        "spatie/laravel-activitylog": "Logs logins, logouts, failed logins, lockouts and password changes (^4.10)"
     },
     "autoload": {
         "psr-4": {
@@ -34,15 +81,24 @@
             "Javaabu\\Auth\\Tests\\": "tests/"
         }
     },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-clover build/coverage.xml",
+        "lint": "vendor/bin/pint --test",
+        "format": "vendor/bin/pint"
+    },
     "extra": {
         "branch-alias": {
-            "dev-main": "2.0-dev"
+            "dev-next-gen": "3.x-dev"
         },
         "laravel": {
             "providers": [
                 "Javaabu\\Auth\\AuthServiceProvider"
             ]
         }
+    },
+    "config": {
+        "sort-packages": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true
